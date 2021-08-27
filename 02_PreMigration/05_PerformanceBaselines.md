@@ -1,0 +1,23 @@
+# Performance Baselines
+
+Understanding the existing Redis workload is one of the best investments that can be made to ensure a successful migration. Excellent system performance depends on adequate hardware and great application design.  Items such as CPU, memory, disk, and networking need to be sized and configured appropriately for the anticipated load. Hardware and configuration are part of the system performance equation.  The developer must understand the instance query load and the most expensive queries to execute. Focusing on the most expensive queries can have a big difference in the overall performance metrics.
+
+Creating baselines of query performance is vital to a migration project. The performance baselines can be used to verify the Azure landing zone configuration for the migrated data workloads. Most systems will be run 24/7 and have different peak load times. It is important to capture the peak workloads for the baseline. Later in the document, we will explore the source server parameters and how they are essential to the overall performance baseline picture. The server parameters should not be overlooked during a migration project.
+
+## Tools
+
+Below are tools used to gather server metrics and instance workload information. Use the captured metrics to determine the appropriate Azure Cache for Redis tier and the associated scaling options.
+
+- [redis-benchmark.exe](https://www.percona.com/software/instance-tools/percona-monitoring-and-management): TODO
+
+## Server Configuration
+
+TODO
+
+## WWI Use Case
+
+TODO
+
+WWI reviewed its Conference instance workload and determined it had a very small load.  Although a basic tier server would work for them, they did not want to perform work later to migrate to another tier.  The server being deployed will eventually host the other Redis data workloads, so they picked the `General Purpose` tier.
+
+In reviewing the Redis instance, the Redis 4.0 server is running with the default server configuration set during the initial install.

@@ -1,0 +1,89 @@
+# onprem-redis-to-azureredis-guide Outline
+
+- Introduction
+  - Redis
+  - Azure Cache for Redis
+- Customer Scenario
+  - Overview
+  - Migration Goals
+- Pre-Migration
+  - Assessment
+    - Redis Versions
+    - Data and Objects
+    - Limitations
+    - Source Systems
+      - Cloud Providers
+      - On-premises
+    - Tools
+    - Azure Cache for Redis - Service Tiers
+    - Version Support
+    - Costs - pricing and sizing
+    - Application Implications
+    - Use Case
+  - Planning
+    - Landing Zone
+    - Networking
+    - Private Link / VNet Integration
+    - SSL/TLS
+    - Use Case
+  - Migration methods and tools
+    - Supported replication Paths
+    - Fastest minimum downtime migration
+    - Use Case
+  - Test Plans
+    - Overview
+    - Rollback strategies
+    - Use Case
+  - Performance Baselines
+    - Tools
+    - Configurations
+    - Use Case
+- Migration
+  - Executing
+    - Offline vs Online
+    - Data drift
+    - Performance Recommendations
+    - Perform the Migration
+      - Prepare instance
+      - Inventory instance
+      - Users and Permissions
+      - Execution
+      - Application Cut over
+    - Use Case
+  - Testing and validation
+    - Rollback strategies
+- Post-Migration
+  - Management
+    - Monitoring and alerts
+    - Configuration
+    - PowerShell module
+    - Azure Cache for Redis Upgrade Process
+    - Use Case
+  - Performance Optimization
+    - Monitoring
+    - Query Performance Insight
+    - Query Store
+    - Performance Recommendations
+    - Azure Monitor
+    - Upgrading your tier
+    - Scaling your instance
+    - Moving regions
+    - Use Case
+  - BCDR
+    - Backup and restore
+    - deleted servers
+    - regional failures
+    - load balancers
+    - Use Case
+  - Security
+    - Authentication
+    - Threat protection
+    - Audit logging
+    - encryption
+    - Firewall
+    - private link
+  - Upgrades
+    - Upgrade process
+- Summary
+  - Call to Action
+  - Resources

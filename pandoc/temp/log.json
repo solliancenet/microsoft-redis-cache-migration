@@ -1,0 +1,618 @@
+[
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Citus"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Citus"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\instance"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\tar"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\ZooKeeper"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\zookeeper"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\conf"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\zoo"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\tar"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Kafka"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Program"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Java"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\jdk"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Program"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Program"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\apache"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Program"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\apache"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\bin*"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\cloud"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Program"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redis"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\bin*"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redisguide"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\onprem"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\artifacts"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\testapp"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\instance"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redisguide"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\onprem"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\artifacts"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\testapp"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\instance"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\sample"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\speaker"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redisguide"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\onprem"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\artifacts"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\testapp"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\instance"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\sample"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\event"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redisguide"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\onprem"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\artifacts"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\testapp"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\conferencedemo*"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redisguide"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\onprem"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\testapp"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\conferencedemo"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redisguide"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\onprem"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\artifacts*"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\environments"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\environment"
+            ]
+        }
+    }
+]

@@ -1,0 +1,76 @@
+
+# Instructions for a Windows machine.  If you are running a Mac OS or Linux, you do not need do this.
+# You need to create one markdown file from the directory tree from markdown files.
+
+# Step 1
+# Navigate to the media folder.  Delete all of the media files.  rem DEL /F/Q *.*
+# Run the Windows command below in the content base directory to produce a list of file paths to the markdown documents. 
+# EXAMPLE:  dir *.md /S /B /O N>markdown-files.txt
+# Open the text file and paste the contents into this yaml file in the input-files section.
+# You will need to add a prefix of "- " before each of the file paths. Open VS Code and add these
+# characters by placing the cursor in front and holding down CTRL, ALT.  Use the down arrow
+# key to highlight all of the lines at once.
+
+# The current version of Pandoc does not like including the images from a directory tree on Windows.
+# On a Windows machine, copy the images to one media folder with this DOS command. 
+
+# Step 2
+# EXAMPLE: for /r %i in (*.png) do xcopy /Y "%i" .\pandoc\media
+# Your image file names need to be unique.
+# Take the contents in the markdown-file.txt and paste it into the 'input-files'
+
+# Step 3
+# Run this command with the defaults.yaml file in the pandoc directory.
+# EXAMPLE:  pandoc --defaults=make-one-markdown-file
+from: markdown+pipe_tables+backtick_code_blocks
+to: markdown+pipe_tables
+output-file: Redis-guide.md
+dpi: 300
+
+input-files:
+- D:\mcw_temp\Redis\01_Introduction\01_Overview.md
+- D:\mcw_temp\Redis\01_Introduction\02_CaseStudy.md
+- D:\mcw_temp\Redis\02_PreMigration\01_Assessment.md
+- D:\mcw_temp\Redis\02_PreMigration\02_Planning.md
+- D:\mcw_temp\Redis\02_PreMigration\03_Methods.md
+- D:\mcw_temp\Redis\02_PreMigration\04_TestPlans.md
+- D:\mcw_temp\Redis\02_PreMigration\05_PerformanceBaselines.md
+- D:\mcw_temp\Redis\03_Migration\01.01_DataMigration_BackupRestore.md
+- D:\mcw_temp\Redis\03_Migration\01.02_DataMigration_Copy.md
+- D:\mcw_temp\Redis\03_Migration\01.03_DataMigration_ADF.md
+- D:\mcw_temp\Redis\03_Migration\01.04_DataMigration_DMS.md
+- D:\mcw_temp\Redis\03_Migration\01.05_DataMigration_LogicalReplication.md
+- D:\mcw_temp\Redis\03_Migration\01.06_DataMigration_LogicalDecoding.md
+- D:\mcw_temp\Redis\03_Migration\01.07_DataMigration_Citus.md
+- D:\mcw_temp\Redis\03_Migration\01_DataMigration.md
+- D:\mcw_temp\Redis\03_Migration\02.01_DataMigration_Schema.md
+- D:\mcw_temp\Redis\03_Migration\02.02_DataMigration_ServerParams_Ingress.md
+- D:\mcw_temp\Redis\03_Migration\02.03_DataMigration_ServerParams_Revert.md
+- D:\mcw_temp\Redis\03_Migration\03_DataMigration_AppSettings.md
+- D:\mcw_temp\Redis\04_PostMigration\01_Management.md
+- D:\mcw_temp\Redis\04_PostMigration\02_Optimization.md
+- D:\mcw_temp\Redis\04_PostMigration\03_BCDR.md
+- D:\mcw_temp\Redis\04_PostMigration\04_Security.md
+- D:\mcw_temp\Redis\04_PostMigration\06_CallToAction.md
+- D:\mcw_temp\Redis\05_Appendix\00_Setup.md
+- D:\mcw_temp\Redis\05_Appendix\01_ARM Templates.md
+- D:\mcw_temp\Redis\05_Appendix\02_ServerParameters_Redis10.md
+- D:\mcw_temp\Redis\05_Appendix\03_ServerParameters_Azure_11.md
+- D:\mcw_temp\Redis\05_Appendix\04_ConfigurePostgresSSL.md
+- D:\mcw_temp\Redis\05_Appendix\05_ConfigurePgBouncer.md
+
+# ERROR, WARNING, or INFO
+verbosity: INFO
+log-file: log.json
+
+table-of-contents: true
+toc-depth: 2
+
+# reference-links: true
+tab-stop: 4
+preserve-tabs: true
+default-image-extension: ".png"
+# shift-heading-level-by: 1
+section-divs: true
+highlight-style: tango
+atx-headers: true
