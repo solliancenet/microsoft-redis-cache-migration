@@ -11,7 +11,7 @@
             "type": "String"
         },
         "adminPassword": {
-            "defaultValue": "Seattle123Seattle123",
+            "defaultValue": "S2@dmins2@dmin",
             "type": "String"
         },
         "location" : {
@@ -34,100 +34,65 @@
         "dns-domain" : "[concat(parameters('prefix'),'privatedns.com')]",
         "linuxFxVersion": "JAVA|11-java11",
         "alwaysOn": "true",
-        "dms-name": "[concat(parameters('prefix'),'-dms')]",
-        "factory-name": "[concat(parameters('prefix'),'-pg-adf-', variables('unique'))]",
         "vault-name": "[concat(parameters('prefix'),'-kv-', variables('unique'))]",
-        "vm_db_name": "[concat(parameters('prefix'),'-vm-pgdb01')]",
+        "vm_redis01_name": "[concat(parameters('prefix'),'-redis01')]",
+        "vm_redis02_name": "[concat(parameters('prefix'),'-redis02')]",
+        "vm_win10_name": "[concat(parameters('prefix'),'-vm-win10')]",
         "app_name": "[concat(parameters('prefix'),'-app01')]",
         "api_name": "[concat(parameters('prefix'),'-api01')]",
-        "insights-name": "[concat(parameters('prefix'),'-pg-insights')]",
-        "pg_db_single": "[concat(parameters('prefix'),'-pg-single-01')]",
-        "pg_db_citus": "[concat(parameters('prefix'),'-pg-citus-01')]",
-        "pg_db_citus_version": "11.2.8",
-        "pg_db_citus_preview": true,
-        "pg_db_citus_coordCores": 2,
-        "pg_db_citus_workerCores": 4,
-        "pg_db_citus_workers": 1,
-        "pg_db_citus_workerSizeMB": 524288,
-        "pg_db_citus_coordSizeMB": 131072,
-        "pg_db_citus_ha": false,
-        "vm-db-ip": "[concat(parameters('prefix'),'-vm-pg-ip-01')]",
-        "pg-dms-name": "[concat(parameters('prefix'),'-pg-dms-01')]",
-        "pg-vnet-db": "[concat(parameters('prefix'),'-vnet-Redis')]",
-        "pg-vnet-app01": "[concat(parameters('prefix'),'-vnet-app01')]",
-        "pg-vnet-hub": "[concat(parameters('prefix'),'-vnet-hub')]",
-        "pg-nsg-01": "[concat(parameters('prefix'),'-pg-nsg')]",
-        "pg-flex-01": "[concat(parameters('prefix'),'-pg-flex-01')]",
-        "pg-nic-01": "[concat(parameters('prefix'),'-vm-pg-nic-01')]",
-        "pg-nic-02": "[concat(parameters('prefix'),'-nic-02')]",
-        "pg-nic-03": "[concat(parameters('prefix'),'-nic-03')]",
+        "insights-name": "[concat(parameters('prefix'),'-insights')]",
+        "redis-name": "[concat(parameters('prefix'),'-redis')]",
+        "db_single": "[concat(parameters('prefix'),'-single-01')]",
+        "vm-win10-ip": "[concat(parameters('prefix'),'-vm-ip-01')]",
+        "vnet-db": "[concat(parameters('prefix'),'-vnet-Redis')]",
+        "vnet-app01": "[concat(parameters('prefix'),'-vnet-app01')]",
+        "vnet-hub": "[concat(parameters('prefix'),'-vnet-hub')]",
+        "nsg-01": "[concat(parameters('prefix'),'-nsg')]",
+        "vm-nic-01": "[concat(parameters('prefix'),'-vm-nic-01')]",
+        "vm-nic-02": "[concat(parameters('prefix'),'-vm-nic-02')]",
+        "vm-nic-03": "[concat(parameters('prefix'),'-vm-nic-03')]",
         "vnetData": "",
         "vnetDataSet": "[if(empty(variables('vnetData')), json('{ \"subnetArmResourceId\": \"\" }'), variables('vnetData'))]",
         "finalVnetData": "[json(concat('{ \"SubnetArmResourceId\": \"', variables('vnetDataSet').subnetArmResourceId, '\"}'))]"
     },
     "resources": [
         {
-            "type": "Microsoft.DataMigration/services",
-            "apiVersion": "2018-07-15-preview",
-            "name": "[variables('dms-name')]",
+            "type": "Microsoft.Cache/Redis",
+            "apiVersion": "2020-12-01",
+            "name": "[concat(variables('redis-name'),'-basic')]",
             "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', variables('pg-nic-03'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
-            ],
-            "sku": {
-                "name": "Premium_4vCores",
-                "tier": "Premium",
-                "size": "4 vCores"
-            },
-            "kind": "Cloud",
             "properties": {
-                "virtualSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
+                "redisVersion": "4.0.14",
+                "sku": {
+                    "name": "Basic",
+                    "family": "C",
+                    "capacity": 0
+                },
+                "enableNonSslPort": false,
+                "publicNetworkAccess": "Enabled",
+                "redisConfiguration": {
+                    
+                }
             }
         },
         {
-            "apiVersion": "2020-10-05-privatepreview",
+            "type": "Microsoft.Cache/Redis",
+            "apiVersion": "2020-12-01",
+            "name": "[concat(variables('redis-name'),'-std')]",
             "location": "[variables('location')]",
-            "name": "[variables('pg_db_citus')]",
-            "type": "Microsoft.DBforRedis/serverGroupsv2",
             "properties": {
-                "createMode": "Default",
-                "administratorLogin": "citus",
-                "administratorLoginPassword": "[parameters('adminPassword')]",
-                "backupRetentionDays": 35,
-                "DelegatedSubnetArguments": "[if(empty(variables('vnetData')), json('null'), variables('finalVnetData'))]",
-                "enableMx": false,
-                "enableZfs": false,
-                "previewFeatures": "[variables('pg_db_citus_preview')]",
-                "RedisVersion": "[variables('pg_db_citus_version')]",
-                "serverRoleGroups": [
-                    {
-                        "name": "",
-                        "role": "Coordinator",
-                        "serverCount": 1,
-                        "serverEdition": "GeneralPurpose",
-                        "vCores": "[variables('pg_db_citus_coordCores')]",
-                        "storageQuotaInMb": "[variables('pg_db_citus_coordSizeMB')]",
-                        "enableHa": "[variables('pg_db_citus_ha')]"
-                    },
-                    {
-                        "name": "",
-                        "role": "Worker",
-                        "serverCount": "[variables('pg_db_citus_workers')]",
-                        "serverEdition": "MemoryOptimized",
-                        "vCores": "[variables('pg_db_citus_workerCores')]",
-                        "storageQuotaInMb": "[variables('pg_db_citus_workerSizeMB')]",
-                        "enableHa": "[variables('pg_db_citus_ha')]"
-                    }
-                ]
+                "redisVersion": "4.0.14",
+                "sku": {
+                    "name": "Standard",
+                    "family": "C",
+                    "capacity": 0
+                },
+                "enableNonSslPort": false,
+                "publicNetworkAccess": "Enabled",
+                "redisConfiguration": {
+                    
+                }
             }
-        },
-        {
-            "type": "Microsoft.DataFactory/factories",
-            "apiVersion": "2018-06-01",
-            "name": "[variables('factory-name')]",
-            "location": "[variables('location')]",
-            "properties": {}
         },
         {
             "type": "microsoft.insights/components",
@@ -199,9 +164,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), 'vnet-hub', '/appGateway')]",
+            "name": "[concat(parameters('prefix'), '-vnet-hub', '/appGateway')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), 'vnet-hub'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-hub'))]"
             ],
             "properties": {
                 "addressPrefix": "10.5.1.0/24",
@@ -214,9 +179,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), 'vnet-app01', '/default')]",
+            "name": "[concat(parameters('prefix'), '-vnet-app01', '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), 'vnet-app01'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-app01'))]"
             ],
             "properties": {
                 "addressPrefix": "10.6.0.0/24",
@@ -228,9 +193,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), 'vnet-hub', '/default')]",
+            "name": "[concat(parameters('prefix'), '-vnet-hub', '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), 'vnet-hub'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-hub'))]"
             ],
             "properties": {
                 "addressPrefix": "10.5.0.0/24",
@@ -242,9 +207,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), 'vnet-Redis', '/default')]",
+            "name": "[concat(parameters('prefix'), '-vnet-redis', '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), 'vnet-Redis'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-redis'))]"
             ],
             "properties": {
                 "addressPrefix": "10.7.0.0/24",
@@ -256,7 +221,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), 'vnet-app01')]",
+            "name": "[concat(parameters('prefix'), '-vnet-app01')]",
             "location": "[variables('location')]",
             "properties": {
                 "addressSpace": {
@@ -281,7 +246,7 @@
                         "properties": {
                             "peeringState": "Connected",
                             "remoteVirtualNetwork": {
-                                "id" : "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), 'vnet-hub'))]"
+                                "id" : "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-hub'))]"
                             },
                             "allowVirtualNetworkAccess": true,
                             "allowForwardedTraffic": false,
@@ -302,7 +267,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), 'vnet-hub')]",
+            "name": "[concat(parameters('prefix'), '-vnet-hub')]",
             "location": "[variables('location')]",
             "properties": {
                 "addressSpace": {
@@ -339,7 +304,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), 'vnet-Redis')]",
+            "name": "[concat(parameters('prefix'), '-vnet-redis')]",
             "location": "[variables('location')]",
             "properties": {
                 "addressSpace": {
@@ -364,7 +329,7 @@
                         "properties": {
                             "peeringState": "Connected",
                             "remoteVirtualNetwork": {
-                                "id" : "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), 'vnet-hub'))]"
+                                "id" : "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-hub'))]"
                             },
                             "allowVirtualNetworkAccess": true,
                             "allowForwardedTraffic": false,
@@ -385,7 +350,7 @@
         {
             "type": "microsoft.operationalinsights/workspaces",
             "apiVersion": "2020-08-01",
-            "name": "[concat(parameters('prefix'), '-pg-logs')]",
+            "name": "[concat(parameters('prefix'), '-logs')]",
             "location": "[variables('location')]",
             "properties": {
                 "sku": {
@@ -402,7 +367,7 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
-            "name": "[concat(parameters('prefix'), '-pg-appsvc')]",
+            "name": "[concat(parameters('prefix'), '-appsvc')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "P1v2",
@@ -427,64 +392,9 @@
             }
         },
         {
-            "type": "Microsoft.DBforRedis/flexibleServers",
-            "apiVersion": "2020-02-14-preview",
-            "name": "[variables('pg-flex-01')]",
-            "location": "[variables('location')]",
-            "sku": {
-                "name": "Standard_D2s_v3",
-                "tier": "GeneralPurpose",
-                "capacity": 2
-            },
-            "properties": {
-                "version": "12",
-                "haEnabled": "Disabled",
-                "administratorLogin": "[parameters('adminUsername')]",
-                "administratorLoginPassword" : "[parameters('adminPassword')]",
-                "availabilityZone": "2",
-                "storageProfile": {
-                    "storageMB": 131072,
-                    "backupRetentionDays": 7
-                },
-                "maintenanceWindow": {
-                    "customWindow": "Disabled",
-                    "dayOfWeek": 0,
-                    "startHour": 0,
-                    "startMinute": 0
-                }
-            }
-        },
-        {
-            "type": "Microsoft.DBforRedis/servers",
-            "apiVersion": "2017-12-01",
-            "name": "[variables('pg_db_single')]",
-            "location": "[variables('location')]",
-            "sku": {
-                "name": "GP_Gen5_2",
-                "tier": "GeneralPurpose",
-                "family": "Gen5",
-                "capacity": 2
-            },
-            "properties": {
-                "administratorLogin" : "[parameters('adminUsername')]",
-                "administratorLoginPassword" : "[parameters('adminPassword')]",
-                "storageProfile": {
-                    "storageMB": 102400,
-                    "backupRetentionDays": 7,
-                    "geoRedundantBackup": "Disabled",
-                    "storageAutogrow": "Enabled"
-                },
-                "version": "11",
-                "sslEnforcement": "Enabled",
-                "minimalTlsVersion": "TLSEnforcementDisabled",
-                "infrastructureEncryption": "Disabled",
-                "publicNetworkAccess": "Enabled"
-            }
-        },
-        {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-11-01",
-            "name": "[variables('pg-nsg-01')]",
+            "name": "[variables('nsg-01')]",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -511,7 +421,41 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-11-01",
-            "name": "[variables('vm-db-ip')]",
+            "name": "cjg-redis-01-ip",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "52.229.24.92",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "cjg-redis-02-ip",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "52.183.7.200",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('vm-win10-ip')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Basic",
@@ -528,7 +472,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-11-01",
-            "name": "[variables('pg-vnet-hub')]",
+            "name": "[variables('-vnet-hub')]",
             "location": "[variables('location')]",
             "properties": {
                 "addressSpace": {
@@ -553,11 +497,131 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
-            "apiVersion": "2020-12-01",
-            "name": "[variables('vm_db_name')]",
+            "apiVersion": "2021-03-01",
+            "name": "[variables('vm_redis01_name')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', variables('pg-nic-01'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-03'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2s_v3"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18_04-lts-gen2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(variables('vm_redis01_name'), '_os_disk1')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "cjg-redis-01",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-03'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2021-03-01",
+            "name": "[variables('vm_redis02_name')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-02'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2s_v3"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18_04-lts-gen2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(variables('vm_redis02_name'), '_os_disk1')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "cjg-redis-02",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-02'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2020-12-01",
+            "name": "[variables('vm_win10_name')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-01'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -572,7 +636,7 @@
                     },
                     "osDisk": {
                         "osType": "Windows",
-                        "name": "[concat(variables('vm_db_name'), '_disk1_59e4d03a14164663945993546a74cc18')]",
+                        "name": "[concat(variables('vm_win10_name'), '_os_disk1')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
@@ -583,7 +647,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[variables('vm_db_name')]",
+                    "computerName": "[variables('vm_win10_name')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
@@ -600,7 +664,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('pg-nic-01'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-01'))]"
                         }
                     ]
                 },
@@ -614,13 +678,13 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-11-01",
-            "name": "[variables('pg-nic-02')]",
+            "name": "[variables('vm-nic-02')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('-vnet-hub'), 'default')]"
             ],
             "tags": {
-                "ServiceResourceId": "/subscriptions/e433f371-e5e9-4238-abc2-7c38aa596a18/resourceGroups/cjg-postgre/providers/Microsoft.DataMigration/services/dms-postgre-01"
+                
             },
             "properties": {
                 "ipConfigurations": [
@@ -630,7 +694,7 @@
                             "privateIPAddress": "10.2.0.5",
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('-vnet-hub'), 'default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -647,13 +711,13 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-11-01",
-            "name": "[variables('pg-nic-03')]",
+            "name": "[variables('vm-nic-03')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('-vnet-hub'), 'default')]"
             ],
             "tags": {
-                "ServiceResourceId": "/subscriptions/e433f371-e5e9-4238-abc2-7c38aa596a18/resourceGroups/cjg-postgre/providers/Microsoft.DataMigration/services/dms-postgre-01"
+                
             },
             "properties": {
                 "ipConfigurations": [
@@ -663,7 +727,7 @@
                             "privateIPAddress": "10.2.0.6",
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('-vnet-hub'), 'default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -680,9 +744,9 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups/securityRules",
             "apiVersion": "2020-11-01",
-            "name": "[concat(variables('pg-nsg-01'), '/RDP')]",
+            "name": "[concat(variables('nsg-01'), '/RDP')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('pg-nsg-01'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
             ],
             "properties": {
                 "protocol": "TCP",
@@ -702,9 +766,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-11-01",
-            "name": "[concat(variables('pg-vnet-hub'), '/default')]",
+            "name": "[concat(variables('-vnet-hub'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('pg-vnet-hub'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('-vnet-hub'))]"
             ],
             "properties": {
                 "addressPrefix": "10.2.0.0/24",
@@ -714,32 +778,14 @@
             }
         },
         {
-            "type": "Microsoft.DataMigration/services",
-            "apiVersion": "2018-07-15-preview",
-            "name": "[variables('pg-dms-name')]",
-            "location": "[variables('location')]",
-            "sku": {
-                "name": "Premium_4vCores",
-                "size": "4 vCores",
-                "tier": "Premium"
-            },
-            "kind": "Cloud",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('pg-vnet-hub'))]"
-            ],
-            "properties": {
-                "virtualSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
-            }
-        },
-        {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-11-01",
-            "name": "[variables('pg-nic-01')]",
+            "name": "[variables('vm-nic-01')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-db-ip'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('pg-nsg-01'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-win10-ip'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('-vnet-hub'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -749,10 +795,10 @@
                             "privateIPAddress": "10.2.0.4",
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-db-ip'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-win10-ip'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('pg-vnet-hub'), 'default')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('-vnet-hub'), 'default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -765,7 +811,7 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('pg-nsg-01'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
                 }
             }
         }
