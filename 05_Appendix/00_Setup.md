@@ -32,6 +32,29 @@ TODO
 - Select the **I agree...** checkbox
 - Select **Create**, after about 20 minutes the landing zone will be deployed
 
+## Setup Redis Binding
+
+- Login to the redis image
+- Open the `redis.conf` file:
+
+```bash
+sudo nano 
+```
+
+- Update the redis.conf, add the following `bind` statement below the others:
+
+```bash
+bind 0.0.0.0
+```
+
+## Setup Redis Cluster
+
+- Run the following commands
+
+```bash
+
+```
+
 ## Open the Azure VM Ports
 
 TODO
@@ -82,6 +105,7 @@ Perform the following on the **PREFIX-vm-dev** virtual machine resource.
   - Redis 11.0
 
 - Install Redis 10.16
+  
   - Start the Redis 10.16 installer you just downloaded
   - Select **Run**
   - On the Welcome dialog, select **Next**
@@ -97,19 +121,7 @@ Perform the following on the **PREFIX-vm-dev** virtual machine resource.
   - On the summary dialog, select **Next**
   - On the ready dialog, select **Next**, Redis will start the installation process
   - Select **Finish**
-  
-- Run StackBuilder
-  - Select the local instance, then select **Next**
-  - Select the following applications, then select **Next**
-    - EDB Language Pack v1.0-5 (expand **Add-ons, tools and utilities**)
-    - pgBouncer v1.x (expand **Add-ons, tools and utilities**)
-    - pgJDBC (64bit) v13x (expand **instance Drivers**)
-    - psqlODBC (64bit) v13x (expand **instance Drivers**)
-    - Migration Toolkit v54.x (expand **Registration-required and trial products > EnterpriseDB Tools**)
-    - Replication Server v6.x (also an EnterpriseDB tool)
-  - For the download directory dialog, type **C:\Users\s2admin\Downloads**, then select **Next**.  The applications will download.
-  - Install all the StackBuilder applications by clicking through the dialogs and accepting all the defaults
-  
+
 - Add the **C:\Program Files\Redis\10\bin** path to the `PATH` environment variable
   - Switch to the Environment Variables window
   - Under **System variables**, choose **Path**. Then, select **Edit...**

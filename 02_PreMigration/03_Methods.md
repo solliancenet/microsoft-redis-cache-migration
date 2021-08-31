@@ -16,15 +16,11 @@ We explore the following commonly used tools in this section:
 
 ### RDB File
 
-TODO
-
-## redis-copy
-
-TODO
+By default, Redis will keep cache data persisted to disk on a fairly regular basis, this can however be disabled by the administrator to improve performance. However, doing so would cause any data in memory to be lost in the case of a server fault or reboot.  In most cases this is enabled.
 
 ## SLAVEOF / REPLICAOF
 
-TODO
+Redis includes the ability to create replicas of master nodes.  You can add an Azure Redis instance as a Replica of a source instance and then retire the old master server.
 
 ## MIGRATE
 
@@ -37,10 +33,11 @@ There are several 3rd party migration tools that help migrate Redis workloads ea
 Some of these include:
 
 - [redis-copy](https://github.com/deepakverma/redis-copy)
+- [redis-migrat](https://github.com/vipshop/redis-migrate-tool)
 
 ## Replication
 
-TODO - Redis include  rplication?
+TODO - Redis include replication?
 
 Similar to other data management systems, Redis provides several ways to replicate data to another Redis instance. These include:
 
@@ -57,12 +54,7 @@ Each change is sent to one or more replica servers directly over a TCP/IP connec
 To use the logical replication feature, there are some setup requirements:
 
 - instance source must be 9.4 or higher and the target must be the same or higher version.
-- Tables must have a primary key or changes may not get synced to the target
-- A user on the target system must be a `superuser`
-- Migration users must have permissions to configure logging and create new users on the master server.
-- Ensure that the target machine\instance can gain access to the master server (firewalls, IP address, etc).
-
-> **Note** Azure Cache for Redis Single Server does not allow `superuser` permissions, therefore Logical replication is not a viable option for moving to Azure Cache for Redis Single Server.  However, [Flexible Server using Redis V11](https://docs.microsoft.com/en-us/azure/Redis/flexible-server/concepts-logical) or higher does support logical replication.
+- TODO
 
 ### Supported replication paths
 

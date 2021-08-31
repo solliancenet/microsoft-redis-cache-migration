@@ -16,7 +16,9 @@ Knowing the source Redis version is important as many features have been introdu
 - RDB format change (5.0 not backwards compatible, 4.0 is not backwards compatible)
 - Change in INFO fields (4.0)
 - RESP3 mode (6.0+)
+- LRU Cache changes (4.0+)
 - Any Lua Language changes (EVAL, EVALSHA)
+- Extensive use of TTL
 
 To check the Redis server version run the following SQL command against the Redis instance:
 
@@ -59,31 +61,13 @@ In addition to the common limitations, each service has its limitations:
 
 Many of the other items are simply operational aspects that administrators should become familiar with as part of the operational data workload lifecycle management. This guide will explore many of these operational aspects in the [Post Migration Management](../04_PostMigration/01_Management.md) section.
 
-### User-Defined Functions and Types (C/C++)
+### Redis Modules
 
-TODO - the language Lua?
+You can extend the features of Redis by implemented custom Redis modules.  Look for any `loadmodule` directives in the `redis.conf` file that are not part of the default installation.  You can also get a list of all modules by running:
 
-To identify these functions in the instance, run the following query:
-
-```sql
-TODO
+```bash
+MODULE LIST
 ```
-
-Production environments that require these types of functions will need to migrate to Redis on Azure Virtual Machines.
-
-### Extensions
-
-Azure Cache for Redis does not support the full range of extensions that come out of the box with on-premises installs of Redis. For the latest list, run the `SELECT * FROM pg_available_extensions;` script or see the latest documentation for each service:
-
-- [Single Server - (https://docs.microsoft.com/en-us/azure/Redis/concepts-extensions)](https://docs.microsoft.com/en-us/azure/Redis/concepts-extensions).
-
-If using any extensions that are outside this list, evaluate if they can be removed or replaced. If they cannot be removed, select a migration path with Virtual Machine hosted Redis.
-
-### File System Writes
-
-Any functions, stored procedures, or application code that execute queries (such as [`COPY`](https://www.Redis.org/docs/current/sql-copy.html)) that need file system access are not allowed in Azure Cache for Redis.
-
-Review application code to see if it makes any calls to the `COPY` command. Functions and stored procedures that contain the `COPY` command embedded can be exported.
 
 ## Source Systems
 
@@ -113,32 +97,11 @@ Equipped with the assessment information (CPU, memory, storage, etc.), the migra
 
 There are currently four potential options:
 
-- Azure Cache for Redis (VM)
-- Azure Cache for Redis (Single Server)
-- Azure Cache for Redis (Flexible Server)
-- Azure Cache for Redis (Hyperscale/Citus)
+- Azure Cache for Redis (Basic) : TODO
+- Azure Cache for Redis (Standard) : TODO
+- Azure Cache for Redis (Enterprise) : TODO
 
 Briefly, these options were discussed in the [Limitations](##Limitations) document.
-
-### Single Server Deployment Options
-
-There are currently three pricing deployment options for the **Single Server** option:
-
-- **Basic**: Workloads requiring light compute and I/O performance.
-- **General Purpose**: Most business workloads requiring balanced compute and memory with scalable I/O throughput.
-- **Memory-Optimized**: High-performance instance workloads requiring in-memory performance for faster transaction processing and higher concurrency.
-
-The deployment option decision can be influenced by the RTO and RPO requirements of the data workload. When the data workload requires over 4TB of storage, an extra step is required to review and select [a region that supports](https://docs.microsoft.com/en-us/azure/Redis/concepts-pricing-tiers#storage) up to 16TB of storage.
-
-> **Note**  Contact the Redis team ([AskAzureDBforRedis@service.microsoft.com](mailto:AskAzureDBforRedis@service.microsoft.com)) for regions that do not support the workload storage requirements.
-
-Typically, the decision-making will focus on the storage and Input/output Operations Per Second (IOPS) needs.  The target system will always need at least as much storage as in the source system.  Additionally, since IOPS are allocated 3/GB, it is important to match up the IOPS needs to the final storage size.
-
- | Option | Factors |
- | --- | --- |
- | Basic | Development machine, no need for high performance with less than 1TB storage |
- | General Purpose | Needs for IOPS more than what basic option can provide, but for storage less than 16TB, and less than 4GB of memory |
- | Memory-Optimized | Data workloads that utilize high memory or high cache and buffer related server configuration such as high concurrency|
 
 ### Comparison of Services
 
