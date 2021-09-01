@@ -15,6 +15,7 @@ Knowing the source Redis version is important as many features have been introdu
 - Support for Redis Modules (RedisSearch, RedisBloom, RedisTimeSeries)
 - RDB format change (5.0 not backwards compatible, 4.0 is not backwards compatible)
 - Change in INFO fields (4.0)
+- Usage of REDIS ACL (6.0+)
 - RESP3 mode (6.0+)
 - LRU Cache changes (4.0+)
 - Any Lua Language changes (EVAL, EVALSHA)
@@ -48,10 +49,11 @@ After reviewing the above items, notice there is much more than just data that m
 
 TODO - find azure limitations
 
-Azure Cache for Redis is a fully supported version of Redis running as a platform as a service. However, there are [some common limitations](https://docs.microsoft.com/en-us/azure/Redis/concepts-known-issues-limitations) to become familiar with when doing an initial assessment.
+Azure Cache for Redis is a fully supported version of Redis running as a platform as a service. However, there are some common limitations to become familiar with when doing an initial assessment.
 
 - Connection limits based on cache size
-- 
+- No Import/Export (<=Standard tier)
+- No support for Redis Modules (Instances lower than Premium sku)
 
 In addition to the common limitations, each service has its limitations:
 
@@ -69,6 +71,10 @@ You can extend the features of Redis by implemented custom Redis modules.  Look 
 MODULE LIST
 ```
 
+## Databases
+
+Consider other than the default database `0`. TODO
+
 ## Source Systems
 
 The amount of migration preparation can vary depending on the source system and its location. In addition to the instance objects, consider how to get the data from the source system to the target system. Migrating data can become challenging when there are firewalls and other networking components in between the source and target.
@@ -81,7 +87,7 @@ Lastly, disk space must be evaluated. When exporting a very large instance, cons
 
 ### Cloud Providers
 
-Migrating instances from cloud services providers, such as Amazon Web Services (AWS), may require extra networking configuration steps to access the cloud-hosted Redis instances.  Migration tools, like Azure instance Migration Service (DMS), require access from outside IP ranges and may be blocked.
+Migrating instances from cloud services providers, such as Google Cloud (GCP) and Amazon Web Services (AWS), may require extra networking configuration steps to access the cloud-hosted Redis instances or they may prevent Redis migration commands. Any first party or third party migration tools will require access from outside IP ranges and may be blocked by default.
 
 ### On-premises
 
@@ -95,11 +101,13 @@ Many tools and methods can be used to assess the Redis data workloads and enviro
 
 Equipped with the assessment information (CPU, memory, storage, etc.), the migration user's next choice is to decide which Azure Cache for Redis service and pricing tier to start with.
 
-There are currently four potential options:
+There are currently five potential options:
 
-- Azure Cache for Redis (Basic) : TODO
-- Azure Cache for Redis (Standard) : TODO
-- Azure Cache for Redis (Enterprise) : TODO
+- Azure Cache for Redis (Basic) : An OSS Redis cache running on a single VM. This tier has no service-level agreement (SLA) and is ideal for development/test and non-critical workloads.
+- Azure Cache for Redis (Standard) : An OSS Redis cache running on two VMs in a replicated configuration.
+- Azure Cache for Redis (Premium) : High-performance OSS Redis caches. This tier offers higher throughput, lower latency, better availability, and more features. Premium caches are deployed on more powerful VMs compared to the VMs for Basic or Standard caches.
+- Azure Cache for Redis (Enterprise) : High-performance caches powered by Redis Labs' Redis Enterprise software. This tier supports Redis modules including RediSearch, RedisBloom, and RedisTimeSeries. Also, it offers even higher availability than the Premium tier.
+- Azure Cache for Redis (Enterprise Flash) : Cost-effective large caches powered by Redis Labs' Redis Enterprise software. This tier extends Redis data storage to non-volatile memory, which is cheaper than DRAM, on a VM. It reduces the overall per-GB memory cost.
 
 Briefly, these options were discussed in the [Limitations](##Limitations) document.
 
@@ -110,54 +118,47 @@ Which Azure Cache for Redis service should be selected and used?  This table out
 | Service | Pros | Cons | Versions Supported
 | --- | --- |--- |--- |
 | Azure VM | Any version, most flexible, full Redis feature support | Customer responsible for updates, security, and administration | Any Version
-| Single Server | Autoupgrades, no management | Limited version support, no inbound logical replication support | 9.5 (deprecated), 9.6 (deprecated), 10, and 11
+| Basic | Sizes up to 53GB, low cost | Lower performance, no data persistence, no replication or failover | 4.x, 6.x
+| Standard | All basic, plus replication and failover support | Lower performance, no data persistence | 4.x, 6.x
+| Premium | All Standard, plus zone redundancy, data persistence and clustering | No support for Redis Modules | 4.x, 6.x
+| Enterprise | All Premium, plus Redis Module support | Higher costs | 4.x, 6.x
+| Enterprise Flash | Flash based memory | No Redis Module support | 4.x, 6.x
 
-As displayed above, if running Redis 10 or lower and do not plan to upgrade, the workload will need to run an Azure VM or Single Server. If the requirement is to target v13, utilize Flexible Server or Hyperscale Citus.
+As displayed above, if the instance is running Redis 3.x or lower and do not plan to upgrade, the workload will need to run an Azure VM.
 
 ### Costs
 
-After evaluating the entire WWI Redis data workloads, WWI determined they would need at least 4 vCores and 20GB of memory and at least 100GB of storage space with an IOP capacity of 450 IOPS. Because of the 450 IOPS requirement, they will need to allocate at least 150GB of storage due to [Azure Cache for Redis's IOPS allocation method](https://docs.microsoft.com/en-us/azure/Redis/concepts-pricing-tiers#storage). Additionally, they will require at least 7 days' worth of backups and one read replica.  They do not anticipate an outbound egress of more than 5GB/month. 
+After evaluating the entire WWI Redis data workloads, WWI determined they would need at least 6GB of cache capacity with data persistence and clustering support so a Premium Sku was selected. WWI intentionally chose to begin its Azure migration journey with a relatively small workload. However, the best practices of instance migration still apply and will be used as a template for future migrations.
 
-WWI intentionally chose to begin its Azure migration journey with a relatively small workload. However, the best practices of instance migration still apply.
-
-To determine these numbers, WWI installed Telegraf with the Redis Input Plugin to interface with the Redis statistics collector. Since the Plugin accesses the `pg_stat_instance` and `pg_stat_bgwriter` tables, which show per-instance and writer process statistics respectively, WWI has also made use of the following query to demonstrate the size of each user table in the `reg_app` schema. Note that the `pg_table_size` function solely includes table size, excluding the size of other associated objects, like indexes.
+To determine these numbers, they interrogated the redis process on their source system:
 
   ```sql
-  SELECT  s.table_name
-        ,pg_size_pretty(s.Table_Size)
-  FROM 
-  (
-    SELECT  table_name
-          ,pg_table_size('reg_app.' || table_name) AS Table_Size
-    FROM information_schema.tables
-    WHERE table_schema = 'reg_app'
-    ORDER BY Table_Size DESC 
-  ) s;
+  TODO
   ```
 
-Using the [Azure Cache for Redis pricing calculator](https://azure.microsoft.com/en-us/pricing/details/Redis/) WWI was able to determine the costs for the Azure Cache for Redis instance. As of 4/2021, the total costs of ownership (TCO) is displayed in the following table for the WWI Conference instance:
+Then they monitored the network bandwidth to see how much traffic was being used between the clients and the Redis server. They measured about 15% cache usage per hour which equated to 900MB of traffic per hour which equates to 328GB of traffic per year.  The current application will not be moved to the same Azure region but will utilize the Azure Redis Cache which means network bandwidth will have to be paid.
+
+Additionally, because they want data persistence and backups, they will persist this to Azure Storage.
+
+Using the [Azure Cache for Redis pricing calculator](https://azure.microsoft.com/en-us/pricing/details/cache/) WWI was able to determine the costs for the Azure Cache for Redis instance. As of 8/2021, the total costs of ownership (TCO) is displayed in the following table for the WWI Conference instance:
 
  | Resource | Description | Quantity | Cost |
  | --- | --- | --- | --- |
- | Compute (General Purpose) | 4 vcores, 20GB | 1 @ $0.351/hr | $3074.76 / yr
- | Storage | 5GB | 12 x 5 @ $0.115 | $6.90 / yr |
- | Backup | 7 full backups (1x free) | 6 * 5(GB) * .10 | $3.00 / yr
- | Read Replica | 1 second region replica | compute + storage | $3081.66 / yr
- | Network | < 5GB/month egress | Free |
- | Total |  |   | $6166.32 / yr |
+ | Compute (Premium) | 6GB Memory (1 primary, 1 replica) | 24 x 365 @ $0.554/hr | $4853.04 / yr |
+ | Storage (backup) | 6GB | 6 * 12 @ $0.15 | $10.80 / yr |
+ | Network | ~27.37GB/month egress | 12 * 22.37 * $.08 | $21.4752 / yr
+ | Total |  |   | $4885.31 / yr |
 
-After reviewing the initial costs, WWI's CIO confirmed they will be on Azure for a period much longer than 3 years. They decided to use 3-year [reserve instances](https://docs.microsoft.com/en-us/azure/Redis/concept-reserved-pricing) to save an extra ~$4K/yr:
+After reviewing the initial costs, WWI's CIO confirmed they will be on Azure for a period much longer than 3 years. They decided to use 3-year [reserve instances](https://docs.microsoft.com/en-us/azure/Redis/concept-reserved-pricing) to save an extra ~$2.6K/yr:
 
  | Resource | Description | Quantity | Cost |
  | --- | --- | --- | --- |
- | Compute (General Purpose) | 4 vCores | 1 @ $0.1431/hr | 1253.56 / yr |
- | Storage | 5GB | 12 x 5 @ $0.115 | $6.90 / yr |
- | Backup | 7 full backups (1x free) | 6 * 5(GB) * .10 | $3.00 / yr |
- | Network | < 5GB/month egress | Free |
- | Read Replica | 1 second region replica | compute + storage | 1260.46 / yr |
- | Total   |  |  | $2425.8 / yr (~39% savings) |
+ | Compute (Premium) | 6GB Memory (1 primary, 1 replica) | 24 x 365 @ $0.249/hr | $2190 / yr |
+ | Storage (backup) | 6GB | 6 * 12 @ $0.15 | $10.80 / yr |
+ | Network | ~27.37GB/month egress | 12 * 22.37 * $.08 | $21.4752 / yr
+ | Total   |  |  | $2222.27 / yr (~45% savings) |
 
-As the table above shows, backups, network egress, and any read replicas must be considered in the total cost of ownership (TCO). As more instances are added, the storage and network traffic generated would be the only extra cost-based factor to consider.
+As the table above shows, backups, network egress, and any extra nodes must be considered in the total cost of ownership (TCO). As more instances are added, the storage and network traffic generated would be the only extra cost-based factor to consider.
 
 > **Note:** The estimates above do not include any [ExpressRoute](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-introduction), [Azure App Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/overview), [Azure Load Balancer](https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-overview), or [App Service](https://docs.microsoft.com/en-us/azure/app-service/overview) costs for the application layers.
 
@@ -169,26 +170,22 @@ When moving to Azure Cache for Redis, the conversion to secure sockets layer (SS
 
 > **Note** Although SSL is enabled by default, it is possible to disable. This is strongly not recommended.
 
-Follow the activities in [Configure TLS connectivity in Azure Cache for Redis - Single Server](https://docs.microsoft.com/en-us/azure/Redis/concepts-ssl-connection-security) to reconfigure the application to support this strong authentication path.
+Follow the activities in [Configure TLS connectivity in Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/concepts-ssl-connection-security) to reconfigure the application to support this strong authentication path.
 
 Lastly, modify the server name in the application connection strings or switch the DNS to point to the new Azure Cache for Redis server.
 
 ## WWI Use Case
 
-WWI started the assessment by gathering information about their Redis data estate. They were able to compile the following:
+WWI started the assessment by gathering information about their Redis instances. They were able to compile the following:
 
- | Name | Source | Size | IOPS | Version | Owner | Downtime |
+ | Name | Source | Size | Data Persistence | Version | Owner | Downtime |
  | --- | --- | --- | ---- | ---- | ---- | ---- |
- | WwwDB | AWS (PaaS) | 1GB | 150 | 9.5 | Marketing Dept | 1 hr |
- | BlogDB | AWS (Paas) | 1GB | 100| 9.6 | Marketing Dept | 4 hrs |
- | ConferenceDB | On-premises | 5GB | 50 | 9.5 | Sales Dept | 4 hrs |
- | CustomerDB | On-premises |  10GB | 75 | 10.0 | Sales Dept | 2 hrs |
- | SalesDB | On-premises | 20GB | 75 | 10.0 | Sales Dept | 1 hr |
- | DataWarehouse | On-premises | 50GB | 200 | 10.0 | Marketing Dept | 4 hrs
+ | Redis (Www) | AWS (PaaS) | 6GB | yes | 3.0 | Information Technology | 4 hr |
+ | Redis (Database) | On-premises | 12GB | yes | 5.0 | Information Technology | 1 hrs |
   
 Each instance owner was contacted to determine the acceptable downtime period. The planning and migration method selected was based on the acceptable instance downtime.
 
-For the first phase, WWI focused solely on the ConferenceDB instance. The team needed the migration experience to assist in the proceeding data workload migrations. The ConferenceDB instance was selected because of the simple instance structure and the lenient downtime requirements. Once the instance was migrated, the team focused on migrating the application into the secure Azure landing zone.
+For the first phase, WWI focused solely on the web site supporting instance. The team needed the migration experience to assist in the proceeding data workload migrations. The www instance was selected because of the simple instance structure and the lenient downtime requirements. Once the instance was migrated, the team focused on migrating the application into the secure Azure landing zone.
 
 ## Assessment Checklist
 
