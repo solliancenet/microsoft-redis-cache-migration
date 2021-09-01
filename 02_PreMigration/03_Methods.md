@@ -18,6 +18,10 @@ We explore the following commonly used tools in this section:
 
 By default, Redis will keep cache data persisted to disk on a fairly regular basis, this can however be disabled by the administrator to improve performance. However, doing so would cause any data in memory to be lost in the case of a server fault or reboot.  In most cases this is enabled.
 
+## Manual (SET, DUMP/RESTORE)
+
+TODO
+
 ## SLAVEOF / REPLICAOF
 
 Redis includes the ability to create replicas of master nodes.  You can add an Azure Redis instance as a Replica of a source instance and then retire the old master server.
@@ -37,21 +41,19 @@ Some of these include:
 
 ## Replication
 
-TODO - Redis include replication?
-
 Similar to other data management systems, Redis provides several ways to replicate data to another Redis instance. These include:
 
-- [Physical Replication/Log Shipping/Warm Standby](https://www.Redis.org/docs/9.6/warm-standby.html).
+- [TODO](TODO).
 
 ### Synchronous vs Asynchronous
 
 As with other replication technologies in other instance management systems, there are several supported ways of sending the transaction data to the targets. In synchronous replication, the source doesn't finish committing until a replica confirms it received the transaction. In asynchronous streaming replication, the replica(s) are allowed to fall behind the source when the source is faster/busier. If the source crashes, it is possible loss of data that wasn't replicated yet may occur.
 
-### Logical Replication
+### Replication Process
 
-Each change is sent to one or more replica servers directly over a TCP/IP connection as it happens. The replicas must have a direct network connection to the master configured in their recovery.conf's `primary_conninfo` option.
+Each change is sent to one or more replica servers directly over a TCP/IP connection as it happens. The replicas must have a direct network connection to the master.
 
-To use the logical replication feature, there are some setup requirements:
+To use replication feature, there are some setup requirements:
 
 - instance source must be 9.4 or higher and the target must be the same or higher version.
 - TODO
@@ -61,14 +63,12 @@ To use the logical replication feature, there are some setup requirements:
 | Replication Type | Service | Direction | Supported | Version Support | Notes
 | --- | --- | --- | --- | ---- | ---- |
 | Physical/File system/Block Device Replication | Single Server, Flexible Server, Hyperscale Citus | Ingress/Egress To Azure | Not Supported | 9.0 or higher | Requires file system access
-| Logical Decoding | Single Server, Flexible Server, Hyperscale Citus | Ingress/Egress To Azure | Supported | 9.6 or higher | N/A
-| Trigger-based | Single Server, Flexible Server, Hyperscale Citus | Ingress/Egress To Azure | Supported | Any | 3rd Party tool required
 
 ## Fastest/Minimum Downtime Migration
 
-There are plenty of paths for migrating the data. Deciding which path to take is a function of the migration team's skill set, and the amount of downtime the instance and application owners are willing to accept.  Some tools support multi-threaded parallel data migration approaches while other tools were designed for simple migrations of table data only.
+There are plenty of paths for migrating the data. Deciding which path to take is a function of the migration team's skill set, and the amount of downtime the instance and application owners are willing to accept.  Some tools support multi-threaded parallel data migration approaches while other tools were designed for simple migrations of key/value data only.
 
-The fastest and most complete path is to use replication style features (either directly with Redis, DMS, or 3rd party tools), but replication typically comes with the costs of adding primary keys, which could break the application and force costly coding changes.
+The fastest and most complete path is to use replication style features (either directly with Redis or 3rd party tools), but replication typically comes with the costs of extra setup steps and various configuration changes.
 
 ## Decision Table
 
@@ -76,18 +76,13 @@ There are many paths WWI can take to migrate their Redis workloads. We have prov
 
 | Objective | Description | Tool | Prerequisites | Advantages | Disadvantages |
 | --- | --- | --- | --- | ---- | ---- |
-| Fastest migration possible | Parallel approach | pg_dump/pg_dumpall | Scripted Setup | Highly parallelized | Target throttling |
-| Fastest migration possible | Parallel approach | Azure Data Factory | ADF Resource, Linked Services setup, Pipelines | Highly parallelized | Target throttling |
-| Online migration | Keep the source up for as long as possible | Logical replication | None | Seamless | Extra processing and storage |
-| Online migration | Keep the source up for as long as possible | Logical decoding | 3rd party tools | High-performance, zero-downtime, high availability, support for other targets | Extra setup, processing and storage |
-| Online migration | Keep the source up for as long as possible | Trigger-based replication | 3rd party tool | Seamless | 3rd party tool configuration |
-| Online migration | Keep the source up for as long as possible | Azure instance Migration Service (DMS) | None | Repeatable process | Limited to data only, supports 10.0 and higher |
-| Highly Customized Offline Migration | Selectively export objects | pg_dump | None | Highly customizable | Manual |
-| Offline Migration Semi-automated | UI based export and import | Redis pgAdmin | Download and Install | Semi-automated | Only common sets of switches are supported |
+| Fastest migration possible | Parallel approach | 3rd party tool | Scripted Setup | Highly parallelized | Target throttling |
+| Online migration | Keep the source up for as long as possible | Replication | None | Seamless | Extra processing and storage |
+| Highly Customized Offline Migration | Selectively export objects | IMPORT/EXPORT | None | Highly customizable | Manual |
 
 ## WWI Use Case
 
-WWI has selected its conference instance as its first migration workload. The workload was selected because it had the least risk and the most available downtime due to the gap in the annual conference schedule. They also assessed the instance to not be using any unsupported features in the target Azure Cache for Redis service. Based on the migration team's other assessment details, they determined that they will attempt to perform an offline migration using the pg_dump/pg_restore Redis tools.
+WWI has selected its conference instance as its first migration workload. The workload was selected because it had the least risk and the most available downtime due to the gap in the annual conference schedule. They also assessed the instance to not be using any unsupported features in the target Azure Cache for Redis service. Based on the migration team's other assessment details, they determined that they will attempt to perform an offline migration using the backup and restore Redis tools.
 
 During their assessment period, they did find that the customer instance does use some languages, extensions, and a custom function that are not available in the target service for the conference instance. They have asked the development team to review replacing those features while they migrate the more simple workloads. If they can be replaced successfully, they will choose an Azure Cache for Redis service, otherwise, they will provision an Azure VM to host the workload.
 

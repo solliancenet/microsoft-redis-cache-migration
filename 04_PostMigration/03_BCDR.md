@@ -10,7 +10,9 @@ Azure Cache for Redis supports automatic backups for 7 days by default. It may b
 
 There are several limitations to the instance backup features as described in each of the backup articles for each service type. It is important to understand them when deciding what additional strategies that should be implemented:
 
-- [Backup and restore in Azure Cache for Redis - Single Server](https://docs.microsoft.com/en-us/azure/Redis/concepts-backup)
+TODO
+
+- [Backup and restore in Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/concepts-backup)
 
 Commonality of the backup architectures include:
 
@@ -32,7 +34,7 @@ During a instance restore, any supporting items outside of the instance will als
 
 ## Replicas
 
-### Read Replicas (Single Server)
+### Read Replicas
 
 [Read replicas](https://docs.microsoft.com/en-us/azure/Redis/concepts-read-replicas) can be used to increase the Redis read throughput, improve performance for regional users and to implement disaster recovery. When creating one or more read replicas, be aware that additional charges will apply for the same compute and storage as the primary server.
 
@@ -54,7 +56,7 @@ If the application is made up of many different instances around the world, it m
 
 WWI wanted to test the failover capabilities of read replicas so they performed the steps outlined below.
 
-### Creating a read replica (Single Server)
+### Creating a read replica 
 
 - Open the Azure Portal.
 - Browse to the Azure Cache for Redis instance.
@@ -66,7 +68,7 @@ WWI wanted to test the failover capabilities of read replicas so they performed 
 
 > **Note:** Each replica will incur additional charges equal to the main instance.
 
-### Failover to read replica (Single Server)
+### Failover to read replica 
 
 Once a read replica has been created and has completed the replication process, it can be used for failed over. Replication will stop during a failover and make the read replica its own main instance.
 

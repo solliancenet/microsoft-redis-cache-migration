@@ -42,7 +42,6 @@
         "api_name": "[concat(parameters('prefix'),'-api01')]",
         "insights-name": "[concat(parameters('prefix'),'-insights')]",
         "redis-name": "[concat(parameters('prefix'),'-redis')]",
-        "db_single": "[concat(parameters('prefix'),'-single-01')]",
         "vm-win10-ip": "[concat(parameters('prefix'),'-vm-ip-01')]",
         "vm-redis01-ip": "[concat(parameters('prefix'),'-vm-redis01-ip')]",
         "vm-redis02-ip": "[concat(parameters('prefix'),'-vm-redis02-ip')]",
