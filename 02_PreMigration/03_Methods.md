@@ -62,7 +62,7 @@ To use replication feature, there are some setup requirements:
 
 | Replication Type | Service | Direction | Supported | Version Support | Notes
 | --- | --- | --- | --- | ---- | ---- |
-| Physical/File system/Block Device Replication | Single Server, Flexible Server, Hyperscale Citus | Ingress/Egress To Azure | Not Supported | 9.0 or higher | Requires file system access
+| Replication | All versions | Ingress/Egress To Azure | Not Supported | 9.0 or higher | Requires file system access
 
 ## Fastest/Minimum Downtime Migration
 

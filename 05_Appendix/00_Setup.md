@@ -52,7 +52,7 @@ bind 0.0.0.0
 - Run the following commands
 
 ```bash
-
+sudo service redis-server restart
 ```
 
 ## Open the Azure VM Ports
