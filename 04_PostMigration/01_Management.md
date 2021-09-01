@@ -14,6 +14,8 @@ Once log data is flowing, use the [Kusto Query Language (KQL)](https://docs.micr
 
 For example, to get the memory usage of the Azure Cache for Redis:
 
+TODO
+
 ```kql
 AzureMetrics
 | where TimeGenerated > ago(15m)
@@ -36,13 +38,13 @@ AzureMetrics
 | top 1 by TimeGenerated
 ```
 
-> **Note** for a list of other metrics, reference [Monitor and tune Azure Cache for Redis - Single Server](https://docs.microsoft.com/en-us/azure/Redis/concepts-monitoring).
+> **Note** for a list of other metrics, reference [Monitor Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-monitor).
 
 Once a KQL query has been created, create [log alerts](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-unified-log) based off these queries.
 
 ## Server Configuration
 
-As part of the migration, it is likely the on-premises [server parameters](https://docs.microsoft.com/en-us/azure/Redis/concepts-server-parameters) were modified to support a fast egress. Also, modifications were made to the Azure Cache for Redis parameters to support a fast ingress. The Azure server parameters should be set back to their original on-premises workload optimized values after the migration.
+As part of the migration, it is likely the on-premises [server configuration](https://docs.microsoft.com/en-us/azure/Redis/concepts-server-parameters) were modified to support a fast egress. Also, modifications were made to the Azure Cache for Redis parameters to support a fast ingress. The Azure server parameters should be set back to their original on-premises workload optimized values after the migration.
 
 However, be sure to review and make server parameters changes that are appropriate for the workload and the environment. Some values that were great for an on-premises environment, may not be optimal for a cloud-based environment. Additionally, when planning to migrate the current on-premises parameters to Azure, verify that they can in fact be set.  
 
@@ -53,10 +55,12 @@ Some parameters are not allowed to be modified in Azure Cache for Redis.
 The Azure Portal and Windows PowerShell can be used for managing the Azure Cache for Redis. To get started with PowerShell, install the Azure PowerShell cmdlets for Redis with the following PowerShell command:
 
 ```PowerShell
-Install-Module -Name Az.Redis
+Install-Module -Name Az.RedisCache
 ```
 
 After the modules are installed, reference tutorials and documentation like the following to learn ways to take advantage of scripting various management activities:
+
+TODO - find links...
 
 - [Tutorial: Design an Azure Cache for Redis using PowerShell](https://docs.microsoft.com/en-us/azure/Redis/tutorial-design-instance-using-powershell)
 - [Restore an Azure Cache for Redis server using PowerShell](https://docs.microsoft.com/en-us/powershell/module/az.Redis/restore-azRedisserver?view=azps-5.8.0)

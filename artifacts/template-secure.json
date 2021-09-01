@@ -413,7 +413,7 @@
         {
             "type": "microsoft.operationalinsights/workspaces",
             "apiVersion": "2020-08-01",
-            "name": "[concat(parameters('prefix'), '-logs')]",
+            "name": "[concat(parameters('prefix'), '-redis-logs')]",
             "location": "[variables('location')]",
             "properties": {
                 "sku": {

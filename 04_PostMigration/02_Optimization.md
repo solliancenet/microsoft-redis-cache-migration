@@ -34,40 +34,39 @@ In consideration of the above patterns, performance issues can crop up in any of
 
 ## Performance Recommendations
 
+TODO
+
 The [Performance Recommendations](https://docs.microsoft.com/en-us/azure/Redis/concepts-performance-recommendations) feature analyzes workloads across the server to identify indexes with the potential to improve performance. The tool requires the Query Store feature to be enabled.  Once enabled, manually review and implement any suggestions.
 
 ## Azure Advisor
 
+TODO
+
 [Azure Advisor](https://docs.microsoft.com/en-us/azure/Redis/concepts-azure-advisor-recommendations) will provide recommendations around Azure Cache for Redis Performance, Reliability and Cost.  For example, Azure Advisor could present a recommendation to modify a server parameter based on the workloads and instance pricing tier and available scaling settings.
-
-## Upgrading the Tier
-
-The Azure Portal can be used to scale between from `General Purpose` and `Memory Optimized`. If a `Basic` tier is chosen, there will be no option to upgrade the tier to `General Purpose` or `Memory Optimized` later. However, it is possible to utilize other techniques to perform a migration/upgrade to a new Azure Cache for Redis instance.
-
-For an example of a script that will migrate from Basic to another server tier, reference [Upgrade from Basic to General Purpose or Memory Optimized tiers in Azure Cache for Redis](https://techcommunity.microsoft.com/t5/azure-instance-for-Redis/upgrade-from-basic-to-general-purpose-or-memory-optimized-tiers/ba-p/690976).
 
 ## Scale the Server
 
-Within the tier, it is possible to scale cores and memory to the minimum and maximum limits allowed in that tier. If monitoring shows a continual maxing out of CPU or memory, follow the steps to [Manage an Azure Cache for Redis server using Azure Portal](https://docs.microsoft.com/en-us/azure/Redis/howto-create-manage-server-portal).
+It is possible to scale up the tier at any time, however, once scaled up, you cannot scale the instance down.  You would need to re-create a lower tiered instance and then migrate to it.
 
 ## Moving Regions
 
-Moving a instance to a different Azure region depends on the approach and architecture.  Depending on the approach, it could cause system downtime.
+Moving a instance to a different Azure region depends on the approach and architecture. Depending on the selected approach, it could cause system downtime.
 
-The recommended process is the same as utilizing read replicas for maintenance failover. However, compared to the planned maintenance method mentioned above, the speed to failover is much faster when a failover layer has been implemented in the application. The application should only be down for a few moments during the read replica failover process. More details are covered in the [Business Continuity and Disaster Recovery](03_BCDR.md) section.
+The recommended process is the same as utilizing cluster replicas for maintenance failover. However, compared to the planned maintenance method mentioned above, the speed to failover is much faster when a failover layer has been implemented in the application. The application should only be down for a few moments during the read replica failover process. More details are covered in the [Business Continuity and Disaster Recovery](03_BCDR.md) section.
 
 ## Quick Tips
 
 Use the following to make quick performance changes:
 
-- **CPU Usage** : If CPU usage for an Azure Cache for Redis server is saturated at 100%, then select the next higher level of Compute Units to get more CPU.
-- **IOPS** : The default storage size of 125GB is limited to 375 IOPs. If the application requires higher IOPs, then it is recommended that a higher storage size be selected to get more IOPs.
+TODO
+
+- **Memory Usage** : If CPU usage for an Azure Cache for Redis server is saturated at 100%, then select the next higher level of Compute Units to get more CPU.
 - **Regions** :  It is recommended having the application server/client machine in the same region in Azure to reduce latency between the client/application server and the instance.
 - **Accelerated Networking** : Accelerated networking enables single root I/O virtualization (SR-IOV) to a VM, greatly improving its networking performance. This high-performance path bypasses the host from the datapath reducing latency, jitter, and CPU utilization for use with the most demanding network workloads on supported VM types.
 
 ## WWI Use Case
 
-WWI business and application users expressed a high level of excitement regarding the ability to scale the instance on-demand. They were also interested in using the Query Performance Insight to determine if long running queries performance needed to be addressed.
+WWI business and application users expressed a high level of excitement regarding the ability to scale the instance on-demand.
 
 They opted to utilize a read replica server for any potential failover or read-only needed scenarios.
 
@@ -77,8 +76,6 @@ They elected to monitor any potential issues for now and implement Azure Automat
 
 ## Optimization Checklist
 
-- Enable Query Store
-- Monitor for slow queries.
 - Periodically review the Performance and Azure Advisor recommendations.
 - Utilize monitoring to drive tier upgrades and scale decisions.
 - Consider moving regions if the users or application needs change.
