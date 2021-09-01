@@ -25,7 +25,11 @@ The migration tool location will determine the network connectivity requirements
 
 | Migration Tool | Type | Tool Location | Inbound Network Requirements | Outbound Network Requirements |
 | --- | --- | --- | --- | --- |
-| Import/Export (pgAdmin, pg_dump) | Offline | On-premises  | Allow 5432 (6432 with PgBouncer) from internal IP | A path to connect to the Azure Redis instance instance |
+| Import/Export (RDB) | Offline | On-premises  | None | A path to copy the file to the new instance |
+| DUMP/RESTORE | Online | On-premises  | None | Open port to the target instance |
+| SLAVEOF / REPLICAOF | Online | On-premises  | None | Open port to the target instance |
+| MIGRATE | Online | On-premises  | None | Open port to the target instance |
+| 3rd party tools | Offline \ Online | On-premises  | Based on tool | Based on tool |
 
 > **Note** We will discuss these migration methods in more detail in the next section.
 
@@ -37,15 +41,11 @@ Other networking considerations include:
 
 ## Private Link and/or VNet integration
 
-As noted above, not all Azure Cache for Redis services support private links.
-
-| Service | Support
-| --- | --- |
-| [Single Server](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet) | Only Premimum or higher pricing tiers will allow for private link configurations.
+All Azure Cache for Redis services support private links and VNet integration.  There are however be sure to review the [FAQs for private endpoints](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq) to understand the behavior of the cache when behind a private endpoint.
 
 ## SSL/TLS Connectivity
 
-In addition to the application implications of migrating to SSL-based communication, the SSL/TLS connection types are also something that needs to be considered. After creating the Azure Cache for Redis instance, review the SSL settings, and read the [SSL/TLS connectivity in Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/concepts-ssl-connection-security) article to understand how the TLS settings can affect the security posture.
+In addition to the application implications of migrating to SSL-based communication, the SSL/TLS connection types are also something that needs to be considered. After creating the Azure Cache for Redis instance, review the SSL settings, and read the [Configure your application to use TLS 1.2](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq) article to understand how the TLS settings can affect the security posture of an application.
 
 ## WWI Use Case
 

@@ -20,6 +20,7 @@ Knowing the source Redis version is important as many features have been introdu
 - LRU Cache changes (4.0+)
 - Any Lua Language changes (EVAL, EVALSHA)
 - Extensive use of TTL
+- Number of databases
 
 To check the Redis server version run the following SQL command against the Redis instance:
 
@@ -38,7 +39,7 @@ For a list of changes between versions, reference the latest release documentati
 
 Data (keys and the values) is only one component of instance migration. The instance supporting configuration may also need to be migrated and validated to ensure the applications will continue to run reliably.  As part of the assessment, it is important to understand what features of the system are being used other than data storage.
 
-Here is a list of inventory items that should be queried before and after the migration:
+Here is a list of inventory items that should be inventoried before and after the migration:
 
 - Users
 - Configuration settings
@@ -47,33 +48,27 @@ After reviewing the above items, notice there is much more than just data that m
 
 ## Limitations
 
-TODO - find azure limitations
-
-Azure Cache for Redis is a fully supported version of Redis running as a platform as a service. However, there are some common limitations to become familiar with when doing an initial assessment.
-
-- Connection limits based on cache size
-- No Import/Export (<=Standard tier)
-- No support for Redis Modules (Instances lower than Premium sku)
-
-In addition to the common limitations, each service has its limitations:
-
-- [Single Server limitations](https://docs.microsoft.com/en-us/azure/Redis/concepts-limits)
-  - No automated upgrades between major instance engine versions.
-  - TODO
+Azure Cache for Redis is a fully supported version of Redis running as a platform as a service. However, there are some common limitations to become familiar with when doing an initial assessment for selected your landing zone. Many of these limitations are driven by the tier selected as shown in the online [supported features document](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-overview#feature-comparison)
 
 Many of the other items are simply operational aspects that administrators should become familiar with as part of the operational data workload lifecycle management. This guide will explore many of these operational aspects in the [Post Migration Management](../04_PostMigration/01_Management.md) section.
+
+> **Note** Each tier supports a maximum number of databases.  If you have more than the default of `16`, be sure that you pick a tier to migrate too that has support for all source databases.
 
 ### Redis Modules
 
 You can extend the features of Redis by implemented custom Redis modules.  Look for any `loadmodule` directives in the `redis.conf` file that are not part of the default installation.  You can also get a list of all modules by running:
 
 ```bash
-MODULE LIST
+redis-cli MODULE LIST
 ```
 
 ## Databases
 
-Consider other than the default database `0`. TODO
+When performing a migration, consider the Redis instance may have more than one database. The tool you select will need to be able to support migrating all databases versus just the default `0` database. You can find the number of databases by running the following:
+
+```bash
+redis-cli INFO keyspace
+```
 
 ## Source Systems
 
@@ -121,22 +116,34 @@ Which Azure Cache for Redis service should be selected and used?  This table out
 | Basic | Sizes up to 53GB, low cost | Lower performance, no data persistence, no replication or failover | 4.x, 6.x
 | Standard | All basic, plus replication and failover support | Lower performance, no data persistence | 4.x, 6.x
 | Premium | All Standard, plus zone redundancy, data persistence and clustering | No support for Redis Modules | 4.x, 6.x
-| Enterprise | All Premium, plus Redis Module support | Higher costs | 4.x, 6.x
-| Enterprise Flash | Flash based memory | No Redis Module support | 4.x, 6.x
+| Enterprise | All Premium, plus Redis Module support | Higher costs | 6.x
+| Enterprise Flash | Flash based memory | No Redis Module support | 6.x
 
-As displayed above, if the instance is running Redis 3.x or lower and do not plan to upgrade, the workload will need to run an Azure VM.
+As displayed above, if the instance is running Redis 3.x or lower and do not plan to upgrade, the workload will need to run in an Azure VM.
 
 ### Costs
 
 After evaluating the entire WWI Redis data workloads, WWI determined they would need at least 6GB of cache capacity with data persistence and clustering support so a Premium Sku was selected. WWI intentionally chose to begin its Azure migration journey with a relatively small workload. However, the best practices of instance migration still apply and will be used as a template for future migrations.
 
-To determine these numbers, they interrogated the redis process on their source system:
+To determine the memory usage, they interrogated the redis processes on their source system during a heavy load period:
 
-  ```sql
-  TODO
+  ```bash
+  ps -o pid,user,%mem,command ax | sort -b -k3 -r
   ```
 
-Then they monitored the network bandwidth to see how much traffic was being used between the clients and the Redis server. They measured about 15% cache usage per hour which equated to 900MB of traffic per hour which equates to 328GB of traffic per year.  The current application will not be moved to the same Azure region but will utilize the Azure Redis Cache which means network bandwidth will have to be paid.
+They then monitored the network bandwidth to see how much traffic was being used between the clients and the Redis server. They measured about 15% cache usage per hour which equated to 900MB of traffic per hour which equates to 328GB of traffic per year.  The current application will not be moved to the same Azure region but will utilize the Azure Redis Cache which means network bandwidth will have to be paid.  They had a couple of tools to choose from to monitor the network traffic (`iptraf` and `nethogs`):
+
+```bash
+sudo apt-get install iptraf -y
+
+sudo netstat =tump | grep <port_number>
+```
+
+```bash
+sudo apt-get install nethogs
+
+sudo nethogs
+```
 
 Additionally, because they want data persistence and backups, they will persist this to Azure Storage.
 

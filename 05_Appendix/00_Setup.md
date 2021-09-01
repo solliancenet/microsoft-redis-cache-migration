@@ -38,7 +38,7 @@ TODO
 - Open the `redis.conf` file:
 
 ```bash
-sudo nano 
+sudo nano /etc/redis/redis.conf
 ```
 
 - Update the redis.conf, add the following `bind` statement below the others:

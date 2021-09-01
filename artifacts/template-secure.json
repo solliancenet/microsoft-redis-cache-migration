@@ -59,12 +59,54 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(parameters('prefix'),'redisstorage')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            },
+            "resources": [
+                {
+                  "type": "blobServices/containers",
+                  "apiVersion": "2019-06-01",
+                  "name": "default/redis",
+                  "dependsOn": [
+                    "[concat(parameters('prefix'),'redisstorage')]"
+                  ]
+                }
+              ]
+        },
+        {
             "type": "Microsoft.Cache/Redis",
             "apiVersion": "2020-12-01",
             "name": "[concat(variables('redis-name'),'-basic')]",
             "location": "[variables('location')]",
             "properties": {
-                "redisVersion": "4.0.14",
+                "redisVersion": "4",
                 "sku": {
                     "name": "Basic",
                     "family": "C",
@@ -83,11 +125,30 @@
             "name": "[concat(variables('redis-name'),'-std')]",
             "location": "[variables('location')]",
             "properties": {
-                "redisVersion": "4.0.14",
+                "redisVersion": "4",
                 "sku": {
                     "name": "Standard",
                     "family": "C",
                     "capacity": 0
+                },
+                "enableNonSslPort": false,
+                "publicNetworkAccess": "Enabled",
+                "redisConfiguration": {
+                    
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Cache/Redis",
+            "apiVersion": "2020-12-01",
+            "name": "[concat(variables('redis-name'),'-prem')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "redisVersion": "4",
+                "sku": {
+                    "name": "Premium",
+                    "family": "P",
+                    "capacity": 1
                 },
                 "enableNonSslPort": false,
                 "publicNetworkAccess": "Enabled",
@@ -426,7 +487,7 @@
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
-                            "priority": 300,
+                            "priority": 310,
                             "direction": "Inbound",
                             "sourcePortRanges": [],
                             "destinationPortRanges": [],
@@ -443,7 +504,7 @@
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
-                            "priority": 300,
+                            "priority": 400,
                             "direction": "Inbound",
                             "sourcePortRanges": [],
                             "destinationPortRanges": [],
@@ -460,7 +521,7 @@
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
-                            "priority": 300,
+                            "priority": 410,
                             "direction": "Inbound",
                             "sourcePortRanges": [],
                             "destinationPortRanges": [],
