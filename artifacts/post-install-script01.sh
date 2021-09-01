@@ -4,14 +4,22 @@ sudo apt update
 
 sudo apt install redis-server
 
-sudo apt install make pkg-config
+sudo apt install make pkg-config libssl-dev
 
 wget https://download.redis.io/releases/redis-6.2.5.tar.gz
 tar xzf redis-6.2.5.tar.gz
 cd redis-6.2.5
 make distclean
-make MALLOC=libc
-make
+
+make distclean
+
+make BUILD_TLS=yes MALLOC=libc
+
+./utils/gen-test-certs.sh
+
+sudo apt-get install -y tcl-tls
+
+#./runtest --tls
 
 cd utils
 
