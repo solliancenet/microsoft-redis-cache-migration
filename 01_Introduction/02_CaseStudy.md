@@ -29,7 +29,7 @@ These stages include:
  | 2 | Migration | Execute Migration, Execute Test Plans |
  | 3 | Post-migration | Business Continuity, Disaster Recovery, Management, Security, Performance Optimization, Platform modernization |
 
-WWI has several instances of Redis running with varying versions ranging from 9.5 to 11.  They would like to move their older instances to the latest Redis version as soon as possible, but there are some concerns regarding applications functioning without issues. A decision has been made to migrate to the cloud first and upgrade the Redis version later knowing that Redis 9.5 and 9.6 are coming to end of support.
+WWI has several instances of Redis running with varying versions ranging from 3.0 to 6.0.  They would like to move their older instances to the latest Redis version as soon as possible, but there are some concerns regarding applications functioning without issues. A decision has been made to migrate to the cloud first and upgrade the Redis version later knowing that Redis 3.0 and 4.0 are coming to end of support.
 
 They would also like to ensure that their data workloads are safe and available across multiple geographic regions in case of failure and are looking at the available configuration options.
 
