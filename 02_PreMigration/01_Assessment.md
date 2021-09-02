@@ -22,9 +22,9 @@ Knowing the source Redis version is important as many features have been introdu
 - Extensive use of TTL
 - Number of databases
 
-To check the Redis server version run the following SQL command against the Redis instance:
+To check the Redis server version run the following command against the Redis instance:
 
-```sql
+```bash
 redis-server --version
 ```
 

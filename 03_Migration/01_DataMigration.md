@@ -2,14 +2,14 @@
 
 ## Back up the instance
 
-Lower the risk and back up the instance before upgrading or migrating data. Use the Redis `save` or `bgsave` command to backup the Redis data to disk.
+Lower risk and back up the instance before upgrading or migrating data. Use the Redis `save` or `bgsave` command to backup the Redis data to disk.
 
 ## Offline vs. Online
 
 Before selecting a migration tool, decide if the migration should be online or offline.
 
 - **Offline migrations** require the system to be down while the migration takes place. Users will not be able to modify data. This option ensures that the state of the data will be exactly what is expected when restored in Azure.
-- **Online migrations** will migrate the data in near real-time. This option is appropriate when there is little downtime for the users or application consuming the data workload. The costs are too high for the corporation to wait for complete migration. The process involves replicating the data using a replication method such as logical replication or similar functionality.
+- **Online migrations** will migrate the data in near real-time. This option is appropriate when there is little downtime for the users or application consuming the data workload. The costs are too high for the corporation to wait for complete migration. The process involves replicating the data using some type of replication method.
 
 > **Case Study:** In the case of WWI, their environment has some complex networking and security requirements that will not allow for the appropriate changes to be applied for inbound and outbound connectivity in the target migration time frame. These complexities and requirements essentially eliminate the online approach from consideration.
 
@@ -17,11 +17,9 @@ Before selecting a migration tool, decide if the migration should be online or o
 
 ## Data Drift
 
-Offline migration strategies have the potential for data drift. Data drift occurs when newly modified source data becomes out of sync with migrated data. When this happens, a full export or a delta export is necessary. To mitigate this problem, stop all traffic to the instance and then perform the export. If stopping all data modification traffic is not possible, it will be necessary to account for the data drift.
+Offline migration strategies have the potential for data drift. Data drift occurs when newly modified source data becomes out of sync with migrated data. When this happens, a full export or a delta export is necessary. To mitigate this problem, stop all write traffic to the instance and then perform the export. If stopping all data modification traffic is not possible, it will be necessary to account for the data drift as part of the migration effort.
 
-Determining the changes can become complicated if the instance tables don't have columns such as numeric primary keys, or some type of modification and creation date in every table that needs to be migrated.
-
-For example, if a numeric primary key is present and the migration is importing in sort order, it will be relatively simple to determine where the import stopped and restart it from that position. If no numeric key is present, then  utilize modification and creation date, and again, import in a sorted manner to restart the migration from the last timestamp seen in the target.
+Determining the changes can be complicated if you do not have a tracking mechanism.  Luckily, Redis has the AppendOnly feature that will generate a log file of all key changes.  This could be used as the diff of the instance from a particular point (such as the start of the migration).
 
 ## Performance recommendations
 
@@ -72,9 +70,10 @@ To change this setting on Windows machines, do the following:
 
 Despite what path is taken, there are common steps in the process:
 
-- Upgrade to a supported Azure Redis version
+- Upgrade to a supported Azure Redis version that matches the target
 - Inventory instance objects
-- Export users and permissions
+- Export users and permissions (ACLS)
+- Export and configuration settings
 
 ## WWI Use Case
 
@@ -84,11 +83,11 @@ TODO
 
 As outlined in the [Test Plans](../02_PreMigration/04_TestPlans.md) section, take an inventory of instance objects before and after the migration.  
 
-Migration teams should develop and test helpful inventory SQL scripts before beginning the migration phase.
+Migration teams should develop and test helpful inventory scripts before beginning the migration phase.
 
 Instance object inventory examples:
 
-```sql
+```powershell
 TODO
 ```
 
@@ -100,16 +99,18 @@ Options:
 
 - [Backup and Restore](./01.01_DataMigration_BackupRestore.md)
 - [Copy command](./01.02_DataMigration_Copy.md)
-- [Replication](./01.05_DataMigration_LogicalReplication.md)
-- [3rd Party Tools](./01.06_DataMigration_LogicalDecoding.md)
+- [Replication](./01.03_DataMigration_Replication.md)
+- [3rd Party Tools](./01.04_DataMigration_Tools.md)
 
 Once the data is migrated, point the application to the new instance
 
 - [Migrate Application Settings](./02_DataMigration_AppSettings.md)
 
-Lastly, validate the target instance's inventory. Below is an example of the SQL results in a target environment. It is easy to identify object count discrepancies.
+Lastly, validate the target instance's inventory. Below is an example of the `INFO` results in a target environment. It is relatively easy to identify database key count discrepancies.
 
 > **Note:** Unsupported objects will be dropped during the migrations.
+
+TODO
 
   ![](media/00_Completed_DB_Count.PNG)
 

@@ -21,7 +21,7 @@ A series of queries were executed on the source and target to verify migration s
 
 Use this query to get all the keys:
 
-```sql
+```bash
 KEYS *
 ```
 
@@ -29,7 +29,7 @@ KEYS *
 
 Use this query to get all the users:
 
-```sql
+```bash
 ACL LIST
 ```
 

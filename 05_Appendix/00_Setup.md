@@ -89,15 +89,7 @@ TODO
   - Select **Open** in the RDP dialog
   - Login using `s2admin` and `Seattle123Seattle123`
 
-## Install Chrome
-
-Perform the following on the **PREFIX-vm-dev** virtual machine resource.
-
-- Open a browser window, browse to https://www.google.com/chrome
-- Click **Download Chrome**
-- Follow all the prompts
-
-## Install Redis 10.16
+## Install Redis 6.x
 
 - In the Virtual Machine, download the following [Redis versions](https://www.enterprisedb.com/downloads/postgres-Redis-downloads)
   
@@ -131,14 +123,6 @@ Perform the following on the **PREFIX-vm-dev** virtual machine resource.
   - In the **Edit environment variable** dialog, select **New** and then **Browse...** Browse to `C:\Program Files\Redis\10\bin`.
   - Select **OK**.
 
-## Azure Data Studio
-
-- [Download the Azure Data Studio tool](https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15)
-- Install the Redis Extension
-  - Select the extensions icon from the sidebar in Azure Data Studio.
-  - Type 'Redis' into the search bar. Select the Redis extension.
-  - Select **Install**. Once installed, select Reload to activate the extension in Azure Data Studio.
-
 ## Download artifacts
 
 Perform the following on the **PREFIX-vm-pgdb01** virtual machine resource.
@@ -161,27 +145,6 @@ git clone https://github.com/solliancenet/onprem-postgre-to-azurepostgre-migrati
 Perform the following on the **PREFIX-vm-pgdb01** virtual machine resource.
 
 - TODO
-
-## Install Azure CLI
-
-Perform the following on the **PREFIX-vm-pgdb01** virtual machine resource.
-
-- Download and Install the [Azure CLI](https://aka.ms/installazurecliwindows)
-
-## Install NodeJS
-
-Perform the following on the **PREFIX-vm-pgdb01** virtual machine resource.
-
-- Download and Install [NodeJS](https://nodejs.org/en/download/). Select the LTS 64-bit MSI Installer.
-  - Accept the default installation location
-  - Make sure that the **Automatically install the necessary tools** box is NOT selected
-
-## Install and Configure Visual Studio Code
-
-Perform the following on the **PREFIX-vm-pgdb01** virtual machine resource.
-
-- Download and Install [Visual Studio Code](https://code.visualstudio.com/download).
-- Select the 64-bit Windows User Installer
 
 ## Configure the Web Application API
 

@@ -594,7 +594,6 @@
                 "tier": "Regional"
             },
             "properties": {
-                "ipAddress": "52.225.239.166",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Dynamic",
                 "idleTimeoutInMinutes": 4,
