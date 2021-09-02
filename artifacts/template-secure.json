@@ -102,10 +102,29 @@
         {
             "type": "Microsoft.Cache/Redis",
             "apiVersion": "2020-12-01",
-            "name": "[concat(variables('redis-name'),'-basic')]",
+            "name": "[concat(variables('redis-name'),'-basic4')]",
             "location": "[variables('location')]",
             "properties": {
                 "redisVersion": "4",
+                "sku": {
+                    "name": "Basic",
+                    "family": "C",
+                    "capacity": 0
+                },
+                "enableNonSslPort": false,
+                "publicNetworkAccess": "Enabled",
+                "redisConfiguration": {
+                    
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Cache/Redis",
+            "apiVersion": "2020-12-01",
+            "name": "[concat(variables('redis-name'),'-basic6')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "redisVersion": "6",
                 "sku": {
                     "name": "Basic",
                     "family": "C",
@@ -741,6 +760,34 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-01'))]"
             ],
+            "resources": [
+                {
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "name": "[concat(variables('vm_win10_name'),'/', 'winExtension')]",
+                    "apiVersion": "2015-06-15",
+                    "location": "[variables('location')]",
+                    "comments": "Script",
+                    "tags": {
+                    "displayName": "VM Extension"
+                    },
+                    "dependsOn": [
+                    "[concat('Microsoft.Compute/virtualMachines/', variables('vm_win10_name'))]"
+                    ],
+                    "properties": {
+                    "publisher": "Microsoft.Compute",
+                    "type": "CustomScriptExtension",
+                    "typeHandlerVersion": "1.8",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "fileUris": [
+                        "https://raw.githubusercontent.com/solliancenet/security-defender-workshop-400/main/artifacts/environment-setup/spektra/post-install-script02.ps1"
+                        ]
+                    },
+                    "protectedSettings": {
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File post-install-script01.ps1', variables('postInstallParameters'))]"
+                    }
+                }
+            }],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_D2s_v3"

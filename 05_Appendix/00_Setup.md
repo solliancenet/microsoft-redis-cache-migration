@@ -19,7 +19,7 @@ The following steps will configure an environment to perform the guide's migrati
 
 TODO
 
-> **Note** The secure template runs at ~$1700 per month.  The non-secure template runs at ~$700 per month.
+> **Note** The secure template runs at ~$2550 per month.  The non-secure template runs at ~$1550 per month.
 
 - Copy the json into the window
 - Select **Save**
