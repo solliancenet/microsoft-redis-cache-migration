@@ -2,9 +2,9 @@
 
 sudo apt update
 
-sudo apt install redis-server
+sudo apt-get install redis-server
 
-sudo apt install make pkg-config libssl-dev
+sudo apt-get install make pkg-config libssl-dev
 
 wget https://download.redis.io/releases/redis-6.2.5.tar.gz
 tar xzf redis-6.2.5.tar.gz
@@ -28,6 +28,14 @@ cd create-cluster
 . create-cluster start
 
 . create-cluster create
+
+#enable the firewall
+sudo ufw allow 6379
+
+#create some users
+redis-cli ACL SETUSER chris on allkeys +set >S2@dmins2@dmin
+redis-cli ACL SETUSER john on allkeys +set >S2@dmins2@dmin
+redis-cli ACL SETUSER mary on allkeys +set >S2@dmins2@dmin
 
 #manual cluster setup...
 #setup bind to all IPs

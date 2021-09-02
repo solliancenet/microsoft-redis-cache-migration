@@ -12,7 +12,7 @@ Redis has a rich history in the open source community and is heavily used in cor
 
 ## Azure Cache for Redis
 
-Microsoft offers a fully managed Redis environment as a Platform as a Service (PaaS) [Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/overview).  In this fully managed environment, the operating system and software updates are automatically applied, as well as the implementation of high availability and protection of the data.
+Microsoft offers a fully managed Redis cache environment to support your data cache, content cache, session store and many other applications as a Platform as a Service (PaaS) offering. In this fully managed environment, the operating system and software updates are automatically applied, as well as the implementation of high availability and protection of the data. For more overview about the Redis cache offering in Azure, reference the [About Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-overview) documentation page.
 
 Although we will solely focus on the managed service, Redis can also run in Azure Virtual machines..
 

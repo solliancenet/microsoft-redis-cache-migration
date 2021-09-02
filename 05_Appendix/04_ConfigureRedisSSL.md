@@ -39,10 +39,10 @@ sudo apt-get install -y tcl-tls
 ## Start the server
 
 ```bash
-./src/redis-server --tls-port 6380 --port 0 \
+./src/redis-server --tls-port 6380 --port 6379 \
     --tls-cert-file ./tests/tls/redis.crt \
     --tls-key-file ./tests/tls/redis.key \
-    --tls-ca-cert-file ./tests/tls/ca.crt
+    --tls-ca-cert-file ./tests/tls/ca.crt &
 ```
 
 The Redis instance should be running and now ready to accept SSL connections.
