@@ -8,7 +8,22 @@ Creating baselines of query performance is vital to a migration project. The per
 
 Below are tools used to gather server metrics and instance workload information. Use the captured metrics to determine the appropriate Azure Cache for Redis tier and the associated scaling options.
 
-- [redis-benchmark.exe](https://www.percona.com/software/instance-tools/percona-monitoring-and-management): TODO
+- [redis-benchmark.exe](https://www.percona.com/software/instance-tools/percona-monitoring-and-management): Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.
+
+You can find some of the pitfalls and misconceptions of using tools to benchmark Redis [here](https://redis.io/topics/benchmarks).
+
+## redis-benchmark
+
+- Open a terminal to the **SUFFIX-redis01** server
+- Run the following:
+
+```bash
+redis-benchmark -t set -r 100000 -n 1000000
+```
+
+- You should get back something similar to the following:
+
+TODO - Image
 
 ## Server Configuration
 
@@ -18,6 +33,6 @@ TODO
 
 TODO
 
-WWI reviewed its Conference instance workload and determined it had a very small load.  Although a basic tier server would work for them, they did not want to perform work later to migrate to another tier.  The server being deployed will eventually host the other Redis data workloads, so they picked the `General Purpose` tier.
+WWI reviewed its Conference instance workload and determined it had a very small load.  Although a basic tier server would work for them, they did not want to perform work later to migrate to another tier.  The server being deployed will eventually host the other Redis data workloads, so they picked the `Premium` tier.
 
 In reviewing the Redis instance, the Redis 4.0 server is running with the default server configuration set during the initial install.

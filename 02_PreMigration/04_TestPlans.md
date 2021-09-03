@@ -42,6 +42,10 @@ TODO
 
 Command renames (for app level)
 
+### Scripts
+
+If you have any scripts or your application makes calls to the [`EVAL` command](https://redis.io/commands/eval), be sure to test them thoroughly in case your scripts use commands or features that are not available in Azure Cache for Redis.
+
 ## Rollback Strategies
 
 The queries above will provide a list of object names and counts that can be used in a rollback decision.  Migration users can take the first object verification step by checking the source and target object counts. A failure in counts may not necessarily mean that a rollback is needed. Performing an in-depth evaluation could point out that the discrepancy is small and easily recoverable.  Manual migration of a few failed objects may be possible.  

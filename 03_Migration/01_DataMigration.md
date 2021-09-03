@@ -42,16 +42,12 @@ To change this setting on Windows machines, do the following:
 
 ### Exporting
 
-- TODO
-- Use an export tool that leverages multiple threads
+TODO
+- Use an export tool that leverages multiple threads.
 
 ### Importing
 
-- TODO
-
-### Post Import
-
-- TODO
+When you select a path for migration, you will want the import to run as fast as possible. You can disable the AOF feature to get faster imports, then re-enable it when you are done with the migration.
 
 ## Performing the Migration
 
@@ -74,6 +70,11 @@ Despite what path is taken, there are common steps in the process:
 - Inventory instance objects
 - Export users and permissions (ACLS)
 - Export and configuration settings
+
+### Post Import
+
+- Setup Compliance and Security features
+- Configure monitoring of the instance
 
 ## WWI Use Case
 
@@ -101,6 +102,7 @@ Options:
 - [Copy command](./01.02_DataMigration_Copy.md)
 - [Replication](./01.03_DataMigration_Replication.md)
 - [3rd Party Tools](./01.04_DataMigration_Tools.md)
+- [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
 
 Once the data is migrated, point the application to the new instance
 
@@ -108,11 +110,7 @@ Once the data is migrated, point the application to the new instance
 
 Lastly, validate the target instance's inventory. Below is an example of the `INFO` results in a target environment. It is relatively easy to identify database key count discrepancies.
 
-> **Note:** Unsupported objects will be dropped during the migrations.
-
-TODO
-
-  ![](media/00_Completed_DB_Count.PNG)
+TODO IMAGE
 
 ## Data Migration Checklist
 
