@@ -25,7 +25,7 @@ D:\mcw_temp\Redis\04_PostMigration\04_Security.md
 D:\mcw_temp\Redis\04_PostMigration\06_CallToAction.md
 D:\mcw_temp\Redis\05_Appendix\00_Setup.md
 D:\mcw_temp\Redis\05_Appendix\01_ARM Templates.md
-D:\mcw_temp\Redis\05_Appendix\04_ConfigurePostgresSSL.md
+D:\mcw_temp\Redis\05_Appendix\04_ConfigureRedisSSL.md
 D:\mcw_temp\Redis\Archive\01_DataMigration_DMS.md
 D:\mcw_temp\Redis\Archive\01_DataMigration_pgAdmin.md
 D:\mcw_temp\Redis\pandoc\Redis-guide.md

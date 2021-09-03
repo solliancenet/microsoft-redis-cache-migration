@@ -56,7 +56,7 @@ input-files:
 - D:\mcw_temp\Redis\05_Appendix\01_ARM Templates.md
 - D:\mcw_temp\Redis\05_Appendix\02_ServerParameters_Redis10.md
 - D:\mcw_temp\Redis\05_Appendix\03_ServerParameters_Azure_11.md
-- D:\mcw_temp\Redis\05_Appendix\04_ConfigurePostgresSSL.md
+- D:\mcw_temp\Redis\05_Appendix\04_ConfigureRedisSSL.md
 - D:\mcw_temp\Redis\05_Appendix\05_ConfigurePgBouncer.md
 
 # ERROR, WARNING, or INFO
