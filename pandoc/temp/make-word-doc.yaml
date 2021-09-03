@@ -10,10 +10,10 @@ from: markdown+backtick_code_blocks
 to: docx+styles
 output-file: Redis-guide.docx
 dpi: 300
-data-dir: D:\mcw_temp\Redis-guide\pandoc\temp
+data-dir: D:\data\projects\redis-cache\pandoc\pandoc\temp
 reference-doc: sample-reference.docx
 input-files:
- - D:\mcw_temp\Redis\pandoc\temp\Redis-guide.md   
+ - D:\data\projects\redis-cache\pandoc\Redis-guide.md   
 
 # ERROR, WARNING, or INFO
 verbosity: INFO
