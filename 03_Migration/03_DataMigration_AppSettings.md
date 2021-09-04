@@ -6,27 +6,27 @@ Most applications use Redis client libraries to handle communication with their 
 
 Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide to create an environment to support the following steps.
 
+## Migration
+
+Ensure that you have migrate the settings in the source to the target using one of the migration paths:
+
+- TODO
+
 ## Update Applications to support SSL
 
-- Open `Redis-Testing` project
-- Update the following code:
-
-```csharp
-TODO
-```
-
-- Update the Connectionstring
+- Open `RedisWeb` project
+- Open the `appsettings.json` file, update the `REDIS_CONNECTION` connection string to point to the new Azure Redis instance:
 
 ```text
-TODO
+"REDIS_CONNECTION": "PREFIX-redis-prem.redis.cache.windows.net:6380,password=<REDIS_PWD>,ssl=True,abortConnect=False",
 ```
 
-## Redeploy the application
+> **NOTE** Notice the usage of the `ssl=True` addition to the connection string
 
-- TODO
+> **NOTE** If you used the secure template, you would be connecting to the private IP endpoint in the connection string.
 
-## Test the application
+- Press **F5** to run the application, you should see all the migrated data from the source displayed
 
-- TODO
+- IMAGE TODO
 
 You have successfully completed an on-premises to Azure Cache for Redis migration!

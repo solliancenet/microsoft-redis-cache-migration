@@ -14,7 +14,7 @@ You can find some of the pitfalls and misconceptions of using tools to benchmark
 
 ## redis-benchmark
 
-- Open a terminal to the **SUFFIX-redis01** server
+- Open a terminal to the **PREFIX-redis01** server
 - Run the following:
 
 ```bash

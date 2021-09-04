@@ -1029,7 +1029,7 @@ benchmark Redis [here](https://redis.io/topics/benchmarks).
 
 ## redis-benchmark
 
--   Open a terminal to the **SUFFIX-redis01** server
+-   Open a terminal to the **PREFIX-redis01** server
 -   Run the following:
 
 ``` {.bash}
@@ -1431,7 +1431,7 @@ sudo service redis-server restart
 ## Replication (SLAVEOF) : Pre Redis 5.0
 
 -   Browse to the Azure Portal
--   Select the **SUFFIX-redis01** Redis instance
+-   Select the **PREFIX-redis01** Redis instance
 -   Open a PowerShell window, login using SSH
 -   Run the following commands:
 
@@ -1442,7 +1442,7 @@ redis-cli
 ## Replication (REPLICAOF) : 5.x or higher
 
 -   Browse to the Azure Portal
--   Select the **SUFFIX-redis02** Redis instance
+-   Select the **PREFIX-redis02** Redis instance
 -   Open a PowerShell window, login using SSH
 -   Run the following commands:
 
@@ -2815,11 +2815,11 @@ resource.
     the Start menu) and run the following commands
 
 ``` {.powershell}
-mkdir c:\Redisguide
-cd c:\Redisguide
+mkdir C:\redismigration
+cd C:\redismigration
 git config --global user.name "FIRST_NAME LAST_NAME"
 git config --global user.email "MY_NAME@example.com"
-git clone https://github.com/solliancenet/onprem-postgre-to-azurepostgre-migration-guide 
+git clone https://github.com/solliancenet/microsoft-redis-cache-migration 
 ```
 
 ## Deploy the instance
@@ -2950,7 +2950,7 @@ ng serve -o
 -   Be sure to replace the maven version (ex `3.8.1`)
 
 ``` {.cmd}
-cd C:\Redisguide\onprem-postgre-to-azurepostgre-migration-guide\artifacts\testapp\conferencedemo
+cd C:\redismigration\microsoft-redis-cache-migration\artifacts\testapp\conferencedemo
 mvn com.microsoft.azure:azure-webapp-maven-plugin:1.15.0:config
 ```
 
@@ -2978,7 +2978,7 @@ mvn com.microsoft.azure:azure-webapp-maven-plugin:1.15.0:config
     > and `appServicePlanResourceGroup` fields in the file, given that
     > the ARM template already deploys an App Service plan. Here is an
     > example of how the `pom.xml` file looks. We recommend using
-    > `conferencedemo-api-app-[SUFFIX]` as the `appName`.
+    > `conferencedemo-api-app-[PREFIX]` as the `appName`.
 
     ![](./media/00_Maven_Pom.png)
 
@@ -3095,7 +3095,7 @@ ng build --configuration production
 ```
 
 -   Navigate to
-    `C:\Redisguide\onprem-Redis-to-azureRedis-migration-guide\artifacts\testapp\conferencedemo-client\dist\conference-client`
+    `C:\redismigration\onprem-Redis-to-azureRedis-migration-guide\artifacts\testapp\conferencedemo-client\dist\conference-client`
     and copy the contents of that directory
 
     ![This image demonstrates the artifacts of the production-ready,
@@ -3103,7 +3103,7 @@ ng build --configuration production
     app.](./media/directory-contents-sample-app-dist.png "Built Angular app in File Explorer")
 
 -   Open a new File Explorer window, and navigate to
-    `C:\Redisguide\onprem-postgre-to-azurepostgre-migration-guide\artifacts\testapp\conferencedemo-client-war\src\main\webapp`.
+    `C:\redismigration\microsoft-redis-cache-migration\artifacts\testapp\conferencedemo-client-war\src\main\webapp`.
     In this case, the built Angular app is packaged as a WAR archive,
     where it will be served by a Tomcat server in Azure App Service.
     Paste the contents copied in the previous step to this folder. Be
@@ -3113,7 +3113,7 @@ ng build --configuration production
     archive.](./media/paste-app-into-war.png "Serve Angular app from Tomcat")
 
 -   Use your preferred text editor to open
-    `C:\Redisguide\onprem-postgre-to-azurepostgre-migration-guide\artifacts\testapp\conferencedemo-client-war\pom.xml`.
+    `C:\redismigration\microsoft-redis-cache-migration\artifacts\testapp\conferencedemo-client-war\pom.xml`.
     Take note of the `azure-webapp-maven-plugin` that has already been
     added for you.
 
@@ -3131,7 +3131,7 @@ ng build --configuration production
         ARM template (i.e. **PLACEHOLDER-pg-appsvc**)
     -   **resourceGroup**: The resource group used to complete this lab.
     -   **appName**: Provide a unique value, such as
-        **conferencedemo-client-app-SUFFIX**.
+        **conferencedemo-client-app-PREFIX**.
 
 -   Once the deployment succeeds, navigate to the sample app in your
     browser. Confirm that everything works as anticipated.

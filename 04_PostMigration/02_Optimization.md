@@ -47,6 +47,22 @@ Moving a instance to a different Azure region depends on the approach and archit
 
 The recommended process is the same as utilizing cluster replicas for maintenance failover. However, compared to the planned maintenance method mentioned above, the speed to failover is much faster when a failover layer has been implemented in the application. The application should only be down for a few moments during the read replica failover process. More details are covered in the [Business Continuity and Disaster Recovery](03_BCDR.md) section.
 
+## Partitioning
+
+Partitioning is the process of splitting your data across multiple Redis instances. Partitioning allows for much larger databases and the scaling of compute power and network bandwidth.
+
+### twemproxy
+
+In the absence of a Redis cluster, you can use the [`twemproxy` tool](https://github.com/twitter/twemproxy). Pronounced "two-em-proxy", aka nutcracker, it is a fast and lightweight proxy for memcached and redis protocol. It was built primarily to reduce the number of connections to the caching servers on the backend. This, together with protocol pipelining and sharding enables you to horizontally scale your distributed caching architecture.
+
+### Other clients
+
+In addition to running a proxy, you can select a client implementation that will hash the keys and handle the routing of your cache queries. There are multiple Redis clients with support for consistent hashing:
+
+- [Redis-rb](https://github.com/redis/redis-rb)
+- [Predis](https://github.com/nrk/predis)
+- [Jedis](https://github.com/redis/jedis)
+
 ## Quick Tips
 
 Use the following to make quick performance changes:

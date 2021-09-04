@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "Baseline.Collector.Host": {
+      "commandName": "Project",
+      "environmentVariables": {
+        //"redis-server": "192.168.102.56",
+        //"redis-port": "6379"
+        "redis-server": "20.190.225.114",
+        "redis-port": "30001"
+      }
+    }
+  }
+}
