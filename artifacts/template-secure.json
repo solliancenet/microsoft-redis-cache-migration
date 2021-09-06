@@ -54,7 +54,13 @@
         "vm-nic-03": "[concat(parameters('prefix'),'-vm-nic-03')]",
         "vnetData": "",
         "vnetDataSet": "[if(empty(variables('vnetData')), json('{ \"subnetArmResourceId\": \"\" }'), variables('vnetData'))]",
-        "finalVnetData": "[json(concat('{ \"SubnetArmResourceId\": \"', variables('vnetDataSet').subnetArmResourceId, '\"}'))]"
+        "finalVnetData": "[json(concat('{ \"SubnetArmResourceId\": \"', variables('vnetDataSet').subnetArmResourceId, '\"}'))]",
+        "azureSubscriptionID": "[subscription().subscriptionId]",
+        "azureTenantID": "[subscription().tenantId]",
+        "azureUsername": "[parameters('adminUsername')]",
+        "azurePassword": "[parameters('adminPassword')]",
+        "rgName": "[resourceGroup().name]",
+        "postInstallParameters": "[concat(' -azureUsername ', variables('azureUsername'), ' -azurePassword ', variables('azurePassword'), ' -azureTenantID ', variables('azureTenantID'), ' -azureSubscriptionID ', variables('azureSubscriptionID'))]"
     },
     "resources": [
         {
@@ -192,7 +198,7 @@
                     "apiVersion": "2021-02-01-preview",
                     "name": "[concat(concat(variables('redis-name'),'-ent'), '/default')]",
                     "dependsOn": [
-                        "Microsoft.Cache/redisEnterprise/cjg-redis-ent1"
+                        "[concat('Microsoft.Cache/redisEnterprise/', variables('redis-name'),'-ent')]"
                     ],
                     "tags": {},
                     "properties": {
@@ -640,6 +646,37 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', variables('vm-nic-03'))]"
             ],
+            "resources" : [
+                {
+                    "name": "config-redis-01",
+                    "type": "extensions",
+                    "location": "[variables('location')]",
+                    "apiVersion": "2019-03-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', variables('vm_redis01_name'))]"
+                    ],
+                    "tags": {
+                        "displayName": "config-redis-01"
+                    },
+                    "properties": {
+                        "publisher": "Microsoft.Azure.Extensions",
+                        "type": "CustomScript",
+                        "typeHandlerVersion": "2.1",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                        "skipDos2Unix":false,
+                        "timestamp":123456789          
+                        },
+                        "protectedSettings": {
+                            "commandToExecute": "sh post-install-script01.sh",
+                            "fileUris": [
+                            "https://raw.githubusercontent.com/solliancenet/common-workshop/main/scripts/post-install-script01.sh"
+                                ],
+                            "managedIdentity" : {}
+                        }
+                    }
+                }
+            ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_D2s_v3"
@@ -724,7 +761,7 @@
                     "protectedSettings": {
                         "commandToExecute": "sh post-install-script01.sh",
                         "fileUris": [
-                        "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script01.sh"
+                        "https://raw.githubusercontent.com/solliancenet/common-workshop/main/scripts/post-install-script01.sh"
                             ],
                         "managedIdentity" : {}
                     }
@@ -811,11 +848,11 @@
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                         "fileUris": [
-                        "https://raw.githubusercontent.com/solliancenet/security-defender-workshop-400/main/artifacts/environment-setup/spektra/post-install-script02.ps1"
+                        "https://raw.githubusercontent.com/solliancenet/security-defender-workshop-400/main/artifacts/environment-setup/spektra/post-install-script01.ps1"
                         ]
                     },
                     "protectedSettings": {
-                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File post-install-script01.ps1', variables('postInstallParameters'))]"
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File post-install-script01.ps1 ', variables('postInstallParameters'))]"
                     }
                 }
             }],
@@ -874,10 +911,49 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-11-01",
+            "name": "[variables('vm-nic-01')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-win10-ip'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.2.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-win10-ip'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2020-11-01",
             "name": "[variables('vm-nic-02')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
             ],
             "tags": {
                 
@@ -904,7 +980,10 @@
                     "dnsServers": []
                 },
                 "enableAcceleratedNetworking": false,
-                "enableIPForwarding": false
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                }
             }
         },
         {
@@ -913,7 +992,8 @@
             "name": "[variables('vm-nic-03')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
             ],
             "tags": {
                 
@@ -927,63 +1007,6 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-redis02-ip'))]"
-                            },
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]"
-                            },
-                            "primary": true,
-                            "privateIPAddressVersion": "IPv4"
-                        }
-                    }
-                ],
-                "dnsSettings": {
-                    "dnsServers": []
-                },
-                "enableAcceleratedNetworking": false,
-                "enableIPForwarding": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
-            "apiVersion": "2020-11-01",
-            "name": "[concat(variables('nsg-01'), '/RDP')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
-            ],
-            "properties": {
-                "protocol": "TCP",
-                "sourcePortRange": "*",
-                "destinationPortRange": "3389",
-                "sourceAddressPrefix": "*",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 300,
-                "direction": "Inbound",
-                "sourcePortRanges": [],
-                "destinationPortRanges": [],
-                "sourceAddressPrefixes": [],
-                "destinationAddressPrefixes": []
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkInterfaces",
-            "apiVersion": "2020-11-01",
-            "name": "[variables('vm-nic-01')]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-win10-ip'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAddress": "10.2.0.4",
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-win10-ip'))]"
                             },
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]"

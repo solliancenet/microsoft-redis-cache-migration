@@ -19,7 +19,7 @@ The following steps will configure an environment to perform the guide's migrati
 
 TODO
 
-> **Note** The secure template runs at ~$2550 per month.  The non-secure template runs at ~$1550 per month.
+> **Note** The secure template runs at ~$2700 per month.  The non-secure template runs at ~$1700 per month.
 
 - Copy the json into the window
 - Select **Save**
@@ -31,6 +31,16 @@ TODO
 - Select **Review + create**
 - Select the **I agree...** checkbox
 - Select **Create**, after about 20 minutes the landing zone will be deployed
+
+> **NOTE** If anything deploys incorrecly in the redis images, you can check the Azure agent log files using:
+
+```bash
+chmod +rwx /var/lib/waagent
+
+cd /var/lib/waagent/custom-script/download/0
+
+sudo nano stderr
+```
 
 ## Setup Redis Binding
 
@@ -53,6 +63,12 @@ bind 0.0.0.0
 
 ```bash
 sudo service redis-server restart
+```
+
+- If you have any errors, run the following to debug:
+
+```bash
+journalctl -u redis-server
 ```
 
 ## Open the Azure VM Ports
@@ -155,3 +171,18 @@ az webapp restart -g $rgName -n $app_name
   - Select **Connection security**
   - Select the `Allow access to all Azure Services` toggle to `Yes`
   - Select **Save**
+
+## Create a Cluster
+
+- Login to the **PREFIX-redis-01** virtual machine
+- Run the following command to enable cluster mode:
+
+```bash
+redis-cli config set cluster-enabled yes
+```
+
+- Run the following to create the cluster:
+
+```bash
+redis-cli --cluster create <IP1>:6379 <IP2>:6379 --cluster-replicas 1
+```
