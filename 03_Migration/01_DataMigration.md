@@ -42,8 +42,9 @@ To change this setting on Windows machines, do the following:
 
 ### Exporting
 
-TODO
-- Use an export tool that leverages multiple threads.
+When exporting your data, you can do it in a serialized fashion (where you export each key one by one), or you can utilize a tool to break apart the key space and export the data in a multi-threaded fashion.  If you have a large cache and a small time-frame to do the migration, explore a multi-threaded approach.
+
+Alternatively, we will look at some online approaches to migrating that will simulate real-time migration activity.
 
 ### Importing
 
@@ -80,7 +81,7 @@ Despite what path is taken, there are common steps in the process:
 
 TODO
 
-## instance Objects
+## Instance Objects
 
 As outlined in the [Test Plans](../02_PreMigration/04_TestPlans.md) section, take an inventory of instance objects before and after the migration.  
 

@@ -23,7 +23,7 @@ You can also select the [persistence in Azure Redis instances](https://docs.micr
 
 ### RDB File
 
-By default, Redis will keep cache data persisted to disk on a fairly regular basis, this can however be disabled by the administrator to improve performance. However, doing so would cause any data in memory to be lost in the case of a server fault or reboot.  In most cases this is enabled.
+By default, Redis will keep cache data persisted to disk on a fairly regular basis, this can however be disabled by the administrator to improve performance. However, doing so would cause any data in memory to be lost in the case of a server fault or reboot.  In most cases this is enabled, but has [advantages and disadvantages](https://redis.io/topics/persistence).
 
 ### Append Only File (AOF)
 
@@ -34,6 +34,8 @@ appendonly yes
 ```
 
 Once enabled, every time Redis receives a command that changes the dataset (e.g. SET) it will append it to the AOF. When you restart Redis it will re-play the AOF to rebuild the state.  This same file can be used to rebuild / migrate a Redis instance in Azure.
+
+This option is more durable than the RDB file, but comes at some costs in larger files, repeated commands and slower performance when under huge write loads.
 
 ### Manual (SET)
 

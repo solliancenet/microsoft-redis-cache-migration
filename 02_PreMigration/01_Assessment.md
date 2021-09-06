@@ -145,7 +145,7 @@ sudo apt-get install nethogs
 sudo nethogs
 ```
 
-Additionally, because they want data persistence and backups, they will persist this to Azure Storage.
+Additionally, because they want [data persistence](https://redis.io/topics/persistence) and backups, they will persist this to Azure Storage.
 
 Using the [Azure Cache for Redis pricing calculator](https://azure.microsoft.com/en-us/pricing/details/cache/) WWI was able to determine the costs for the Azure Cache for Redis instance. As of 8/2021, the total costs of ownership (TCO) is displayed in the following table for the WWI Conference instance:
 

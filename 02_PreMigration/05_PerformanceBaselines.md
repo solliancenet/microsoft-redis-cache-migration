@@ -17,13 +17,13 @@ You can find some of the pitfalls and misconceptions of using tools to benchmark
 - Open a terminal to the **PREFIX-redis01** server
 - Run the following:
 
-```bash
-redis-benchmark -t set -r 100000 -n 1000000
-```
+    ```bash
+    redis-benchmark -t set -r 100000 -n 1000000
+    ```
 
 - You should get back something similar to the following:
 
-TODO - Image
+    ![output of redis-benchmark tool.](media/../../05_Appendix/media/redisbenchmark-local.png)
 
 ## Server Configuration
 

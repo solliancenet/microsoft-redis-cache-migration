@@ -27,17 +27,15 @@ KEYS *
 
 > **NOTE** Running this command on a production environment can cause performance issues with any applications using the target instance.  It is advisable to execute during low traffic/usage periods.
 
-Use this query to get all the users:
+As of Redis 6.x, you can implement [ACL lists](https://redis.io/topics/acl). If your source is 6.x or higher, use this query to get all the users:
 
 ```bash
 ACL LIST
 ```
 
-TODO : https://redis.io/topics/acl
+### Rename Commands
 
-### Commands
-
-TODO
+`RENAME` is not supported in Azure Cache for Redis, but if you are moving to Azure Virtual Machines, you will want to export and re-apply any rename commands to the target.
 
 Command renames (for app level)
 

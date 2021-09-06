@@ -37,6 +37,9 @@ cd
 sudo ufw allow 6379
 sudo ufw allow 30001
 
+#set the password
+redis-cli config set requirepass S2@dmins2@dmin
+
 #create some users
 redis-cli ACL SETUSER chris on allkeys +set >S2@dmins2@dmin
 redis-cli ACL SETUSER john on allkeys +set >S2@dmins2@dmin
