@@ -52,7 +52,13 @@ Azure Cache for Redis is a fully supported version of Redis running as a platfor
 
 Many of the other items are simply operational aspects that administrators should become familiar with as part of the operational data workload lifecycle management. This guide will explore many of these operational aspects in the [Post Migration Management](../04_PostMigration/01_Management.md) section.
 
-> **Note** Each tier supports a maximum number of databases.  If you have more than the default of `16`, be sure that you pick a tier to migrate too that has support for all source databases.
+- Each tier supports a maximum number of databases (when not in cluster mode).  If you have more than the default of `16`, be sure that you pick a tier to migrate too that has support for all source databases.
+
+- Although you can cluster enable the premium tier, in doing so, you will only be able to support the `db0` database.  If you are using a tool that supports migrating databases, you will need to ensure that you move all source databases to the `db0` database in the target.
+
+- You cannot cluster enable `Basic` or `Standard` tiers so migrating via cluster failover is not an option. You can cluster enable a premium instance but it will become part of its own cluster and you cannot use it to cluster failover.
+
+- Once you cluster enabled the premium instance, it will communication over the Redis cluster protocol.
 
 ### Redis Modules
 

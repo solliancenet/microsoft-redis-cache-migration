@@ -15,6 +15,8 @@ Since WWI is based in San Francisco, all resources for the Azure landing zone we
 
 > **Note:** As part of this guide, two ARM templates (one with private endpoints, one without) were provided to deploy a potential Azure landing zone for a Redis migration project. The private endpoints ARM template provides a more secure, production-ready scenario. Additional manual Azure landing zone configuration may be necessary, depending on the requirements.
 
+> **Note** Creating a Redis instance in an Azure Virtual Machine with a default port and no password or on an non-SSL port with a password with no network security group protecting them is highly discouraged.  Bots continually monitor the Azure IP address space and will find your Redis instance within a few days.  Be very careful creating resources that are exposed to the internet.
+
 ## Networking
 
 Getting data from the source system to Azure Cache for Redis in a fast and optimal way is a vital component to consider in a migration project. Small unreliable connections may require administrators to restart the migration several times until a successful result is achieved. Restarting migrations due to network issues can lead to wasted effort, time and money.

@@ -25,6 +25,14 @@ You can find some of the pitfalls and misconceptions of using tools to benchmark
 
     ![output of redis-benchmark tool.](media/../../05_Appendix/media/redisbenchmark-local.png)
 
+- You can also run the tool against the target Azure instance:
+
+    ```bash
+    redis-benchmark -h <REDIS_IP> -p <REDIS_PORT> -a <REDIS_PWD> -t set -r 100000 -n 1000000
+    ```
+
+> **Note** You will get errors as various commands are not exposed in Azure Cache for Redis.
+
 ## Server Configuration
 
 TODO

@@ -6,47 +6,39 @@ As with any mission critical system, having a backup and restore as well as a di
 
 ### Backup
 
-Azure Cache for Redis supports automatic backups for 7 days by default. It may be appropriate to modify this to the current maximum of 35 days. It is important to be aware that if the value is changed to 35 days, there will be charges for any extra backup storage over 1x of the storage allocated.
+Azure Cache for Redis supports automatic backups (data persistence) based on RDB or AOF features.  The backup frequency can be as low as 15 minutes or up to 24 hours. If enabled, the files are stored in Azure Storage, which should be factoring into in the total cost of ownership of your solution.
 
-There are several limitations to the instance backup features as described in each of the backup articles for each service type. It is important to understand them when deciding what additional strategies that should be implemented:
-
-TODO
-
-- [Backup and restore in Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/concepts-backup)
-
-Commonality of the backup architectures include:
-
-- Up to 35 days of backup protection
-- No direct access to the backups (no exports).
-
-Some items to be aware of include:
-
-- Tiers that allow up to 4TB will retain two full backups, all diff backups and transaction logs since last full backup every 7 days.
-- Tiers that allow up to 16TB will retain the full backup, all diff backups, and transaction logs in the last 8 days.
-
-> **Note:** [Some regions](https://docs.microsoft.com/en-us/azure/Redis/concepts-pricing-tiers#storage) do not yet support storage up to 16TB.
+You can also choose to `export` your data using the Azure Portal, Azure CLI or Azure PowerShell.
 
 ### Restore
 
-Redundancy (local or geo) must be configured during server creation. However, a geo-restore can be performed and allows the modification of these options during the restore process. Performing a restore operation will temporarily stop connectivity and any applications will be down during the restore process.
+As you learned in the migration sections, you can restore a Redis instance from a RDB or AOF backup.
 
-During a instance restore, any supporting items outside of the instance will also need to be restored. See [Perform post-restore tasks](https://docs.microsoft.com/en-us/azure/Redis/concepts-backup#perform-post-restore-tasks) for more information.
+## Clustering
 
-## Replicas
+To support high availability you can enabled clustering on the `Premium` and `Enterprise` skus.  `Basic` and `Standard` do not support clustering.  You can scale up to 10 shards in Azure Cache for Redis Premium.
 
-### Read Replicas
+## Geo-replication
 
-[Read replicas](https://docs.microsoft.com/en-us/azure/Redis/concepts-read-replicas) can be used to increase the Redis read throughput, improve performance for regional users and to implement disaster recovery. When creating one or more read replicas, be aware that additional charges will apply for the same compute and storage as the primary server.
+[Geo-replication](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-retries-exponential-backoff) allows you to created cache replication links to Azure Cache for Redis instances running in any region in Azure.  This provides for the ability to recover from any regional outages that may occur. Secondary instances are read-only and can be accessed from applications.
 
-## Deleted Servers
+Geo-replication is not automatic failover, so if any issues do arise, you will need to be ready to `unlike` the replication to make the secondary instance a primary.  You would also need to manage changing the connection settings in any applications, or adding a load balancer to route traffic.
 
-If an administrator or bad actor deletes the server in the Azure Portal or via automated methods, all backups and read replicas will also be deleted. It is important that [resource locks](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources) are created on the Azure Cache for Redis resource group to add an extra layer of deletion prevention to the instances.
+> **Note** Geo-replication is not enabled for the `Basic` or `Standard` tiers.
+
+### Cache Replication Links
+
+Once a link has been setup, there are numerous features that are not supported and some restrictions that are placed on your instances.  Reference [Configure geo-replication for Premium Azure Cache for Redis instances](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-geo-replication) for more information.  Also part of the document, reference the [Geo-replication FAQ](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-geo-replication#geo-replication-faq).
+
+## Deleted Servers, Resource Locks
+
+If an administrator or bad actor deletes the instance in the Azure Portal or via automated methods, it is possible that the operations could delete your instance. It is important that [resource locks](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources) are created on the Azure Cache for Redis resource group to add an extra layer of deletion prevention to the instances.
 
 ## Regional Failure
 
-Although rare, if a regional failure occurs geo-redundant backups or a read replica can be used to get the data workloads running again. It is best to have both geo-replication and a read replica available for the best protection against unexpected regional failures.
+Although rare, if a regional failure occurs geo-redundant backups or cluster nodes can be used to get the data workloads running again. It is best to have both geo-replication and a clustering available for the best protection against unexpected regional failures.
 
-> **Note** Changing the instance server region also means the endpoint will change and application configurations will need to be updated accordingly.
+Changing the instance server region also means the endpoint will change and application configurations will need to be updated accordingly or load balancers should be utilized.
 
 ### Load Balancers
 
@@ -54,36 +46,46 @@ If the application is made up of many different instances around the world, it m
 
 ## WWI Use Case
 
-WWI wanted to test the failover capabilities of read replicas so they performed the steps outlined below.
+WWI wanted to test the failover capabilities of clusters and geo-replication so they performed the steps outlined below.
 
-### Creating a read replica 
+### Creating a Cluster
 
 - Open the Azure Portal.
-- Browse to the Azure Cache for Redis instance.
-- Under **Settings**, select **Replication**.
-- Select **Add Replica**.
-- Type a server name.
-- Select the region.
-- Select **OK**, wait for the instance to deploy.  Depending on the size of the main instance, it could take some time to replicate.
+- Browse to the Azure Cache for Redis **PREFIX-redis-basic6** instance.
+- Under **Settings**, select **Scale**
+- Select `C0 Standard`, then select **Select**, the instance will start to scale
+- Under **Settings**, select **Scale**
+- Select `P1 Premium`, then select **Select**, the instance will start to scale
+- Under **Settings**, select **Cluster size**
+- Select **Enable** to enable clustering on the instance
+- Select **Save**
 
-> **Note:** Each replica will incur additional charges equal to the main instance.
+> **Note:** Each cluster node will incur additional charges equal to the main instance.
 
-### Failover to read replica 
+### Setup Geo-replication
 
-Once a read replica has been created and has completed the replication process, it can be used for failed over. Replication will stop during a failover and make the read replica its own main instance.
+- Browse to the **PREFIX-redis-prem** Azure Cache for Redis instance
+- Under **Settings**, select **Geo-replication**
+- Select **Add cache replication link**
+- Select the **PREFIX-redis-basic6** instance
+- Select **Link**, wait for the status to change to **Synced**
+- Select **Unlink caches**
+
+### Failover to replica
+
+Once a replica has been created and has completed the replication process, it can be used for failed over. Replication will stop during a failover and make the read replica its own primary instance.
 
 Failover Steps:
 
 - Open the Azure Portal.
-- Browse to the Azure Cache for Redis instance.
-- Under **Settings**, select **Replication**.
-- Select one of the read replicas.
-- Select **Stop Replication**. This will break the read replica.
-- Modify all applications connection strings to point to the new main instance.
+- Browse to the **PREFIX-redis-basic6** Azure Cache for Redis instance.
+- Under **Settings** select **Geo-replication**
+- Select **Unlink caches**
 
 ## BCDR Checklist
 
 - Modify backup frequency to meet requirements.
-- Setup read replicas for read intensive workloads and regional failover.
+- Setup clustering for high-availability
 - Create resource locks on resource groups.
+- Setup geo-replication for regional failure mitigation
 - Implement a load balancing strategy for applications for quick failover.

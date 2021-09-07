@@ -41,6 +41,8 @@ In consideration of the above patterns, performance issues can crop up in any of
 
 It is possible to [scale up the tier](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-scale) at any time, however, once scaled up, you cannot scale the instance down.  You would need to re-create a lower tiered instance and then migrate to it.
 
+> **Note** In order to scale a `Basic` to `Premium`, it must be scaled to `Standard` first.
+
 ## Moving Regions
 
 Moving a instance to a different Azure region depends on the approach and architecture. Depending on the selected approach, it could cause system downtime.
