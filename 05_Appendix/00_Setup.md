@@ -96,12 +96,12 @@ TODO  - clustr port...
 
 ## Connect to the Azure VM
 
-- Login to the deployed instance VM
+- Login to the deployed instance VM.
   - Browse to the Azure Portal.
   - Select the **PREFIX-win10** virtual machine resource.
-  - Select **Connect->RDP**
-  - Select **Open** in the RDP dialog
-  - Login using `s2admin` and `Seattle123Seattle123`
+  - Select **Connect->RDP**.
+  - Select **Open** in the RDP dialog.
+  - Login using `s2admin` and `S2@dmins2@dmin`.
   
 ## Download artifacts
 
@@ -117,37 +117,24 @@ git config --global user.email "MY_NAME@example.com"
 git clone https://github.com/solliancenet/microsoft-redis-cache-migration 
 ```
 
-## Configure the Web Application API
+## Configure the Web Application
 
 Perform the following on the **PREFIX-win10** virtual machine resource.
 
 - Open Visual Studio Code, if prompted, select **Yes, I trust the authors**
 - Open the **C:\redismigration\microsoft-redis-cache-migration\artifacts\testapp\conferencedemo** folder (Ctrl+K and Ctrl+O, or **File->Open Folder...**)
 - Select the **Extensions** tab
-
-    ![](media/00_Opening_Extension_Manager.png)
-
 - Search for and install the following extensions
   - TODO
 
 - Update the **{DB_CONNECTION_URL}** environment variable to the Redis Connections string `jdbc:Redis://localhost:5432/reg_app?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&noAccessToProcedureBodies=true`
 - Select the **Debug** tab (directly above the **Extensions** tab from earlier), then select the debug option to start a debug session
-
-    ![](media/00_Launch_Debug_Config.png)
-
 - If prompted, select **Yes** to switch to `standard` mode
 
 ## Test the Web Application
 
 - Open a browser window, browse to **http://localhost:8888**
 - Ensure the application started on port 8888 and displays results
-
-## Configure the Web Application Client
-
-- Open a new Visual Studio Code window to **C:\redismigration\microsoft-redis-cache-migration\testapp\conferencedemo-client**
-- Open a terminal window (**Terminal**->**New Terminal**)
-- Run the following commands to install all the needed packages, if prompted, select **N**
-- Press **F5** to run the application, a browser will open to the node site **http://localhost:{port}**
 
 ## Deploy the Application to Azure
 
@@ -162,8 +149,7 @@ az webapp restart -g $rgName -n $app_name
 
 ## Configure Network Security (Secure path)
 
-
-TODO - 
+TODO
 
 - When attempting to connect to the instance from the app service, an access denied message should be displayed. Add the app virtual network to the firewall of the Azure Cache for Redis
   - Browse to the Azure Portal

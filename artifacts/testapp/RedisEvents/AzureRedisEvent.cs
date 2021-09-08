@@ -34,7 +34,7 @@ namespace RedisEvents
                                 NotificationType = value;
                                 break;
                             case "starttimeinutc":
-                                DateTimeOffset.TryParse(value, out StartTimeOffset);
+                                DateTime.TryParse(value, out StartTimeInUTC);
                                 break;
                             case "isreplica":
                                 bool.TryParse(value, out IsReplica);

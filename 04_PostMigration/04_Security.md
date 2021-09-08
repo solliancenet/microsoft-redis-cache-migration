@@ -2,7 +2,15 @@
 
 Moving to a cloud-based service doesn't mean the entire internet will have access to it at all times. Azure provides best in class security that ensures data workloads are continually protected from bad actors and rouge programs.
 
+## Encryption
+
+Redis does not directly support any form of data encryption, so all encoding must be performed by client applications. Additionally, Redis does not provide any form of transport security. If you need to protect data as it flows across the network, we recommend implementing an SSL proxy.
+
 ## Authentication
+
+Redis is focused purely on providing fast access to data, and is designed to run inside a trusted environment that can be accessed only by trusted clients. Redis supports [a limited security model](https://redis.io/topics/security) based on password authentication. (It is possible to remove authentication completely, although we don't recommend this.)
+
+All authenticated clients share the same global password and have access to the same resources. If you need more comprehensive sign-in security, you must implement your own security layer in front of the Redis server, and all client requests should pass through this additional layer. Redis should not be directly exposed to untrusted or unauthenticated clients.
 
 Azure Cache for Redis supports the basic authentication mechanisms for Redis user connectivity with two access keys per instance.  Azure Cache for Redis does not support Azure Active Directory integration.
 

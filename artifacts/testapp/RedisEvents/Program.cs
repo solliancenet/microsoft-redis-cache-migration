@@ -46,7 +46,9 @@ namespace RedisEvents
             var failover = sub.SubscribeAsync("AzureRedisEvents", async (channel, message) =>
             {
                 Console.WriteLine($"[{DateTime.UtcNow:hh.mm.ss.ffff}] { message }");
+                
                 var newMessage = new AzureRedisEvent(message);
+                
                 if (newMessage.NotificationType == "NodeMaintenanceStarting")
                 {
                     var delay = newMessage.StartTimeInUTC.Subtract(DateTime.UtcNow) - TimeSpan.FromSeconds(1);
@@ -54,6 +56,7 @@ namespace RedisEvents
                     await Task.Delay(delay);
                     Console.WriteLine($"[{DateTime.UtcNow:hh.mm.ss.ffff}] Breaking circuit since update coming at {newMessage.StartTimeInUTC}");
                 }
+
             });
 
             Console.ReadLine();
