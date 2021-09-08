@@ -39,7 +39,7 @@ Other networking considerations include:
 
 - When using an Azure Virtual Machine to run the migration tools, assign it a public IP address and then only allow it to connect to the on-premises Redis instance.
 
-- Outbound firewalls must ensure outbound connectivity to Azure Cache for Redis. 
+- Outbound firewalls must ensure outbound connectivity to Azure Cache for Redis.
 
 ## Private Link and/or VNet integration
 

@@ -40,6 +40,8 @@ The following steps will configure an environment to perform the guide's migrati
   sudo nano stderr
   ```
 
+> **NOTE** If you choose the `secure` template, you will need to perform all the tasks via the Azure Portal or inside the **PREFIX-win10** jump machine in the **PREFIX-vnet-hub** virtual network.  You will also need to make sure that DNS records are correct such that you can connect to the resources in the **PREFIX-vnet-redis** virtual network.  For simplicity, you should use the `non-secure` template.
+
 ## Setup Redis Binding
 
 - Login to the redis image (**PREFIX-redis01** and **PREFIX-redis02**)

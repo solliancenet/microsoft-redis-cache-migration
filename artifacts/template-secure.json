@@ -39,16 +39,16 @@
         "vm_redis02_name": "[concat(parameters('prefix'),'-redis02')]",
         "vm_win10_name": "[concat(parameters('prefix'),'-vm-win10')]",
         "app_name": "[concat(parameters('prefix'),'-app01')]",
-        "api_name": "[concat(parameters('prefix'),'-api01')]",
         "insights-name": "[concat(parameters('prefix'),'-insights')]",
         "redis-name": "[concat(parameters('prefix'),'-redis')]",
         "vm-win10-ip": "[concat(parameters('prefix'),'-vm-ip-01')]",
         "vm-redis01-ip": "[concat(parameters('prefix'),'-vm-redis01-ip')]",
         "vm-redis02-ip": "[concat(parameters('prefix'),'-vm-redis02-ip')]",
-        "vnet-db": "[concat(parameters('prefix'),'-vnet-Redis')]",
         "vnet-app01": "[concat(parameters('prefix'),'-vnet-app01')]",
         "vnet-hub": "[concat(parameters('prefix'),'-vnet-hub')]",
-        "nsg-01": "[concat(parameters('prefix'),'-nsg')]",
+        "vnet-redis": "[concat(parameters('prefix'),'-vnet-redis')]",
+        "nsg-hub": "[concat(parameters('prefix'),'-nsg-hub')]",
+        "nsg-redis": "[concat(parameters('prefix'),'-nsg-redis')]",
         "vm-nic-01": "[concat(parameters('prefix'),'-vm-nic-01')]",
         "vm-nic-02": "[concat(parameters('prefix'),'-vm-nic-02')]",
         "vm-nic-03": "[concat(parameters('prefix'),'-vm-nic-03')]",
@@ -244,18 +244,113 @@
         {
             "type": "Microsoft.Network/privateDnsZones/A",
             "apiVersion": "2018-09-01",
-            "name": "[concat(parameters('prefix'), 'privatedns.com', '/cjg-Redis')]",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', parameters('prefix'), '-redis-basic4')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]"
             ],
             "properties": {
                 "metadata": {
-                    "creator": "created by private endpoint cjg-Redis-pe with resource guid 59310e5f-d6cb-47ed-93e6-6dc09893dcfd"
+                    "creator": ""
                 },
                 "ttl": 10,
                 "aRecords": [
                     {
                         "ipv4Address": "10.5.0.4"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/A",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', parameters('prefix'), '-redis-basic6')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]"
+            ],
+            "properties": {
+                "metadata": {
+                    "creator": ""
+                },
+                "ttl": 10,
+                "aRecords": [
+                    {
+                        "ipv4Address": "10.5.0.4"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/A",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', parameters('prefix'), '-redis-std')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]"
+            ],
+            "properties": {
+                "metadata": {
+                    "creator": ""
+                },
+                "ttl": 10,
+                "aRecords": [
+                    {
+                        "ipv4Address": "10.5.0.4"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/A",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', parameters('prefix'), '-redis-prem')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]"
+            ],
+            "properties": {
+                "metadata": {
+                    "creator": ""
+                },
+                "ttl": 10,
+                "aRecords": [
+                    {
+                        "ipv4Address": "10.5.0.4"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/A",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', parameters('prefix'), '-redis-ent')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]"
+            ],
+            "properties": {
+                "metadata": {
+                    "creator": ""
+                },
+                "ttl": 10,
+                "aRecords": [
+                    {
+                        "ipv4Address": "10.7.0.4"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/A",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', parameters('prefix'), '-redis-ent.eastus2.redisenterprise.cache.azure.net')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]"
+            ],
+            "properties": {
+                "metadata": {
+                    "creator": ""
+                },
+                "ttl": 10,
+                "aRecords": [
+                    {
+                        "ipv4Address": "10.7.0.4"
                     }
                 ]
             }
@@ -312,9 +407,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), '-vnet-redis', '/default')]",
+            "name": "[concat(variables('vnet-redis'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-redis'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-redis'))]"
             ],
             "properties": {
                 "addressPrefix": "10.7.0.0/24",
@@ -367,7 +462,29 @@
                 ],
                 "enableDdosProtection": false,
                 "enableVmProtection": false
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "app01-to-hub",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-app01'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-hub'))]"
+                    ],
+                    "comments": "app01 to hub",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": false,
+                        "allowGatewayTransit": false,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-hub'))]"
+                        }
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
@@ -418,12 +535,54 @@
                 "virtualNetworkPeerings": [],
                 "enableDdosProtection": false,
                 "enableVmProtection": false
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "hub-to-app01",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-app01'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-hub'))]"
+                    ],
+                    "comments": "hub to app01",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": false,
+                        "allowGatewayTransit": false,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet-app01'))]"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "hub-to-redis",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-redis'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-hub'))]"
+                    ],
+                    "comments": "hub to redis",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": false,
+                        "allowGatewayTransit": false,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet-redis'))]"
+                        }
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
-            "name": "[concat(parameters('prefix'), '-vnet-redis')]",
+            "name": "[variables('vnet-redis')]",
             "location": "[variables('location')]",
             "properties": {
                 "addressSpace": {
@@ -448,7 +607,7 @@
                         "properties": {
                             "peeringState": "Connected",
                             "remoteVirtualNetwork": {
-                                "id" : "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('prefix'), '-vnet-hub'))]"
+                                "id" : "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-hub'))]"
                             },
                             "allowVirtualNetworkAccess": true,
                             "allowForwardedTraffic": false,
@@ -464,7 +623,29 @@
                 ],
                 "enableDdosProtection": false,
                 "enableVmProtection": false
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "redis-to-hub",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-redis'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', variables('vnet-hub'))]"
+                    ],
+                    "comments": "redis to hub",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": false,
+                        "allowGatewayTransit": false,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnet-hub'))]"
+                        }
+                    }
+                }
+            ]
         },
         {
             "type": "microsoft.operationalinsights/workspaces",
@@ -513,7 +694,7 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-11-01",
-            "name": "[variables('nsg-01')]",
+            "name": "[variables('nsg-hub')]",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -534,6 +715,33 @@
                             "destinationAddressPrefixes": []
                         }
                     },
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 310,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('nsg-redis')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "securityRules": [
                     {
                         "name": "SSH",
                         "properties": {
@@ -865,7 +1073,7 @@
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                         "fileUris": [
-                        "https://raw.githubusercontent.com/solliancenet/security-defender-workshop-400/main/artifacts/environment-setup/spektra/post-install-script01.ps1"
+                            "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script01.ps1"
                         ]
                     },
                     "protectedSettings": {
@@ -933,7 +1141,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-win10-ip'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-hub'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -959,7 +1167,7 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-hub'))]"
                 }
             }
         },
@@ -969,8 +1177,8 @@
             "name": "[variables('vm-nic-02')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-redis'))]"
             ],
             "tags": {
                 
@@ -986,7 +1194,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-redis01-ip'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -999,7 +1207,7 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-redis'))]"
                 }
             }
         },
@@ -1009,8 +1217,8 @@
             "name": "[variables('vm-nic-03')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-redis'))]"
             ],
             "tags": {
                 
@@ -1026,7 +1234,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vm-redis02-ip'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-hub'), 'default')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -1039,7 +1247,422 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-01'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg-redis'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('app_name')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', concat(parameters('prefix'), '-appsvc'))]"
+            ],
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(variables('app_name'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(variables('app_name'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('prefix'), '-appsvc'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {
+                    "appSettings": [],
+                    "linuxFxVersion": "[variables('linuxFxVersion')]",
+                    "alwaysOn": "[variables('alwaysOn')]"
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(variables('app_name'), '/web')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('app_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "nodeVersion": "12.13.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$cjg-app01",
+                "azureStorageAccounts": {},
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": true,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": true
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "ftpsState": "AllAllowed",
+                "reservedInstanceCount": 0
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(variables('app_name'), '/', variables('app_name'), '.azurewebsites.net')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('app_name'))]"
+            ],
+            "properties": {
+                "siteName": "[variables('app_name')]",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('app_name'),'-pe')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('app_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-app01'), 'default')]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[concat(variables('app_name'), '-pe')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Web/sites', variables('app_name'))]",
+                            "groupIds": [
+                                "sites"
+                            ],
+                            "privateLinkServiceConnectionState": {
+                                "actionsRequired": "None"
+                            }
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [],
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-app01'), 'default')]"
+                },
+                "customDnsConfigs": [
+                    {
+                        "fqdn": "[concat(variables('app_name'), '.azurewebsites.net')]",
+                        "ipAddresses": [
+                            "10.7.0.4"
+                        ]
+                    },
+                    {
+                        "fqdn": "concat(variables('app_name'), '.scm.azurewebsites.net')",
+                        "ipAddresses": [
+                            "10.7.0.4"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('redis-name'),'-basic4', '-pe')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-basic4'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[concat(variables('redis-name'),'-basic4', '-pe')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-basic4'))]",
+                            "groupIds": [
+                                "redisCache"
+                            ],
+                            "privateLinkServiceConnectionState": {
+                                "description": "Auto-Approved",
+                                "actionsRequired": "None"
+                            }
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [],
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+                },
+                "customDnsConfigs": [
+                    {
+                        "fqdn": "[concat(variables('redis-name'),'-basic4', parameters('prefix'), 'privatedns.com')]",
+                        "ipAddresses": [
+                            "10.7.0.4"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('redis-name'),'-basic6', '-pe')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-basic6'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[concat(variables('redis-name'),'-basic6', '-pe')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-basic6'))]",
+                            "groupIds": [
+                                "redisCache"
+                            ],
+                            "privateLinkServiceConnectionState": {
+                                "description": "Auto-Approved",
+                                "actionsRequired": "None"
+                            }
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [],
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+                },
+                "customDnsConfigs": [
+                    {
+                        "fqdn": "[concat(variables('redis-name'),'-basic6', parameters('prefix'), 'privatedns.com')]",
+                        "ipAddresses": [
+                            "10.7.0.5"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('redis-name'),'-std', '-pe')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-std'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[concat(variables('redis-name'),'-std', '-pe')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-std'))]",
+                            "groupIds": [
+                                "redisCache"
+                            ],
+                            "privateLinkServiceConnectionState": {
+                                "description": "Auto-Approved",
+                                "actionsRequired": "None"
+                            }
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [],
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+                },
+                "customDnsConfigs": [
+                    {
+                        "fqdn": "[concat(variables('redis-name'),'-prem', parameters('prefix'), 'privatedns.com')]",
+                        "ipAddresses": [
+                            "10.7.0.6"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('redis-name'),'-prem', '-pe')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-prem'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[concat(variables('redis-name'),'-prem', '-pe')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Cache/Redis', concat(variables('redis-name'),'-prem'))]",
+                            "groupIds": [
+                                "redisCache"
+                            ],
+                            "privateLinkServiceConnectionState": {
+                                "description": "Auto-Approved",
+                                "actionsRequired": "None"
+                            }
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [],
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+                },
+                "customDnsConfigs": [
+                    {
+                        "fqdn": "[concat(variables('redis-name'),'-prem', parameters('prefix'), 'privatedns.com')]",
+                        "ipAddresses": [
+                            "10.7.0.6"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('redis-name'),'-ent', '-pe')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/redisEnterprise', concat(variables('redis-name'),'-ent'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[concat(variables('redis-name'),'-ent', '-pe')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Cache/redisEnterprise', concat(variables('redis-name'),'-ent'))]",
+                            "groupIds": [
+                                "redisEnterprise"
+                            ],
+                            "privateLinkServiceConnectionState": {
+                                "description": "Auto-Approved",
+                                "actionsRequired": "None"
+                            }
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [],
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnet-redis'), 'default')]"
+                },
+                "customDnsConfigs": [
+                    {
+                        "fqdn": "[concat(variables('redis-name'),'-ent', parameters('prefix'), 'privatedns.com')]",
+                        "ipAddresses": [
+                            "10.7.0.7"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', variables('vnet-redis'))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-redis'))]"
+            ],
+            "properties": {
+                "registrationEnabled": true,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-redis'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', variables('vnet-hub'))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-hub'))]"
+            ],
+            "properties": {
+                "registrationEnabled": true,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-hub'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('prefix'), 'privatedns.com', '/', variables('vnet-app01'))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', concat(parameters('prefix'), 'privatedns.com'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-app01'))]"
+            ],
+            "properties": {
+                "registrationEnabled": true,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet-app01'))]"
                 }
             }
         }

@@ -135,10 +135,18 @@ $cred = new-object -typename System.Management.Automation.PSCredential -argument
 Connect-AzAccount -Credential $cred | Out-Null
  
 # Template deployment
-$rg = (Get-AzResourceGroup | Where-Object { $_.ResourceGroupName -like "*AZDEFEND*-02" });
+$rg = (Get-AzResourceGroup | Where-Object { $_.ResourceGroupName -like "*redis*" });
 $resourceGroupName = $rg.ResourceGroupName
 $region = $rg.Location;
 $deploymentId =  (Get-AzResourceGroup -Name $resourceGroupName).Tags["DeploymentId"]
+
+$branchName = "master";
+$workshopName = "microsoft-redis-cache-migration";
+$repoUrl = "solliancenet/microsoft-redis-cache-migration";
+
+#download the git repo...
+Write-Host "Download Git repo." -ForegroundColor Green -Verbose
+git clone https://github.com/solliancenet/$workshopName.git $workshopName
 
 #execute setup scripts
 Write-Host "Executing post scripts." -ForegroundColor Green -Verbose
