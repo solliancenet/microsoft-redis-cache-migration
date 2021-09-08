@@ -179,11 +179,9 @@ As the table above shows, backups, network egress, and any extra nodes must be c
 
 ### Application Implications
 
-When moving to Azure Cache for Redis, the conversion to secure sockets layer (SSL) based communication is likely to be one of the biggest changes for the applications. SSL is enabled by default in Azure Cache for Redis and it is likely the on-premises application and data workload is not set up to connect to Redis using SSL. When enabled, SSL usage will add some additional processing overhead and should be monitored.
+When moving to Azure Cache for Redis, the conversion to [secure sockets layer (SSL)](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-remove-tls-10-11#configure-your-application-to-use-tls-12) based communication is likely to be one of the biggest changes for the applications. SSL is enabled by default in Azure Cache for Redis and it is likely the on-premises application and data workload is not set up to connect to Redis using SSL. When enabled, SSL usage will add some additional processing overhead and should be monitored.
 
 > **Note** Although SSL is enabled by default, it is possible to disable. This is strongly not recommended.
-
-Follow the activities in [Configure TLS connectivity in Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/concepts-ssl-connection-security) to reconfigure the application to support this strong authentication path.
 
 Lastly, modify the server name in the application connection strings or switch the DNS to point to the new Azure Cache for Redis server.
 

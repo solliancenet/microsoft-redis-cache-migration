@@ -77,17 +77,13 @@ Despite what path is taken, there are common steps in the process:
 - Setup Compliance and Security features
 - Configure monitoring of the instance
 
-## WWI Use Case
-
-TODO
-
 ## Instance Objects
 
 As outlined in the [Test Plans](../02_PreMigration/04_TestPlans.md) section, take an inventory of instance objects before and after the migration.  
 
 Migration teams should develop and test helpful inventory scripts before beginning the migration phase.
 
-Instance object inventory examples:
+Instance object inventory script:
 
 ```powershell
 TODO
@@ -104,6 +100,7 @@ Options:
 - [Replication](./01.03_DataMigration_Replication.md)
 - [3rd Party Tools](./01.04_DataMigration_Tools.md)
 - [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
+- [Append Only File](./01.06_DataMigration_Aof.md)
 
 Once the data is migrated, point the application to the new instance
 
@@ -112,6 +109,10 @@ Once the data is migrated, point the application to the new instance
 Lastly, validate the target instance's inventory. Below is an example of the `INFO` results in a target environment. It is relatively easy to identify database key count discrepancies.
 
 TODO IMAGE
+
+## WWI Use Case
+
+Worldwide Importers has decided to use a simple backup and restore of their Redis Conference instance.  They will backup the RDB file and then copy it to Azure Storage.  Once uploaded, they will utilize the Azure PowerShell cmdlets to restore the the RDB file contents to the new Azure Cache for Redis premium instance.  Once migrated, they will enable the instance to be cluster enabled and then modify their applications to point to the new instance.
 
 ## Data Migration Checklist
 

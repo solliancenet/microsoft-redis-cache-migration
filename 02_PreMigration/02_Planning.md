@@ -39,7 +39,7 @@ Other networking considerations include:
 
 - When using an Azure Virtual Machine to run the migration tools, assign it a public IP address and then only allow it to connect to the on-premises Redis instance.
 
-- Outbound firewalls must ensure outbound connectivity to Azure Cache for Redis. The Redis gateway IP addresses are available on the [Connectivity Architecture in Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/concepts-connectivity-architecture#azure-instance-for-Redis-gateway-ip-addresses) page.
+- Outbound firewalls must ensure outbound connectivity to Azure Cache for Redis. 
 
 ## Private Link and/or VNet integration
 
@@ -47,7 +47,7 @@ All Azure Cache for Redis services support private links and VNet integration.  
 
 ## SSL/TLS Connectivity
 
-In addition to the application implications of migrating to SSL-based communication, the SSL/TLS connection types are also something that needs to be considered. After creating the Azure Cache for Redis instance, review the SSL settings, and read the [Configure your application to use TLS 1.2](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq) article to understand how the TLS settings can affect the security posture of an application.
+In addition to the application implications of migrating to SSL-based communication, the SSL/TLS connection types are also something that needs to be considered. After creating the Azure Cache for Redis instance, review the SSL settings, and read the [Configure your application to use TLS 1.2](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-remove-tls-10-11#configure-your-application-to-use-tls-12) article to understand how the TLS settings can affect the security posture of an application.
 
 ## WWI Use Case
 

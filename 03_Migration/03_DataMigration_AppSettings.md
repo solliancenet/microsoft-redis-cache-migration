@@ -8,9 +8,14 @@ Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide to creat
 
 ## Migration
 
-Ensure that you have migrate the settings in the source to the target using one of the migration paths:
+Ensure that you have migrated the data in the source to the target using one of the migration paths:
 
-- TODO
+- [Backup and Restore](./01.01_DataMigration_BackupRestore.md)
+- [Copy command](./01.02_DataMigration_Copy.md)
+- [Replication](./01.03_DataMigration_Replication.md)
+- [3rd Party Tools](./01.04_DataMigration_Tools.md)
+- [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
+- [Append Only File](./01.06_DataMigration_Aof.md)
 
 ## Update Applications to support SSL
 
@@ -18,7 +23,7 @@ Ensure that you have migrate the settings in the source to the target using one 
 - Open the `appsettings.json` file, update the `REDIS_CONNECTION` connection string to point to the new Azure Redis instance:
 
 ```text
-"REDIS_CONNECTION": "PREFIX-redis-prem.redis.cache.windows.net:6380,password=<REDIS_PWD>,ssl=True,abortConnect=False",
+"REDIS_CONNECTION": "PREFIX-redis-prem.redis.cache.windows.net:6380,password=<REDIS_PWD>,ssl=True,abortConnect=False"
 ```
 
 > **NOTE** Notice the usage of the `ssl=True` addition to the connection string

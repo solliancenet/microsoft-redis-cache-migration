@@ -12,7 +12,7 @@ In the end, several tools exist in the marketplace ranging from free to commerci
 
 ## Questions and Feedback
 
-For any questions or suggestions about working with Azure Cache for Redis, send an email to the Azure Cache for Redis Team (TODO@service.microsoft.com). Please note that this address is for general questions rather than support tickets.
+For any questions or suggestions about working with Azure Cache for Redis, send an email to the Azure Cache for Redis Team (azurecache@microsoft.com). Please note that this address is for general questions rather than support tickets.
 
 In addition, consider these points of contact as appropriate:
 

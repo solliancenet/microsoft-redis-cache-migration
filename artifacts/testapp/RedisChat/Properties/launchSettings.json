@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Baseline.Collector.Host": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "redis-source": "cjg-redis-basic6.redis.cache.windows.net:6379,password=1vCrpTAyRJc0QMR6ySLVO0AO88axt2vEA3w84YU0BoA=",
+      }
+    }
+  }
+}
