@@ -33,14 +33,8 @@ You can find some of the pitfalls and misconceptions of using tools to benchmark
 
 > **Note** You will get errors as various commands are not exposed in Azure Cache for Redis.
 
-## Server Configuration
-
-TODO
-
 ## WWI Use Case
 
-TODO
+WWI reviewed its conference website instance workload and determined it had a very small load.  Although a basic tier server would work for them, they did not want to perform work later to migrate to another tier.  The server being deployed will eventually host the other Redis data workloads, so they picked the `Premium` tier which will provide more than enough memory and throughput.  They also like the ideal of having geo-replication with the `Premium` tier.
 
-WWI reviewed its Conference instance workload and determined it had a very small load.  Although a basic tier server would work for them, they did not want to perform work later to migrate to another tier.  The server being deployed will eventually host the other Redis data workloads, so they picked the `Premium` tier.
-
-In reviewing the Redis instance, the Redis 4.0 server is running with the default server configuration set during the initial install.
+In reviewing the Redis instance, the Redis 4.0 server is running with the default server configuration set during the initial install so no configuration settings will need to be migrated.

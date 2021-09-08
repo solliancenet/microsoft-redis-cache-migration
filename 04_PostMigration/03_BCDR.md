@@ -6,7 +6,7 @@ As with any mission critical system, having a backup and restore as well as a di
 
 ### Backup
 
-Azure Cache for Redis supports automatic backups (data persistence) based on RDB or AOF features.  The backup frequency can be as low as 15 minutes or up to 24 hours. If enabled, the files are stored in Azure Storage, which should be factoring into in the total cost of ownership of your solution.
+Azure Cache for Redis supports automatic backups ([data persistence](https://redis.io/topics/persistence)) based on RDB or AOF features.  The backup frequency can be as low as 15 minutes or up to 24 hours. If enabled, the files are stored in Azure Storage, which should be factoring into in the total cost of ownership of your solution.
 
 You can also choose to `export` your data using the Azure Portal, Azure CLI or Azure PowerShell.
 
@@ -14,11 +14,15 @@ You can also choose to `export` your data using the Azure Portal, Azure CLI or A
 
 As you learned in the migration sections, you can restore a Redis instance from a RDB or AOF backup.
 
-## Clustering
+## High Availability (HA)
+
+Azure Cache for Redis has several options for [implementing high availability](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-high-availability) across the various hosting options (IaaS or PaaS) whether you are looking for 99.9 with up to 99.999% uptime.  These include using Virtual Machines with Availability Zones and replication, or utilizing the PaaS based Premium and Enterprise SKUs for built-in clustering and geo-replication.
+
+### Clustering
 
 To support high availability you can enabled clustering on the `Premium` and `Enterprise` skus.  `Basic` and `Standard` do not support clustering.  You can scale up to 10 shards in Azure Cache for Redis Premium.
 
-## Geo-replication
+### Geo-replication
 
 [Geo-replication](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-retries-exponential-backoff) allows you to created cache replication links to Azure Cache for Redis instances running in any region in Azure.  This provides for the ability to recover from any regional outages that may occur. Secondary instances are read-only and can be accessed from applications.
 
@@ -26,7 +30,7 @@ Geo-replication is not automatic failover, so if any issues do arise, you will n
 
 > **Note** Geo-replication is not enabled for the `Basic` or `Standard` tiers.
 
-### Cache Replication Links
+#### Cache Replication Links
 
 Once a link has been setup, there are numerous features that are not supported and some restrictions that are placed on your instances.  Reference [Configure geo-replication for Premium Azure Cache for Redis instances](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-geo-replication) for more information.  Also part of the document, reference the [Geo-replication FAQ](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-geo-replication#geo-replication-faq).
 
@@ -80,7 +84,7 @@ Failover Steps:
 - Open the Azure Portal.
 - Browse to the **PREFIX-redis-basic6** Azure Cache for Redis instance.
 - Under **Settings** select **Geo-replication**
-- Select **Unlink caches**
+- Select **Unlink caches**, the replication will unlink and the two caches will become read/write.
 
 ## BCDR Checklist
 

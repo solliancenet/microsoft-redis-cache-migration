@@ -61,9 +61,9 @@ In the absence of a Redis cluster, you can use the [`twemproxy` tool](https://gi
 
 In addition to running a proxy, you can select a client implementation that will hash the keys and handle the routing of your cache queries. There are multiple Redis clients with support for consistent hashing:
 
-- [Redis-rb](https://github.com/redis/redis-rb)
-- [Predis](https://github.com/nrk/predis)
-- [Jedis](https://github.com/redis/jedis)
+- [Redis-rb](https://github.com/redis/redis-rb) : A Ruby client that tries to match Redis' API one-to-one, while still providing an idiomatic interface.
+- [Predis](https://github.com/nrk/predis) : A flexible and feature-complete Redis client for PHP 7.2 and newer.
+- [Jedis](https://github.com/redis/jedis) : Jedis is a blazingly small and sane Redis java client.
 
 ## Quick Tips
 
@@ -74,6 +74,8 @@ Use the following to make quick performance changes:
 - **Memory Usage** : If memory usage for an Azure Cache for Redis server is saturated at 100%, then select the next higher level of tier to get more memory.
 - **Network** : If the tier runs out of bandwidth to serve the clients, the clients will start received time outs, scale up to a higher tier to get more bandwidth.
 - **Regions** :  It is recommended having the application server/client machine in the same region in Azure to reduce latency between the client/application server and the instance.
+
+You can also review the [best practices guidance on caching](https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching) in the Azure Architecture Center.
 
 ## WWI Use Case
 

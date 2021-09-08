@@ -17,8 +17,6 @@ The following steps will configure an environment to perform the guide's migrati
 
 - Choose between the [`secure`](../artifacts/template-secure.json) or the [`non-secure`](../artifacts/template.json) ARM template.  The difference between the two options is the secured option's resources are hidden behind an App Gateway with private endpoints, whereas the other, resources are directly exposed to the internet.
 
-TODO
-
 > **Note** The secure template runs at ~$2700 per month.  The non-secure template runs at ~$1700 per month.
 
 - Copy the json into the window
@@ -32,15 +30,15 @@ TODO
 - Select the **I agree...** checkbox
 - Select **Create**, after about 20 minutes the landing zone will be deployed
 
-> **NOTE** If anything deploys incorrecly in the redis images, you can check the Azure agent log files using:
+  > **NOTE** If anything deploys incorrectly in the redis images via the Azure script extensions, you can check the Azure agent log files using:
 
-```bash
-chmod +rwx /var/lib/waagent
+  ```bash
+  chmod +rwx /var/lib/waagent
 
-cd /var/lib/waagent/custom-script/download/0
+  cd /var/lib/waagent/custom-script/download/0
 
-sudo nano stderr
-```
+  sudo nano stderr
+  ```
 
 ## Setup Redis Binding
 
@@ -73,7 +71,7 @@ journalctl -u redis-server
 
 ## Open the Azure VM Ports
 
-TODO
+TODO  - clustr port...
 
 - Browse to the Azure Portal.
 - Select the **PREFIX-redis01** virtual machine resource.
@@ -164,6 +162,9 @@ az webapp restart -g $rgName -n $app_name
 
 ## Configure Network Security (Secure path)
 
+
+TODO - 
+
 - When attempting to connect to the instance from the app service, an access denied message should be displayed. Add the app virtual network to the firewall of the Azure Cache for Redis
   - Browse to the Azure Portal
   - Select the target resource group
@@ -171,18 +172,3 @@ az webapp restart -g $rgName -n $app_name
   - Select **Connection security**
   - Select the `Allow access to all Azure Services` toggle to `Yes`
   - Select **Save**
-
-## Create a Cluster
-
-- Login to the **PREFIX-redis-01** virtual machine
-- Run the following command to enable cluster mode:
-
-```bash
-redis-cli config set cluster-enabled yes
-```
-
-- Run the following to create the cluster:
-
-```bash
-redis-cli --cluster create <IP1>:6379 <IP2>:6379 --cluster-replicas 1
-```
