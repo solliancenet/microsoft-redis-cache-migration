@@ -33,7 +33,9 @@ The following steps will configure an environment to perform the guide's migrati
   > **NOTE** If anything deploys incorrectly in the redis images via the Azure script extensions, you can check the Azure agent log files using:
 
   ```bash
-  chmod +rwx /var/lib/waagent
+  sudo chmod +rwx /var/lib/waagent
+
+  sudo chmod +rwx /var/lib/waagent/custom-script/download/0
 
   cd /var/lib/waagent/custom-script/download/0
 
@@ -44,13 +46,17 @@ The following steps will configure an environment to perform the guide's migrati
 
 ## Ensure Redis is Configured
 
-- Login to the redis image (**PREFIX-redis01** and **PREFIX-redis02**)
-- Open a PowerShell window and run the following:
+- Browse to the Azure Portal
+- Select your lab resource group
+- Select the **PREFIX-redis01** virtual machine
+- Record the public IP address
+- Login to the redis image (**PREFIX-redis01** and **PREFIX-redis02**) by opening a PowerShell window and run the following:
 
   ```PowerShell
-  ssh s2admin@IP
+  ssh s2admin@<IP>
   ```
 
+- Enter the password `S2@dmins2@dmin`
 - Open the `redis.conf` file:
 
   ```bash
@@ -63,7 +69,7 @@ The following steps will configure an environment to perform the guide's migrati
   bind 0.0.0.0
   ```
 
-- If the setting does not exist, run all the commands in the `.\artifacts\post-install-script01.sh` file
+- If the setting does not exist or it is an empty file, run all the commands in the `.\artifacts\post-install-script01.sh` file
 
 ## Connect to the Azure VM
 
@@ -80,7 +86,8 @@ The following steps will configure an environment to perform the guide's migrati
 Perform the following on the **PREFIX-win10** virtual machine resource.
 
 - Open Visual Studio
-- Open the **C:\redismigration\microsoft-redis-cache-migration\artifacts\testapp\Redis.sln** file
+- Open the **C:\redismigration\microsoft-redis-cache-migration\artifacts\applications\Redis.sln** file
+- When prompted, login using an account that has a Visual Studio license enabled
 - Open the ``appsettings.json` file, update the **{TODO}** variable to the Redis Connections string `TODO`
 - Press **F5** to run the application, a browser window should open
 

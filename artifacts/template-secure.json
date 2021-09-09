@@ -933,7 +933,7 @@
                         "protectedSettings": {
                             "commandToExecute": "sh post-install-script01.sh",
                             "fileUris": [
-                            "https://raw.githubusercontent.com/solliancenet/common-workshop/main/scripts/post-install-script01.sh"
+                            "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script01.sh"
                                 ],
                             "managedIdentity" : {}
                         }
@@ -1024,7 +1024,7 @@
                     "protectedSettings": {
                         "commandToExecute": "sh post-install-script01.sh",
                         "fileUris": [
-                        "https://raw.githubusercontent.com/solliancenet/common-workshop/main/scripts/post-install-script01.sh"
+                            "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script01.sh"
                             ],
                         "managedIdentity" : {}
                     }

@@ -112,6 +112,8 @@ InstallAzureCli
 
 InstallOffice
 
+InstallVisualStudio "enterprise"
+
 Uninstall-AzureRm -ea SilentlyContinue
 
 CreateLabFilesDirectory
