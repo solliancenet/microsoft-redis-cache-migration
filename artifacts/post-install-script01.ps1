@@ -140,7 +140,7 @@ $resourceGroupName = $rg.ResourceGroupName
 $region = $rg.Location;
 $deploymentId =  (Get-AzResourceGroup -Name $resourceGroupName).Tags["DeploymentId"]
 
-$branchName = "master";
+$branchName = "main";
 $workshopName = "microsoft-redis-cache-migration";
 $repoUrl = "solliancenet/microsoft-redis-cache-migration";
 

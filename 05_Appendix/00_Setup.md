@@ -42,121 +42,50 @@ The following steps will configure an environment to perform the guide's migrati
 
 > **NOTE** If you choose the `secure` template, you will need to perform all the tasks via the Azure Portal or inside the **PREFIX-win10** jump machine in the **PREFIX-vnet-hub** virtual network.  You will also need to make sure that DNS records are correct such that you can connect to the resources in the **PREFIX-vnet-redis** virtual network.  For simplicity, you should use the `non-secure` template.
 
-## Setup Redis Binding
+## Ensure Redis is Configured
 
 - Login to the redis image (**PREFIX-redis01** and **PREFIX-redis02**)
+- Open a PowerShell window and run the following:
+
+  ```PowerShell
+  ssh s2admin@IP
+  ```
+
 - Open the `redis.conf` file:
 
-```bash
-sudo nano /etc/redis/redis.conf
-```
+  ```bash
+  sudo nano /etc/redis/redis.conf
+  ```
 
-- Update the redis.conf, add the following `bind` statement below the others:
+- Check the following `bind` statement exists:
 
-```bash
-bind 0.0.0.0
-```
+  ```bash
+  bind 0.0.0.0
+  ```
 
-## Setup Redis Cluster
-
-- Run the following commands
-
-```bash
-sudo service redis-server restart
-```
-
-- If you have any errors, run the following to debug:
-
-```bash
-journalctl -u redis-server
-```
-
-## Open the Azure VM Ports
-
-TODO  - clustr port...
-
-- Browse to the Azure Portal.
-- Select the **PREFIX-redis01** virtual machine resource.
-- Under **Settings**, select **Networking**
-- In the **Inbound port rules** area, select **Add inbound port rule**
-- For the **Destination port ranges**, type **6379**
-- For the name, type **Port_6379**
-- Select **Add**
-
-## Allow Azure Redis Access
-
-- Browse to the Azure Portal.
-- Select the **PREFIX-redis-basic** instance.
-- Under **Settings**, select **Connection security**
-- Toggle the **Allow access to Azure services** to **On**
-- Select **Save**
-- Browse to your resource group
-- Select the **PREFIX-redis-std** instance.
-- Under **Settings**, select **Networking**
-- Toggle the **Allow public access from any Azure service within Azure to this server** to **On**
-- Select **Save**
+- If the setting does not exist, run all the commands in the `.\artifacts\post-install-script01.sh` file
 
 ## Connect to the Azure VM
 
 - Login to the deployed instance VM.
   - Browse to the Azure Portal.
-  - Select the **PREFIX-win10** virtual machine resource.
+  - Select the **PREFIX-win10** virtual machine resource
   - Select **Connect->RDP**.
   - Select **Open** in the RDP dialog.
   - Login using `s2admin` and `S2@dmins2@dmin`.
+  - Select **Accept** in the dialog.
   
-## Download artifacts
+## Configure and Test the Web Application
 
 Perform the following on the **PREFIX-win10** virtual machine resource.
 
-- Open a Windows PowerShell window (just by entering "PowerShell" into the Start menu) and run the following commands
-
-```PowerShell
-mkdir c:\redismigration
-cd c:\redismigration
-git config --global user.name "FIRST_NAME LAST_NAME"
-git config --global user.email "MY_NAME@example.com"
-git clone https://github.com/solliancenet/microsoft-redis-cache-migration 
-```
-
-## Configure the Web Application
-
-Perform the following on the **PREFIX-win10** virtual machine resource.
-
-- Open Visual Studio Code, if prompted, select **Yes, I trust the authors**
-- Open the **C:\redismigration\microsoft-redis-cache-migration\artifacts\testapp\conferencedemo** folder (Ctrl+K and Ctrl+O, or **File->Open Folder...**)
-- Select the **Extensions** tab
-- Search for and install the following extensions
-  - TODO
-
-- Update the **{DB_CONNECTION_URL}** environment variable to the Redis Connections string `jdbc:Redis://localhost:5432/reg_app?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&noAccessToProcedureBodies=true`
-- Select the **Debug** tab (directly above the **Extensions** tab from earlier), then select the debug option to start a debug session
-- If prompted, select **Yes** to switch to `standard` mode
-
-## Test the Web Application
-
-- Open a browser window, browse to **http://localhost:8888**
-- Ensure the application started on port 8888 and displays results
+- Open Visual Studio
+- Open the **C:\redismigration\microsoft-redis-cache-migration\artifacts\testapp\Redis.sln** file
+- Open the ``appsettings.json` file, update the **{TODO}** variable to the Redis Connections string `TODO`
+- Press **F5** to run the application, a browser window should open
 
 ## Deploy the Application to Azure
 
-- TODO
-- Restart the App Service by running the following
+- Right-click the **RedisWeb** project, select **Publish**
 
-```PowerShell
-az webapp restart -g $rgName -n $app_name
-```
-
-- Congratulations. You have migrated the sample app to Azure. Now, focus on migrating a multi-tenant app to Azure to explore the power of horizontally-scalable Redis (Citus).
-
-## Configure Network Security (Secure path)
-
-TODO
-
-- When attempting to connect to the instance from the app service, an access denied message should be displayed. Add the app virtual network to the firewall of the Azure Cache for Redis
-  - Browse to the Azure Portal
-  - Select the target resource group
-  - Select the `{PREFIX}Redis` resource
-  - Select **Connection security**
-  - Select the `Allow access to all Azure Services` toggle to `Yes`
-  - Select **Save**
+- Congratulations. You have migrated the sample app to Azure, now we need to migrate the Redis instance.
