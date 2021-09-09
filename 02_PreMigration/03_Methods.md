@@ -80,6 +80,19 @@ There are many paths WWI can take to migrate their Redis workloads. We have prov
 | Online migration | Keep the source up for as long as possible | Replication | None | Seamless | Extra processing and storage |
 | Highly Customized Offline Migration | Selectively export objects | IMPORT/EXPORT | None | Highly customizable | Manual |
 
+In terms of the more specific tools and methods, here is a table of supported features with advantages and disadvantages of each:
+
+| Path\Tool | Supported in Azure | Multiple Databases | Clusters | Underlying Cmds | Advantages | Disadvantages
+| --- | --- | --- | --- | --- | --- | --- |
+| RDP Backup/Restore | Premium+ | Yes | Yes | N/A | Simple file copy | Requires storage account, Complicated for clusters
+| AOF Backup/Restore | Premium+ | Yes | Yes | N/A | Simple file copy | Requires storage account, Complicated for clusters
+| Cluster Failover (Migration) | No | - | - | - | - | -
+| Replication (SLAVEOF/REPLICAOF) | No | - | - | - | - | -
+| Mass Insertion (SET/GET) | Yes | Yes | Yes | SET/GET | Simple to implement | Binary encoding complexities (output and input formatting)
+| Mass Insertion (DUMP/RESTORE) | Yes | Yes | Yes | DUMP/RESTORE | Simple to implement | Binary encoding complexities (versions must match)
+| Mass Insertion (MIGRATE) | Yes | Yes | Yes | MIGRATE | Simple to implement | Binary encoding complexities (versions must match), Data is deleted from source during migration.
+| Layer of Abstraction | Yes | Yes | Yes | SET/GET | Simple to implement | Requires application changes, does not support local SET/GET (outside of application)
+
 ## WWI Use Case
 
 WWI has selected its conference instance as its first migration workload. The workload was selected because it had the least risk and the most available downtime due to the gap in the annual conference schedule. They also assessed the instance to not be using any unsupported features in the target Azure Cache for Redis service. Based on the migration team's other assessment details, they determined that they will attempt to perform an offline migration using the backup and restore Redis tools.

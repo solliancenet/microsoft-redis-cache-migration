@@ -19,19 +19,21 @@ Ensure that you have migrated the data in the source to the target using one of 
 
 ## Update Applications to support SSL
 
-- Open `RedisWeb` project
-- Open the `appsettings.json` file, update the `REDIS_CONNECTION` connection string to point to the new Azure Redis instance:
+- Switch to the Azure Portal
+- Select the **PREFIX-app01** app service
+- Under **Settings**, select **Configuration**
+- For the **REDIS_CONNECTION** application setting, replace it to point to the migrated Azure Cache for Redis instance:
 
-```text
-"REDIS_CONNECTION": "PREFIX-redis-prem.redis.cache.windows.net:6380,password=<REDIS_PWD>,ssl=True,abortConnect=False"
-```
+    ```text
+    "REDIS_CONNECTION": "PREFIX-redis-prem.redis.cache.windows.net:6380,password=<REDIS_PWD>,ssl=True,abortConnect=False"
+    ```
 
 > **NOTE** Notice the usage of the `ssl=True` addition to the connection string
 
 > **NOTE** If you used the secure template, you would be connecting to the private IP endpoint in the connection string.
 
-- Press **F5** to run the application, you should see all the migrated data from the source displayed
+- Press **F5** to run the application, you should see the migrated data from the source displayed
 
-- IMAGE TODO
+    ![RedisWeb app running with Hello World displayed](./media/RedisWeb_HelloWorld.png)
 
 You have successfully completed an on-premises to Azure Cache for Redis migration!

@@ -85,7 +85,7 @@ namespace RedisWeb
         {
             T val = GetData<T>(key);
 
-            if (val.ToString() != data.ToString())
+            if (val == null || val.ToString() != data.ToString())
                 SetData<T>(key, data);
 
             return default(T);
@@ -129,17 +129,21 @@ namespace RedisWeb
 
         public static T GetData<T>(string key, IDatabase db)
         {
+            RedisValue rv = new RedisValue(); ;
+
             try
             {
-                var res = db.StringGet(key);
+                rv = db.StringGet(key);
 
-                if (res.IsNull)
+                if (rv.IsNull)
                     return default(T);
                 else
-                    return JsonConvert.DeserializeObject<T>(res);
+                    return JsonConvert.DeserializeObject<T>(rv);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.Write(ex.Message);
+
                 return default(T);
             }
         }

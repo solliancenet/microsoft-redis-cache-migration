@@ -33,11 +33,7 @@ namespace RedisWeb
 
                 services.AddStackExchangeRedisCache(options =>
                 {
-                    string server = configuration["redis-server"];
-                    string port = configuration["redis-port"];
-                    string cnstring = $"{server}:{port}";
-
-                    cnstring = configuration["REDIS_CONNECTION"];
+                    string cnstring = configuration["REDIS_CONNECTION"];
 
                     options.Configuration = cnstring;
                 });

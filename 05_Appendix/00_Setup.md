@@ -33,13 +33,8 @@ The following steps will configure an environment to perform the guide's migrati
   > **NOTE** If anything deploys incorrectly in the redis images via the Azure script extensions, you can check the Azure agent log files using:
 
   ```bash
-  sudo chmod +rwx /var/lib/waagent
-
-  sudo chmod +rwx /var/lib/waagent/custom-script/download/0
-
-  cd /var/lib/waagent/custom-script/download/0
-
-  sudo nano stderr
+  sudo nano /var/lib/waagent/custom-script/download/0/stdout
+  sudo nano /var/lib/waagent/custom-script/download/0/stderr
   ```
 
 > **NOTE** If you choose the `secure` template, you will need to perform all the tasks via the Azure Portal or inside the **PREFIX-win10** jump machine in the **PREFIX-vnet-hub** virtual network.  You will also need to make sure that DNS records are correct such that you can connect to the resources in the **PREFIX-vnet-redis** virtual network.  For simplicity, you should use the `non-secure` template.
@@ -66,7 +61,7 @@ The following steps will configure an environment to perform the guide's migrati
 - Check the following `bind` statement exists:
 
   ```bash
-  bind 0.0.0.0
+  bind 0.0.0.0 ::1
   ```
 
 - If the setting does not exist or it is an empty file, run all the commands in the `.\artifacts\post-install-script01.sh` file
@@ -88,11 +83,30 @@ Perform the following on the **PREFIX-win10** virtual machine resource.
 - Open Visual Studio
 - Open the **C:\redismigration\microsoft-redis-cache-migration\artifacts\applications\Redis.sln** file
 - When prompted, login using an account that has a Visual Studio license enabled
-- Open the ``appsettings.json` file, update the **{TODO}** variable to the Redis Connections string `TODO`
-- Press **F5** to run the application, a browser window should open
+- When prompted, select to **Install** the .NET desktop development
+- In the **RedisWeb** project, open the `.\Properties\launchSettings.json` file
+- Update the **IISExpress** profile **REDIS_CONNECTION** environment variable to the Redis Connections string `<REDIS01_VM_IP>:6379`
+- Press **F5** to run the application, a browser window should open and display the cache value `Hello World`:
+
+  ![RedisWeb app running with Hello World displayed](./media/RedisWeb_HelloWorld.png)
 
 ## Deploy the Application to Azure
 
 - Right-click the **RedisWeb** project, select **Publish**
+- Select **Azure**, then select **Next**
+- Select **Azure App Server (Linux)**, then select **Next**
+- Login if prompted, then select your lab subscription and resource group
+- Select the **PREFIX-app01** app service then select **Next**
+- Select **Finish**
+- Select **Publish**
+- Browse to the Azure Portal
+- Select the **PREFIX-app01** app service
+- Under **Deployment** select **Configuration**
+- Select **New application setting**, for the name type **REDIS_CONNECTION**
+- Set the value to `<REDIS01_VM_IP>:6379`
+- Select **Save**
+- Open the web app url `https://PREFIX-app01.azurewebsites.net/`
 
-- Congratulations. You have migrated the sample app to Azure, now we need to migrate the Redis instance.
+> **NOTE** If you used the secure template, you would need to ensure your DNS is setup to point to the private IP address of the app service.
+
+- Congratulations. You have migrated the sample Redis app to Azure, now we need to migrate the Redis instance.

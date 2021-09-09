@@ -56,10 +56,10 @@ When you select a path for migration, you will want the import to run as fast as
 - Create and verify the Azure Landing zone
 - Export and configure Source Server configuration
 - Export and configure Target Server configuration
-- Export the instance objects (schema, users, etc.)
-- Export the data
+- Export the instance objects (Users, etc.)
+- Export the data (if possible disable writing)
 - Import the instance objects
-- Import the data (no triggers, keys)
+- Import the data
 - Validation
 - Migrate the Application(s)
 
@@ -67,7 +67,7 @@ When you select a path for migration, you will want the import to run as fast as
 
 Despite what path is taken, there are common steps in the process:
 
-- Upgrade to a supported Azure Redis version that matches the target
+- Upgrade to a supported Azure Redis version that matches the target and migration tool support
 - Inventory instance objects
 - Export users and permissions (ACLS)
 - Export and configuration settings
@@ -76,6 +76,7 @@ Despite what path is taken, there are common steps in the process:
 
 - Setup Compliance and Security features
 - Configure monitoring of the instance
+- Optimize applications
 
 ## Instance Objects
 
@@ -117,9 +118,9 @@ Worldwide Importers has decided to use a simple backup and restore of their Redi
 ## Data Migration Checklist
 
 - Understand the complexity of the environment and determine if an online approach is feasible.
-- Account for data drift. Stopping the instance service can eliminate potential data drift. Acceptable downtime costs?
-- Configure source parameters for fast export.
-- Configure target parameters for fast import.
+- Account for data drift. Stopping or denying writes in the source can eliminate potential data drift. Determine acceptable downtime costs.
+- Configure source configuration for fast export.
+- Configure target configuration for fast import.
 - Test any migrations that have a different source version vs the target.
 - Migrate any miscellaneous objects, such as user names and privileges.
 - Update application settings to point to the new instance.

@@ -39,10 +39,8 @@ cd
 sudo ufw allow 6379
 sudo ufw allow 30001
 
-#set the password
-redis-cli config set requirepass S2@dmins2@dmin
-
 #create some users
+redis-cli ACL SETUSER default on allkeys +set >S2@dmins2@dmin
 redis-cli ACL SETUSER chris on allkeys +set >S2@dmins2@dmin
 redis-cli ACL SETUSER john on allkeys +set >S2@dmins2@dmin
 redis-cli ACL SETUSER mary on allkeys +set >S2@dmins2@dmin
@@ -55,11 +53,11 @@ sudo sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf
 sudo sed -i 's/supervised no/supervised systemd/' /etc/redis/redis.conf
 
 #setup cluster
-sudo sed -i 's/# cluster-enabled yes/cluster-enabled yes/' /etc/redis/redis.conf
+#sudo sed -i 's/# cluster-enabled yes/cluster-enabled yes/' /etc/redis/redis.conf
 
-sudo sed -i 's/# cluster-config-file nodes-6379.conf/cluster-config-file nodes.conf/' /etc/redis/redis.conf
+#sudo sed -i 's/# cluster-config-file nodes-6379.conf/cluster-config-file nodes.conf/' /etc/redis/redis.conf
 
-sudo sed -i 's/# cluster-node-timeout 5000/cluster-node-timeout 5000/' /etc/redis/redis.conf
+#sudo sed -i 's/# cluster-node-timeout 5000/cluster-node-timeout 5000/' /etc/redis/redis.conf
 
 #restart the service
 sudo service redis-server restart
@@ -68,6 +66,7 @@ sudo service redis-server restart
 
 #simple string
 redis-cli set key1 "hello world"
+redis-cli set "RedisWeb.index.message" "\"Hello World\""
 
 #simple int
 redis-cli set key2 12345
@@ -123,3 +122,28 @@ redis-cli -c -h localhost -p 30001 zadd hackers 1914 "Hedy Lamarr"
 redis-cli -c -h localhost -p 30001 zadd hackers 1916 "Claude Shannon"
 redis-cli -c -h localhost -p 30001 zadd hackers 1969 "Linus Torvalds"
 redis-cli -c -h localhost -p 30001 zadd hackers 1912 "Alan Turing"
+
+#last step - set the password
+redis-cli config set requirepass S2@dmins2@dmin
+
+#install azure cli
+cd
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+#install powershell
+
+# Update the list of packages
+sudo apt-get update
+# Install pre-requisite packages.
+sudo apt-get install -y wget apt-transport-https software-properties-common
+# Download the Microsoft repository GPG keys
+wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+# Register the Microsoft repository GPG keys
+sudo dpkg -i packages-microsoft-prod.deb
+# Update the list of products
+sudo apt-get update
+# Enable the "universe" repositories
+sudo add-apt-repository universe
+# Install PowerShell
+sudo apt-get install -y powershell

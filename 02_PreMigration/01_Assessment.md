@@ -86,6 +86,14 @@ Do not overwhelm existing network infrastructure. If ExpressRoute is already pre
 
 Lastly, disk space must be evaluated. When exporting a very large instance, consider the size of the data. Ensure the system where the tool is running and the export location have enough disk space to perform the export operation.
 
+### Clusters
+
+If the source system is running in a cluster, you will need to ensure that the target instance is also running in a similarly configured cluster with the same performance metrics as the source.
+
+### Hashing layers
+
+When not using clusters, you can place a `hashing` layer in front of a set of Redis servers.  In this case, you will need to ensure that you have the same technology sitting in front of the Azure Cache for Redis instances.  The path or tool you use to migrate will need to be tested with whatever hashing layer you are using to ensure that all keys are discovered and migrated to the target.
+
 ### Cloud Providers
 
 Migrating instances from cloud services providers, such as Google Cloud (GCP) and Amazon Web Services (AWS), may require extra networking configuration steps to access the cloud-hosted Redis instances or they may prevent Redis migration commands. Any first party or third party migration tools will require access from outside IP ranges and may be blocked by default.
@@ -104,11 +112,11 @@ Equipped with the assessment information (CPU, memory, storage, etc.), the migra
 
 There are currently five potential options:
 
-- Azure Cache for Redis (Basic) : An OSS Redis cache running on a single VM. This tier has no service-level agreement (SLA) and is ideal for development/test and non-critical workloads.
-- Azure Cache for Redis (Standard) : An OSS Redis cache running on two VMs in a replicated configuration.
-- Azure Cache for Redis (Premium) : High-performance OSS Redis caches. This tier offers higher throughput, lower latency, better availability, and more features. Premium caches are deployed on more powerful VMs compared to the VMs for Basic or Standard caches.
-- Azure Cache for Redis (Enterprise) : High-performance caches powered by Redis Labs' Redis Enterprise software. This tier supports Redis modules including RediSearch, RedisBloom, and RedisTimeSeries. Also, it offers even higher availability than the Premium tier.
-- Azure Cache for Redis (Enterprise Flash) : Cost-effective large caches powered by Redis Labs' Redis Enterprise software. This tier extends Redis data storage to non-volatile memory, which is cheaper than DRAM, on a VM. It reduces the overall per-GB memory cost.
+- **Azure Cache for Redis (Basic)** : An OSS Redis cache running on a single VM. This tier has no service-level agreement (SLA) and is ideal for development/test and non-critical workloads.
+- **Azure Cache for Redis (Standard)** : An OSS Redis cache running on two VMs in a replicated configuration.
+- **Azure Cache for Redis (Premium)** : High-performance OSS Redis caches. This tier offers higher throughput, lower latency, better availability, and more features. Premium caches are deployed on more powerful VMs compared to the VMs for Basic or Standard caches.
+- **Azure Cache for Redis (Enterprise)** : High-performance caches powered by Redis Labs' Redis Enterprise software. This tier supports Redis modules including RediSearch, RedisBloom, and RedisTimeSeries. Also, it offers even higher availability than the Premium tier.
+- **Azure Cache for Redis (Enterprise Flash)** : Cost-effective large caches powered by Redis Labs' Redis Enterprise software. This tier extends Redis data storage to non-volatile memory, which is cheaper than DRAM, on a VM. It reduces the overall per-GB memory cost.
 
 Briefly, these options were discussed in the [Limitations](##Limitations) document.
 

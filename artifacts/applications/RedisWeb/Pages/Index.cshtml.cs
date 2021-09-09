@@ -11,7 +11,7 @@ namespace RedisWeb.Pages
 {
     public class IndexData
     {
-        [Required, StringLength(10)]
+        [Required, StringLength(20)]
         public string Message { get; set; } = "";
     }
     
