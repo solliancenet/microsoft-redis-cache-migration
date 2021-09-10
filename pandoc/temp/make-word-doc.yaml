@@ -10,7 +10,7 @@ from: markdown+backtick_code_blocks
 to: docx+styles
 output-file: Redis-guide.docx
 dpi: 300
-data-dir: D:\data\projects\redis-cache\pandoc\pandoc\temp
+data-dir: D:\data\projects\redis-cache\pandoc\temp
 reference-doc: sample-reference.docx
 input-files:
  - D:\data\projects\redis-cache\pandoc\Redis-guide.md   
