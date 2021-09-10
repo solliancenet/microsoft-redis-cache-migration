@@ -173,3 +173,5 @@ sudo add-apt-repository universe
 sudo apt-get install -y powershell
 
 sudo snap install powershell --classic
+
+pwsh -command "Install-Module -Name Az -AllowClobber -force"

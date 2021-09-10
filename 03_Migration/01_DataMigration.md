@@ -105,7 +105,7 @@ Options:
 
 Once the data is migrated, point the application to the new instance
 
-- [Migrate Application Settings](./02_DataMigration_AppSettings.md)
+- [Migrate Application Settings](./04_DataMigration_AppSettings.md)
 
 Lastly, validate the target instance's inventory. Below is an example of the `INFO` results in a target environment. It is relatively easy to identify database key count discrepancies.
 
