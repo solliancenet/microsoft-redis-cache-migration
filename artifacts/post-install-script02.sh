@@ -1,7 +1,3 @@
-#https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-20-04
-
-sudo add-apt-repository ppa:chris-lea/redis-server -y
-
 sudo apt-get update -y
 
 sudo apt-get install redis-tools -y
@@ -38,12 +34,6 @@ cd
 #enable the firewall
 sudo ufw allow 6379
 sudo ufw allow 30001
-
-#create some users
-redis-cli ACL SETUSER default on allkeys +set >S2@dmins2@dmin
-redis-cli ACL SETUSER chris on allkeys +set >S2@dmins2@dmin
-redis-cli ACL SETUSER john on allkeys +set >S2@dmins2@dmin
-redis-cli ACL SETUSER mary on allkeys +set >S2@dmins2@dmin
 
 #manual cluster setup...
 #setup bind to all IPs

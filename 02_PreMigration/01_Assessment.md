@@ -64,17 +64,25 @@ Many of the other items are simply operational aspects that administrators shoul
 
 You can extend the features of Redis by implemented custom Redis modules.  Look for any `loadmodule` directives in the `redis.conf` file that are not part of the default installation.  You can also get a list of all modules by running:
 
-```bash
-redis-cli MODULE LIST
-```
+  ```bash
+  redis-cli MODULE LIST
+  ```
 
 ## Databases
 
-When performing a migration, consider the Redis instance may have more than one database. The tool you select will need to be able to support migrating all databases versus just the default `0` database. You can find the number of databases by running the following:
+When performing a migration, consider the Redis instance may have more than one database. Databases in Redis were not designed for scaling but rather for namespaces. For example a SaaS Application may run one code base but hundreds of clients each with their own namespace / redis database. Databases allow you to flush a client without affecting others and minimize administrative overhead.
 
-```bash
-redis-cli INFO keyspace
-```
+The tool you select will need to be able to support migrating keys in all databases and ensuring they are moved to the target appropriately versus just moving the default `0` database. You can find the number of databases by running the following:
+
+  ```bash
+  redis-cli INFO keyspace
+  ```
+
+OR
+
+  ```bash
+  redis-cli config get databases
+  ```
 
 ## Source Systems
 

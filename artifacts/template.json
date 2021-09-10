@@ -1022,9 +1022,9 @@
                     "timestamp":123456789          
                     },
                     "protectedSettings": {
-                        "commandToExecute": "sh post-install-script01.sh",
+                        "commandToExecute": "sh post-install-script02.sh",
                         "fileUris": [
-                            "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script01.sh"
+                            "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script02.sh"
                             ],
                         "managedIdentity" : {}
                     }

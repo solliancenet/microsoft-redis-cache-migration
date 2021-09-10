@@ -1002,7 +1002,7 @@
             ],
             "resources" : [
             {
-                "name": "config-redis-01",
+                "name": "config-redis-02",
                 "type": "extensions",
                 "location": "[variables('location')]",
                 "apiVersion": "2019-03-01",
@@ -1010,7 +1010,7 @@
                     "[concat('Microsoft.Compute/virtualMachines/', variables('vm_redis02_name'))]"
                 ],
                 "tags": {
-                    "displayName": "config-redis-01"
+                    "displayName": "config-redis-02"
                 },
                 "properties": {
                     "publisher": "Microsoft.Azure.Extensions",
@@ -1022,9 +1022,9 @@
                     "timestamp":123456789          
                     },
                     "protectedSettings": {
-                        "commandToExecute": "sh post-install-script01.sh",
+                        "commandToExecute": "sh post-install-script02.sh",
                         "fileUris": [
-                            "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script01.sh"
+                            "https://raw.githubusercontent.com/solliancenet/microsoft-redis-cache-migration/main/artifacts/post-install-script02.sh"
                             ],
                         "managedIdentity" : {}
                     }
