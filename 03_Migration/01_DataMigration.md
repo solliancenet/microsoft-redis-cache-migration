@@ -87,7 +87,7 @@ Migration teams should develop and test helpful inventory scripts before beginni
 Instance object inventory script:
 
 ```powershell
-TODO
+TBD
 ```
 
 ## Execute migration
@@ -103,13 +103,19 @@ Options:
 - [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
 - [Append Only File](./01.06_DataMigration_Aof.md)
 
+<!--
+- [Non-cluster to cluster](./01.06_DataMigration_NonClusterToCluster.md)
+- [Cluster to cluster](./01.06_DataMigration_ClusterToCluster.md)
+- [Hash to Hash](./01.06_DataMigration_HashToHash.md)
+-->
+
 Once the data is migrated, point the application to the new instance
 
 - [Migrate Application Settings](./04_DataMigration_AppSettings.md)
 
 Lastly, validate the target instance's inventory. Below is an example of the `INFO` results in a target environment. It is relatively easy to identify database key count discrepancies.
 
-TODO IMAGE
+Follow the `Check success` steps in the [common tasks article](03_DataMigration_Common.md).
 
 ## WWI Use Case
 

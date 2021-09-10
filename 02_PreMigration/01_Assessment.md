@@ -100,7 +100,11 @@ If the source system is running in a cluster, you will need to ensure that the t
 
 ### Hashing layers
 
-When not using clusters, you can place a `hashing` layer in front of a set of Redis servers.  In this case, you will need to ensure that you have the same technology sitting in front of the Azure Cache for Redis instances.  The path or tool you use to migrate will need to be tested with whatever hashing layer you are using to ensure that all keys are discovered and migrated to the target.
+When not using clusters, you can place a `hashing` layer in front of a set of Redis servers.  In this case, you will need to ensure that you have the same technology sitting in front of the Azure Cache for Redis instances. The path or tool you use to migrate will need to be tested with whatever hashing layer you are using to ensure that all keys are discovered and migrated to the target.
+
+For instance, the default source code for the tool `twemproxy` will require all the target servers to have the same password or no password.  You cannot change the Azure Cache for Redis password/keys to a custom value.  This means you would need to setup Redis cache servers in Virtual Machines in a private network and place the `twemproxy` in front of them.
+
+During the migration from the hashing layer, you will need to export keys from each of the source servers and then add the values through the new hashing layer setup with the same configuration on the target side.
 
 ### Cloud Providers
 

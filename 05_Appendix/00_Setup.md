@@ -110,3 +110,53 @@ Perform the following on the **PREFIX-win10** virtual machine resource.
 > **NOTE** If you used the secure template, you would need to ensure your DNS is setup to point to the private IP address of the app service.
 
 - Congratulations. You have migrated the sample Redis app to Azure, now we need to migrate the Redis instance.
+
+# Install twemproxy
+
+- Run the following:
+
+  ```bash
+  sudo apt-get install automake libtool autoconf bzip2 -y
+
+  git clone https://github.com/twitter/twemproxy
+  cd twemproxy
+  autoreconf -fvi
+  ./configure --enable-debug=full
+  make
+  src/nutcracker -h
+  ```
+
+- Configure `twemproxy`:
+
+  ```bash
+  sudo rm nutcracker.yml
+  sudo nano nutcracker.yml
+  ```
+
+- Update the configuration to the following:
+
+  ```bash
+  alpha:
+    listen: 127.0.0.1:22121
+    hash: fnv1a_64
+    distribution: ketama
+    auto_eject_hosts: true
+    redis: true
+    server_retry_timeout: 2000
+    server_failure_limit: 1
+    servers:
+    - <REDIS_IP1>:6379:1
+    - <REDIS_IP2>:6379:1
+  ```
+
+- Run `nutcracker`
+
+  ```bash
+  nutcracker -d
+  ```
+
+- Test `nutcracker`
+
+  ```bash
+  redis-cli -h localhost -p 22121 set key1 "key1"
+  ```
