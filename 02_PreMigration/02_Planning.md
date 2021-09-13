@@ -45,6 +45,14 @@ Other networking considerations include:
 
 All Azure Cache for Redis services support private links and VNet integration.  There are however be sure to review the [FAQs for private endpoints](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq) to understand the behavior of the cache when behind a private endpoint.
 
+You should also be familiar with the communication ports of Redis which are outlined in [Outbound port requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#outbound-port-requirements).
+
+When integrating with other Azure services, you must also ensure that [other network connectivity](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#additional-virtual-network-connectivity-requirements) is also allowed in a virtual network.
+
+## Networking with Geo-replication
+
+If you plan to use the Geo-replication feature of Azure Cache for Redis, there are several other ports that must be allowed in order for the replication to be successful.  See [Geo-replication peer port requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#geo-replication-peer-port-requirements) for more information.
+
 ## SSL/TLS Connectivity
 
 In addition to the application implications of migrating to SSL-based communication, the SSL/TLS connection types are also something that needs to be considered. After creating the Azure Cache for Redis instance, review the SSL settings, and read the [Configure your application to use TLS 1.2](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-remove-tls-10-11#configure-your-application-to-use-tls-12) article to understand how the TLS settings can affect the security posture of an application.

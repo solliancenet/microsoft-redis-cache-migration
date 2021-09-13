@@ -145,18 +145,24 @@ Perform the following on the **PREFIX-win10** virtual machine resource.
     server_retry_timeout: 2000
     server_failure_limit: 1
     servers:
-    - <REDIS_IP1>:6379:1
-    - <REDIS_IP2>:6379:1
+    - <REDIS_IP1>:6379:0
+    - <REDIS_IP2>:6379:0
   ```
 
 - Run `nutcracker`
 
   ```bash
-  nutcracker -d
+  cd
+  ./twemproxy/src/nutcracker -c ~/twemproxy/conf/nutcracker.yml
   ```
 
 - Test `nutcracker`
 
   ```bash
-  redis-cli -h localhost -p 22121 set key1 "key1"
+  redis-cli -h localhost -p 22121 set hashkey1 "key1"
+  redis-cli -h localhost -p 22121 set hashkey2 "key2"
+  redis-cli -h localhost -p 22121 set hashkey3 "key3"
+  redis-cli -h localhost -p 22121 set hashkey4 "key4"
+  redis-cli -h localhost -p 22121 set hashkey5 "key5"
   ```
+  
