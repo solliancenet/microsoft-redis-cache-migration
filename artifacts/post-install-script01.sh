@@ -12,6 +12,8 @@ sudo apt-get install make pkg-config libssl-dev -y
 
 sudo apt install net-tools -y
 
+cd /home/s2admin
+
 wget https://download.redis.io/releases/redis-6.2.5.tar.gz
 tar xzf redis-6.2.5.tar.gz
 cd redis-6.2.5
@@ -33,7 +35,7 @@ cd create-cluster
 
 ./create-cluster create -y
 
-cd
+cd /home/s2admin
 
 #enable the firewall
 sudo ufw allow 6379
@@ -151,7 +153,7 @@ redis-cli -c -h localhost -p 30001 zadd hackers 1912 "Alan Turing"
 redis-cli config set requirepass S2@dmins2@dmin
 
 #install azure cli
-cd
+cd /home/s2admin
 
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
