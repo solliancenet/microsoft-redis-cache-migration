@@ -8,7 +8,7 @@ We explore the following commonly used tools in this section:
 
 - Database export/import via RDB file
 - Append Only File (AOF)
-- Layer of abstraction
+- Layer of abstraction (Dual write)
 - SLAVEOF / REPLICAOF commands
 - MIGRATE command
 - 3rd Party tools
@@ -33,7 +33,7 @@ The append-only file is an alternative to RDB and is a fully-durable strategy fo
 appendonly yes
 ```
 
-Once enabled, every time Redis receives a command that changes the dataset (e.g. SET) it will append it to the AOF. When you restart Redis it will re-play the AOF to rebuild the state.  This same file can be used to rebuild / migrate a Redis instance in Azure.
+Once enabled, every time Redis receives a command that changes the dataset (e.g. SET) it will append it to the AOF. When you restart Redis it will re-play the AOF to rebuild the state.  This same file can be used to rebuild / migrate a Redis instance in Azure, however, the replay will need to be done via a tool such as `redis-cli` as you cannot use automatic import of the AOF file like an RDB file via Azure Storage.
 
 This option is more durable than the RDB file, but comes at some costs in larger files, repeated commands and slower performance when under huge write loads.
 
@@ -53,7 +53,7 @@ Redis includes the ability to create replicas of master nodes.  This path is one
 
 The [`MIGRATE`](https://redis.io/commands/migrate) Redis command will atomically transfer a key from a source Redis instance to a destination Redis instance. On success the key is deleted from the original instance and is guaranteed to exist in the target instance.
 
-### Layer of Abstraction
+### Layer of Abstraction (Dual write)
 
 Layer of abstraction means that you can use your applications to migrate your Redis data in real-time and as the data is used.  Once you hit 100% key coverage, you can then remove the layer of abstraction and retire the old Redis instances.
 
@@ -85,7 +85,7 @@ In terms of the more specific tools and methods, here is a table of supported fe
 | Path\Tool | Supported in Azure | Multiple Databases | Clusters | Underlying Cmds | Advantages | Disadvantages
 | --- | --- | --- | --- | --- | --- | --- |
 | RDP Backup/Restore | Premium+ | Yes | Yes | N/A | Simple file copy | Requires storage account, Complicated for clusters
-| AOF Backup/Restore | Premium+ | Yes | Yes | N/A | Simple file copy | Requires storage account, Complicated for clusters
+| AOF Backup/Restore | Premium+ | Yes | Yes | N/A | Replay of AOF file via redis-cli | Requires storage account, Complicated for clusters, Not all commands may execute
 | Cluster Failover (Migration) | No | - | - | - | - | -
 | Replication (SLAVEOF/REPLICAOF) | No | - | - | - | - | -
 | Mass Insertion (SET/GET) | Yes | Yes | Yes | SET/GET | Simple to implement | Binary encoding complexities (output and input formatting)

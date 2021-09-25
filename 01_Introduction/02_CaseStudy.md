@@ -14,7 +14,6 @@ The primary goals for migrating their Redis instances and associated workloads t
 
 - Improve their overall security posture by encrypting data at rest and in-transit.
 - Enhance the high availability and disaster recovery (HA/DR) capabilities.
-- Position the organization to leverage cloud-native capabilities and technologies such as point in time restore.
 - Take advantage of administrative and performance optimizations features of Azure Cache for Redis.
 - Create a scalable platform that they can use to expand their business into more geographic regions.
 - Allow for enhanced compliance with various legal requirements where PII information is stored.

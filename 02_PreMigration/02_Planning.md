@@ -63,7 +63,7 @@ WWI's cloud team has created the necessary Azure landing zone resources in a spe
 
 As part of the ARM template, all connections between virtual networks will be configured with peering in a hub and spoke architecture. The instance and application will be placed into separate virtual networks. An Azure App Gateway will be placed in front of the app service to allow the app service to be isolated from the Internet.  The Azure App Service will connect to the Azure Cache for Redis using a private endpoint.
 
-WWI originally wanted to test an online migration, but the required network setup for DMS to connect to their on-premises environment made this infeasible. WWI chose to do an offline migration instead. The Redis pgAdmin tool was used to export the on-premises data and then was used to import the data into the Azure Cache for Redis instance. The WWI migration team has also learned that the versatile Azure Data Studio tool has preview Redis support, and would like to explore its utility for developing applications using Redis.
+WWI originally wanted to test an online migration, but the lack of replication support made this infeasible as they did not want to deal with complexities of replaying the AOF files. WWI chose to do an offline migration instead. The Redis RDB backup option was used to export the on-premises data and then was used to import the data into the Azure Cache for Redis instance via Azure Storage.
 
 ## Planning Checklist
 

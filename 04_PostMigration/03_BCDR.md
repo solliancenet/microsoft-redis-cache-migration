@@ -24,11 +24,17 @@ To support high availability you can enabled clustering on the `Premium` and `En
 
 ### Geo-replication
 
-[Geo-replication](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-retries-exponential-backoff) allows you to created cache replication links to Azure Cache for Redis instances running in any region in Azure.  This provides for the ability to recover from any regional outages that may occur. Secondary instances are read-only and can be accessed from applications.
+[Geo-replication](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-retries-exponential-backoff) allows you to created cache replication links to Azure Cache for Redis premium tier instances running in any region in Azure.  This provides for the ability to recover from any regional outages that may occur. Secondary instances are read-only and can be accessed from applications.
 
 Geo-replication is not automatic failover, so if any issues do arise, you will need to be ready to `unlike` the replication to make the secondary instance a primary.  You would also need to manage changing the connection settings in any applications, or adding a load balancer to route traffic.
 
 > **Note** Geo-replication is not enabled for the `Basic` or `Standard` tiers.
+
+### Active geo-replication
+
+The Enterprise tiers support a more advanced form of geo-replication called active geo-replication. Using conflict-free replicated data types, the Redis Enterprise software supports writes to multiple cache instances and takes care of merging of changes and resolving conflicts. You can join two or more Enterprise tier cache instances in different Azure regions to form an active geo-replicated cache.
+
+In this configuration, both instances are active and will accept write requests.  Unlike geo-replication, active geo-replication can essentially be used for automatic failover.
 
 #### Cache Replication Links
 

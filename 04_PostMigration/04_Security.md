@@ -4,7 +4,11 @@ Moving to a cloud-based service doesn't mean the entire internet will have acces
 
 ## Encryption
 
-Redis does not directly support any form of data encryption, so all encoding must be performed by client applications. Additionally, Redis does not provide any form of transport security. If you need to protect data as it flows across the network, we recommend implementing an SSL proxy.
+Redis does not directly support any form of data encryption, so all encoding must be performed by client applications.
+
+Additionally, Redis OSS does not provide any form of transport security unless a supported version is specifically compiled to support it. When running a default non-SSL enabled instance, if you need to protect data as it flows across the network, it is recommended to implement an SSL proxy.
+
+Azure Cache for Redis supported SSL/TLS encryption and is enabled by default.  As covered in the migration assessment, your application may need to be modified to support SSL connectivity as it is not recommended to enable the non-SSL port in Azure Cache for Redis.
 
 ## Authentication
 
@@ -30,7 +34,7 @@ When moving an application to Azure along with the Redis workload, it is likely 
 
 There are a couple of [network isolation options](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-network-isolation) you can choose from in Azure, each one has some advantages and limitations.
 
-### Private Endpoint
+### Private Endpoint (Recommended)
 
 To limit access to the Azure Cache for Redis to internal Azure resources, enable [Private Endpoint](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-network-isolation#azure-private-link).  Private Endpoints will ensure that the Redis instance will be assigned a private IP rather than a public IP address.
 

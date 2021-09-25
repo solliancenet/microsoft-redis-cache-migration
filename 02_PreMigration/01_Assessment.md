@@ -8,7 +8,7 @@ Remote Dictionary Server (Redis) has a rich history starting in late 2000s.  Sin
 
 For the latest on Azure Cache for Redis version support, reference [Supported Azure Cache for Redis server versions](https://docs.microsoft.com/en-us/azure/Redis/concepts-supported-versions). In the Post Migration Management section, we will review how upgrades (such as 4.0 to 6.0) are applied to the Redis instances in Azure.
 
-> **Note** Redis Support is based on the release of the latest stable release.  Only the latest stable version, and the last two versions will receive maintenance.  As of 4/2021, anything prior to 4.0 is end of life.
+> **Note** Redis OSS Support is based on the release of the latest stable release and only the latest stable version, and the last two versions will receive maintenance from Redis OSS. As of 4/2021, anything prior to 4.0 is end of life.  Microsoft Cache for Redis may not exactly match to these same support windows.
 
 Knowing the source Redis version is important as many features have been introduced through the major versions. The applications using the system may be expecting behavior and features that are specific to that version. Although Redis has been great at keeping breaking changes at a minimum and keeping compatibility between versions, there are a small handful of cases that may influence the migration path and version:
 
@@ -17,6 +17,7 @@ Knowing the source Redis version is important as many features have been introdu
 - Change in INFO fields (4.0)
 - Usage of REDIS ACL (6.0+)
 - RESP3 mode (6.0+)
+- Redis streams (5.0+)
 - LRU Cache changes (4.0+)
 - Any Lua Language changes (EVAL, EVALSHA)
 - Extensive use of TTL
@@ -45,6 +46,8 @@ Here is a list of inventory items that should be inventoried before and after th
 - Configuration settings
 
 After reviewing the above items, notice there is much more than just data that may be required to migrate a Redis workload.  The following sections below address more specific details about several of the above.
+
+> **Note** Even though you may be able to get these configuration values out of your source system, it is unlikely that you will be able to import them using the same commands as many configurations must be done via the Azure Portal, PowerShell or Azure Cli using Azure specific syntax.  For example, the `config` command is not exposed in Azure Cache for Redis.
 
 ## Limitations
 
@@ -141,7 +144,7 @@ Which Azure Cache for Redis service should be selected and used?  This table out
 | Azure VM | Any version, most flexible, full Redis feature support | Customer responsible for updates, security, and administration | Any Version
 | Basic | Sizes up to 53GB, low cost | Lower performance, no data persistence, no replication or failover | 4.x, 6.x
 | Standard | All basic, plus replication and failover support | Lower performance, no data persistence | 4.x, 6.x
-| Premium | All Standard, plus zone redundancy, data persistence and clustering | No support for Redis Modules | 4.x, 6.x
+| Premium | All Standard, plus zone redundancy, data persistence and clustering | No support for Redis Modules, no active geo-replication | 4.x, 6.x
 | Enterprise | All Premium, plus Redis Module support | Higher costs | 6.x
 | Enterprise Flash | Flash based memory | No Redis Module support | 6.x
 
@@ -203,7 +206,7 @@ When moving to Azure Cache for Redis, the conversion to [secure sockets layer (S
 
 > **Note** Although SSL is enabled by default, it is possible to disable. This is strongly not recommended.
 
-Lastly, modify the server name in the application connection strings or switch the DNS to point to the new Azure Cache for Redis server.
+Lastly, it is likely that the application configuration will need to be modified to point to the new Azure Cache for Redis server, however if you use private endpoints and have a route to the Azure Cache for Redis, you may only need to change your DNS entry to point to the new cloud-based instance.
 
 ## WWI Use Case
 

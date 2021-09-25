@@ -92,7 +92,7 @@ TBD
 
 ## Execute migration
 
-With the basic migration components in place, it is now possible to proceed with the data migration. WWI will utilize the Redis pgAdmin option to export the data and then import it into Azure Cache for Redis.  
+With the basic migration components in place, it is now possible to proceed with the data migration. WWI will utilize the Redis backup and restore option to export the data and then import it into Azure Cache for Redis.  
 
 Options:
 
