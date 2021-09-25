@@ -28,35 +28,35 @@ output-file: Redis-guide.md
 dpi: 300
 
 input-files:
-- d:\data\projects\redis-cache\01_Introduction\01_Overview.md
-- d:\data\projects\redis-cache\01_Introduction\02_CaseStudy.md
-- d:\data\projects\redis-cache\02_PreMigration\01_Assessment.md
-- d:\data\projects\redis-cache\02_PreMigration\02_Planning.md
-- d:\data\projects\redis-cache\02_PreMigration\03_Methods.md
-- d:\data\projects\redis-cache\02_PreMigration\04_TestPlans.md
-- d:\data\projects\redis-cache\02_PreMigration\05_PerformanceBaselines.md
-- d:\data\projects\redis-cache\03_Migration\01.01_DataMigration_BackupRestore.md
-- d:\data\projects\redis-cache\03_Migration\01.02_DataMigration_Copy.md
-- d:\data\projects\redis-cache\03_Migration\01.03_DataMigration_Replication.md
-- d:\data\projects\redis-cache\03_Migration\01.04_DataMigration_Tools.md
-- d:\data\projects\redis-cache\03_Migration\01.05_DataMigration_Abstraction.md
-- d:\data\projects\redis-cache\03_Migration\01.06_DataMigration_Aof.md
-- d:\data\projects\redis-cache\03_Migration\01.07_DataMigration_NonClusterToCluster.md
-- d:\data\projects\redis-cache\03_Migration\01.08_DataMigration_ClusterToClutser.md
-- d:\data\projects\redis-cache\03_Migration\01.09_DataMigration_HashToHash.md
-- d:\data\projects\redis-cache\03_Migration\01_DataMigration.md
-- d:\data\projects\redis-cache\03_Migration\02.01_DataMigration_Configuration.md
-- d:\data\projects\redis-cache\03_Migration\03_DataMigration_Common.md
-- d:\data\projects\redis-cache\03_Migration\04_DataMigration_AppSettings.md
-- d:\data\projects\redis-cache\04_PostMigration\01_Management.md
-- d:\data\projects\redis-cache\04_PostMigration\02_Optimization.md
-- d:\data\projects\redis-cache\04_PostMigration\03_BCDR.md
-- d:\data\projects\redis-cache\04_PostMigration\04_Security.md
-- d:\data\projects\redis-cache\04_PostMigration\06_CallToAction.md
-- d:\data\projects\redis-cache\05_Appendix\00_Setup.md
-- d:\data\projects\redis-cache\05_Appendix\01_ARM Templates.md
-- d:\data\projects\redis-cache\05_Appendix\03_InstallStunnel.md
-- d:\data\projects\redis-cache\05_Appendix\04_ConfigureRedisSSL.md
+- D:\data\projects\redis-cache\01_Introduction\01_Overview.md
+- D:\data\projects\redis-cache\01_Introduction\02_CaseStudy.md
+- D:\data\projects\redis-cache\02_PreMigration\01_Assessment.md
+- D:\data\projects\redis-cache\02_PreMigration\02_Planning.md
+- D:\data\projects\redis-cache\02_PreMigration\03_Methods.md
+- D:\data\projects\redis-cache\02_PreMigration\04_TestPlans.md
+- D:\data\projects\redis-cache\02_PreMigration\05_PerformanceBaselines.md
+- D:\data\projects\redis-cache\03_Migration\01.01_DataMigration_BackupRestore.md
+- D:\data\projects\redis-cache\03_Migration\01.02_DataMigration_Copy.md
+- D:\data\projects\redis-cache\03_Migration\01.03_DataMigration_Replication.md
+- D:\data\projects\redis-cache\03_Migration\01.04_DataMigration_Tools.md
+- D:\data\projects\redis-cache\03_Migration\01.05_DataMigration_Abstraction.md
+- D:\data\projects\redis-cache\03_Migration\01.06_DataMigration_Aof.md
+- D:\data\projects\redis-cache\03_Migration\01.07_DataMigration_NonClusterToCluster.md
+- D:\data\projects\redis-cache\03_Migration\01.08_DataMigration_ClusterToClutser.md
+- D:\data\projects\redis-cache\03_Migration\01.09_DataMigration_HashToHash.md
+- D:\data\projects\redis-cache\03_Migration\01_DataMigration.md
+- D:\data\projects\redis-cache\03_Migration\02.01_DataMigration_Configuration.md
+- D:\data\projects\redis-cache\03_Migration\03_DataMigration_Common.md
+- D:\data\projects\redis-cache\03_Migration\04_DataMigration_AppSettings.md
+- D:\data\projects\redis-cache\04_PostMigration\01_Management.md
+- D:\data\projects\redis-cache\04_PostMigration\02_Optimization.md
+- D:\data\projects\redis-cache\04_PostMigration\03_BCDR.md
+- D:\data\projects\redis-cache\04_PostMigration\04_Security.md
+- D:\data\projects\redis-cache\04_PostMigration\06_CallToAction.md
+- D:\data\projects\redis-cache\05_Appendix\00_Setup.md
+- D:\data\projects\redis-cache\05_Appendix\01_ARM Templates.md
+- D:\data\projects\redis-cache\05_Appendix\03_InstallStunnel.md
+- D:\data\projects\redis-cache\05_Appendix\04_ConfigureRedisSSL.md
 # ERROR, WARNING, or INFO
 verbosity: INFO
 log-file: log.json
