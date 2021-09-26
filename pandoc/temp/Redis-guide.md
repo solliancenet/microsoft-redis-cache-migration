@@ -107,8 +107,6 @@ workloads to the cloud include:
     and in-transit.
 -   Enhance the high availability and disaster recovery (HA/DR)
     capabilities.
--   Position the organization to leverage cloud-native capabilities and
-    technologies such as point in time restore.
 -   Take advantage of administrative and performance optimizations
     features of Azure Cache for Redis.
 -   Create a scalable platform that they can use to expand their
@@ -186,10 +184,11 @@ versions](https://docs.microsoft.com/en-us/azure/Redis/concepts-supported-versio
 In the Post Migration Management section, we will review how upgrades
 (such as 4.0 to 6.0) are applied to the Redis instances in Azure.
 
-> **Note** Redis Support is based on the release of the latest stable
-> release. Only the latest stable version, and the last two versions
-> will receive maintenance. As of 4/2021, anything prior to 4.0 is end
-> of life.
+> **Note** Redis OSS Support is based on the release of the latest
+> stable release and only the latest stable version, and the last two
+> versions will receive maintenance from Redis OSS. As of 4/2021,
+> anything prior to 4.0 is end of life. Microsoft Cache for Redis may
+> not exactly match to these same support windows.
 
 Knowing the source Redis version is important as many features have been
 introduced through the major versions. The applications using the system
@@ -204,6 +203,7 @@ handful of cases that may influence the migration path and version:
 -   Change in INFO fields (4.0)
 -   Usage of REDIS ACL (6.0+)
 -   RESP3 mode (6.0+)
+-   Redis streams (5.0+)
 -   LRU Cache changes (4.0+)
 -   Any Lua Language changes (EVAL, EVALSHA)
 -   Extensive use of TTL
@@ -245,6 +245,13 @@ after the migration:
 After reviewing the above items, notice there is much more than just
 data that may be required to migrate a Redis workload. The following
 sections below address more specific details about several of the above.
+
+> **Note** Even though you may be able to get these configuration values
+> out of your source system, it is unlikely that you will be able to
+> import them using the same commands as many configurations must be
+> done via the Azure Portal, PowerShell or Azure Cli using Azure
+> specific syntax. For example, the `config` command is not exposed in
+> Azure Cache for Redis.
 
 ## Limitations
 
@@ -446,9 +453,9 @@ with their Redis version support as of 4/2021.
                     failover support  data persistence  
 
   Premium           All Standard,     No support for    4.x, 6.x
-                    plus zone         Redis Modules     
-                    redundancy, data                    
-                    persistence and                     
+                    plus zone         Redis Modules, no 
+                    redundancy, data  active            
+                    persistence and   geo-replication   
                     clustering                          
 
   Enterprise        All Premium, plus Higher costs      6.x
@@ -578,8 +585,11 @@ additional processing overhead and should be monitored.
 > **Note** Although SSL is enabled by default, it is possible to
 > disable. This is strongly not recommended.
 
-Lastly, modify the server name in the application connection strings or
-switch the DNS to point to the new Azure Cache for Redis server.
+Lastly, it is likely that the application configuration will need to be
+modified to point to the new Azure Cache for Redis server, however if
+you use private endpoints and have a route to the Azure Cache for Redis,
+you may only need to change your DNS entry to point to the new
+cloud-based instance.
 
 ## WWI Use Case
 
@@ -729,6 +739,23 @@ integration. There are however be sure to review the [FAQs for private
 endpoints](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq)
 to understand the behavior of the cache when behind a private endpoint.
 
+You should also be familiar with the communication ports of Redis which
+are outlined in [Outbound port
+requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#outbound-port-requirements).
+
+When integrating with other Azure services, you must also ensure that
+[other network
+connectivity](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#additional-virtual-network-connectivity-requirements)
+is also allowed in a virtual network.
+
+## Networking with Geo-replication
+
+If you plan to use the Geo-replication feature of Azure Cache for Redis,
+there are several other ports that must be allowed in order for the
+replication to be successful. See [Geo-replication peer port
+requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#geo-replication-peer-port-requirements)
+for more information.
+
 ## SSL/TLS Connectivity
 
 In addition to the application implications of migrating to SSL-based
@@ -756,14 +783,12 @@ An Azure App Gateway will be placed in front of the app service to allow
 the app service to be isolated from the Internet. The Azure App Service
 will connect to the Azure Cache for Redis using a private endpoint.
 
-WWI originally wanted to test an online migration, but the required
-network setup for DMS to connect to their on-premises environment made
-this infeasible. WWI chose to do an offline migration instead. The Redis
-pgAdmin tool was used to export the on-premises data and then was used
-to import the data into the Azure Cache for Redis instance. The WWI
-migration team has also learned that the versatile Azure Data Studio
-tool has preview Redis support, and would like to explore its utility
-for developing applications using Redis.
+WWI originally wanted to test an online migration, but the lack of
+replication support made this infeasible as they did not want to deal
+with complexities of replaying the AOF files. WWI chose to do an offline
+migration instead. The Redis RDB backup option was used to export the
+on-premises data and then was used to import the data into the Azure
+Cache for Redis instance via Azure Storage.
 
 ## Planning Checklist
 
@@ -789,7 +814,7 @@ We explore the following commonly used tools in this section:
 
 -   Database export/import via RDB file
 -   Append Only File (AOF)
--   Layer of abstraction
+-   Layer of abstraction (Dual write)
 -   SLAVEOF / REPLICAOF commands
 -   MIGRATE command
 -   3rd Party tools
@@ -830,7 +855,9 @@ appendonly yes
 Once enabled, every time Redis receives a command that changes the
 dataset (e.g. SET) it will append it to the AOF. When you restart Redis
 it will re-play the AOF to rebuild the state. This same file can be used
-to rebuild / migrate a Redis instance in Azure.
+to rebuild / migrate a Redis instance in Azure, however, the replay will
+need to be done via a tool such as `redis-cli` as you cannot use
+automatic import of the AOF file like an RDB file via Azure Storage.
 
 This option is more durable than the RDB file, but comes at some costs
 in larger files, repeated commands and slower performance when under
@@ -866,7 +893,7 @@ atomically transfer a key from a source Redis instance to a destination
 Redis instance. On success the key is deleted from the original instance
 and is guaranteed to exist in the target instance.
 
-### Layer of Abstraction
+### Layer of Abstraction (Dual write)
 
 Layer of abstraction means that you can use your applications to migrate
 your Redis data in real-time and as the data is used. Once you hit 100%
@@ -930,11 +957,13 @@ supported features with advantages and disadvantages of each:
                                                                                        Complicated for
                                                                                        clusters
 
-  AOF Backup/Restore    Premium+    Yes         Yes        N/A            Simple file  Requires
-                                                                          copy         storage
-                                                                                       account,
+  AOF Backup/Restore    Premium+    Yes         Yes        N/A            Replay of    Requires
+                                                                          AOF file via storage
+                                                                          redis-cli    account,
                                                                                        Complicated for
-                                                                                       clusters
+                                                                                       clusters, Not
+                                                                                       all commands
+                                                                                       may execute
 
   Cluster Failover      No          \-          \-         \-             \-           \-
   (Migration)                                                                          
@@ -1195,7 +1224,7 @@ In reviewing the Redis instance, the Redis 4.0 server is running with
 the default server configuration set during the initial install so no
 configuration settings will need to be migrated.
 
-# Data Migration with Backup and Restore (RDB)
+# Option 1 - Data Migration with Backup and Restore (RDB)
 
 ## Setup
 
@@ -1212,7 +1241,7 @@ article](03_DataMigration_Common.md).
 > **NOTE** RDB file format changes between versions may not be backwards
 > compatible.
 
-### Manual Backup
+### Manual Backup (Source)
 
 -   Run the following command to find where your RDB file is located:
 
@@ -1378,7 +1407,13 @@ migration process.
 
 -   [Import and Export data in Azure Cache for
     Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-import-export-data)
-    \# Data Migration with Redis (Mass Insertion)
+-   [Redis Persistence](https://redis.io/topics/persistence)
+-   [Azure
+    PowerShell](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-manage-redis-cache-powershell)
+-   [Azure
+    CLI](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cli-samples)
+
+# Option 2 - Data Migration with Redis (Mass Insertion)
 
 ## Setup
 
@@ -1513,9 +1548,6 @@ article](03_DataMigration_Common.md).
     done
     ```
 
-> **NOTE** Add the `-c` option if running against a cluster as the
-> source or target.
-
 -   Save the file and exit the editor
 
 -   Run the migration:
@@ -1587,7 +1619,14 @@ article](03_DataMigration_Common.md).
 Follow the `Enable AOF in the target` steps in the [common tasks
 article](03_DataMigration_Common.md).
 
-# Data Migration with Redis Replication
+## Resources
+
+-   [SET Command](https://redis.io/commands/set)
+-   [RESTORE Command](https://redis.io/commands/restore)
+-   [DUMP Command](https://redis.io/commands/dump)
+-   [MIGRATE Command](https://redis.io/commands/migrate)
+
+# Option 3 - Data Migration with Redis Replication
 
 Using the `SLAVEOF` or the `MIGRATEOF` is for migrating from one version
 to another to support a move to Azure.
@@ -1710,9 +1749,11 @@ article](03_DataMigration_Common.md).
 
 ## Resources
 
+-   [Rename commands](https://redis.io/topics/security)
 -   [SLAVEOF](https://redis.io/commands/SLAVEOF)
--   [REPLICAOF](https://redis.io/commands/REPLICAOF) \# Data Migration
-    with 3rd Party Tools
+-   [REPLICAOF](https://redis.io/commands/REPLICAOF)
+
+# Option 4 - Data Migration with 3rd Party Tools
 
 ## Setup
 
@@ -1989,9 +2030,10 @@ article](03_DataMigration_Common.md).
 
 ## Resources
 
--   https://github.com/vipshop/redis-migrate-tool
--   https://github.com/deepakverma/redis-copy \# Data Migration with
-    Layer of Abstraction
+-   [Redis migrate](https://github.com/vipshop/redis-migrate-tool)
+-   [Redis Copy](https://github.com/deepakverma/redis-copy)
+
+# Option 5 - Data Migration with Layer of Abstraction (Dual Write)
 
 If migrating an entire Redis instance is not feasible or worth the extra
 effort, you can add a layer of abstraction in your application code that
@@ -2047,7 +2089,7 @@ extra work to save the value to the new instance.
 > **NOTE** It is important to ensure that the save operation to the new
 > instance is `async` to prevent any application performance issues.
 
-# Data Migration with Append Only File (AOF)
+# Option 6 - Data Migration with Append Only File (AOF)
 
 ## Setup
 
@@ -2148,7 +2190,9 @@ entire migration.
 
 -   [Import and Export data in Azure Cache for
     Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-import-export-data)
-    \# Data Migration (Non-cluster to cluster)
+-   [Redis Persistence](https://redis.io/topics/persistence)
+
+# Data Migration (Non-cluster to cluster)
 
 ## Setup
 
@@ -2160,19 +2204,74 @@ to create an environment to support the following steps.
 Follow the `Disable AOF in the target` steps in the [common tasks
 article](03_DataMigration_Common.md).
 
-## Data
+## Enable clustering on Target
+
+-   Open the Azure Portal
+-   Browse to your lab resource group
+-   Select the **PREFIX-redis-prem** instance
+-   Under **Settings**, select **Cluster size**
+-   For **Clustering**, select **Enable**
+-   Select **Save**
+
+## Data Migration
 
 In many cases you may be moving from a single instance Redis server to
 an Azure Cache for Redis cluster. When doing this, you will need to
 migrate any source databases to the `0` database. This could break
 applications if the keys overlap.
 
--   Run the following to migrate the keys in a single instance to a
-    cluster:
+-   In the SSH window for the **PREFIX-redis01** virtual machine, run
+    the following:
 
-``` {.bash}
-TBD
-```
+    ``` {.bash}
+    sudo nano restore.sh
+    ```
+
+-   Paste the following into the file, be sure to replace the target
+    Azure Cache for Redis details:
+
+    ``` {.bash}
+    #!/bin/bash
+    dbs=$(redis-cli config get databases)
+    items=$(sed "s/databases//" <<< $dbs)
+
+    for (( count=0; count<items; count++))
+    do
+        OLD="redis-cli -h localhost"
+        NEW="redis-cli -h <REDIS_NAME>.redis.cache.windows.net -a <REDIS_PWD>"
+
+        for KEY in $($OLD -n $count --scan); do
+            $OLD -n $count --raw DUMP "$KEY" | head -c-1 > /tmp/dump
+            TTL=$($OLD -n $count --raw TTL "$KEY")
+            case $TTL in
+                -2)
+                    $NEW DEL "$KEY"
+                    ;;
+                -1)
+                    $NEW DEL "$KEY"
+                    cat /tmp/dump | $NEW -x RESTORE "$KEY" 0
+                    ;;
+                *)
+                    $NEW DEL "$KEY"
+                    cat /tmp/dump | $NEW -x RESTORE "$KEY" "$TTL"
+                    ;;
+            esac
+            echo "$KEY (TTL = $TTL)"
+        done
+    done
+    ```
+
+-   Save the file and exit the editor
+
+-   Run the migration:
+
+    ``` {.bash}
+    sudo bash restore.sh
+    ```
+
+> **NOTE** The target versions should be the same, or have similar
+> encoding of the values in order for the DUMP/RESTORE command to
+> succeed.
 
 ### Check success
 
@@ -2200,9 +2299,9 @@ migration process.
 
 ## Resources
 
--   [Import and Export data in Azure Cache for
-    Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-import-export-data)
-    \# Data Migration (Non-cluster to cluster)
+-   [Redis Clustering](https://redis.io/topics/cluster-tutorial)
+
+# Data Migration (Non-cluster to cluster)
 
 ## Setup
 
@@ -2218,14 +2317,101 @@ article](03_DataMigration_Common.md).
 
 In many cases you may be moving from a clustered Redis server to an
 Azure Cache for Redis cluster. This is similar to executing a single
-instance to single instance migration.
+instance to single instance migration. The setup scripts for the images
+will create basic Redis instances, but also create a cluster running on
+ports 30001-30007 (three mains, three replicas).
 
--   Run the following to migrate the keys in a cluster instance to an
-    Azure cluster:
+-   Run the following to get all the keys in a cluster:
 
-``` {.bash}
-TBD
-```
+    ``` {.bash}
+    redis-cli --cluster call localhost:30001 KEYS "*"
+    ```
+
+-   To migrate the keys in a cluster instance to an Azure cluster, run
+    the following script:
+
+    ``` {.bash}
+    sudo nano cluster-migrate.sh
+    ```
+
+-   Copy the following into it:
+
+    ``` {.bash}
+    #!/bin/bash
+    dbs=$(redis-cli -h localhost -p 30001 config get databases)
+    items=$(sed "s/databases//" <<< $dbs)
+
+    for (( count=0; count<1; count++))
+    do
+        OLD="redis-cli --cluster call localhost:30001 KEYS \"*\""
+
+        NEW="redis-cli -h <REDIS_NAME>.redis.cache.windows.net -a <REDIS_KEY>"
+
+        RAW=$($OLD)
+
+        #get all the server names
+        echo $RAW
+
+        COUNT=0
+
+        #loop all the servers
+        for TMP in $RAW; do
+
+            ((COUNT++))
+
+            if [[ $COUNT < 5 ]]
+                then
+                        continue
+            fi
+
+            #echo $TMP
+
+            IFS=':' read -ra VALS <<< "$TMP"
+
+            HOST=${VALS[0]}
+            PORT=${VALS[1]}
+
+            #echo $HOST
+            #echo $PORT
+
+            #get the keys in each cluster host
+            KEYS=$(redis-cli -h $HOST -p $PORT --scan)
+
+            for KEY in $KEYS; do
+
+                redis-cli -h $HOST -p $PORT --raw DUMP "$KEY" | head -c-1 > /tmp/dump
+                TTL=$(redis-cli -h $HOST -p $PORT --raw TTL "$KEY")
+
+                #skip items that are moved - on replica nodes
+                if [[ $TTL == *"MOVED"* ]]; then
+                        continue;
+                fi
+
+                case $TTL in
+                        -2)
+                        $NEW DEL "$KEY"
+                        ;;
+                        -1)
+                        $NEW DEL "$KEY"
+                        cat /tmp/dump | $NEW -x RESTORE "$KEY" 0
+                        ;;
+                        *)
+                        $NEW DEL "$KEY"
+                        cat /tmp/dump | $NEW -x RESTORE "$KEY" "$TTL"
+                        ;;
+                esac
+
+            echo "$HOST $PORT $KEY (TTL = $TTL)"
+            done
+        done
+    done
+    ```
+
+-   Save the script, run it:
+
+    ``` {.bash}
+    sudo bash cluster-migrate.sh
+    ```
 
 ### Check success
 
@@ -2253,9 +2439,9 @@ migration process.
 
 ## Resources
 
--   [Import and Export data in Azure Cache for
-    Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-import-export-data)
-    \# Data Migration (Hash to Hash)
+-   [Redis Clustering](https://redis.io/topics/cluster-tutorial)
+
+# Data Migration (Hash to Hash)
 
 ## Setup
 
@@ -2269,7 +2455,94 @@ article](03_DataMigration_Common.md).
 
 ## Data
 
-TBD
+### Install twemproxy
+
+-   Run the following:
+
+    ``` {.bash}
+    sudo apt-get install automake libtool autoconf bzip2 -y
+
+    git clone https://github.com/twitter/twemproxy
+    cd twemproxy
+    autoreconf -fvi
+    ./configure --enable-debug=full
+    make
+    src/nutcracker -h
+    ```
+
+-   Configure `twemproxy`:
+
+    ``` {.bash}
+    sudo rm nutcracker.yml
+    sudo nano nutcracker.yml
+    ```
+
+-   Update the configuration to the following:
+
+    ``` {.bash}
+    alpha:
+      listen: 127.0.0.1:22121
+      hash: fnv1a_64
+      distribution: ketama
+      auto_eject_hosts: true
+      redis: true
+      server_retry_timeout: 2000
+      server_failure_limit: 1
+      servers:
+      - <REDIS_IP1>:6379:0
+      - <REDIS_IP2>:6379:0
+    ```
+
+-   Run `nutcracker`
+
+    ``` {.bash}
+    cd
+    ./twemproxy/src/nutcracker -c ~/twemproxy/conf/nutcracker.yml
+    ```
+
+### Run a migration
+
+-   For each of the hosts in the source `twemproxy` configuration,
+    export the keys to the target `twemproxy` instance
+
+-   Install the Redis dump tool
+
+    ``` {.bash}
+    sudo apt-get remove ruby ruby-dev
+    sudo apt-get install ruby ruby-dev
+    sudo apt-get install make pkg-config libssl-dev -y
+
+    sudo chmod -R a+w /var/lib/gems
+    sudo chmod -R a+w /usr/local/bin
+
+    gem install redis-dump -V
+    ```
+
+-   Create a new migration file:
+
+    ``` {.bash}
+    sudo nano hash.sh
+    ```
+
+-   Copy the following into it;
+
+    ``` {.bash}
+    #array of source hosts from twemproxy configuration file
+    declare -a arr=("localhost:6379" "localhost:6379" "localhost:6379")
+
+    for i in "${arr[@]}"
+    do
+        $(redis-dump -u $i > localhost.json)
+
+        $(cat localhost.json | redis-load -u redis://<TWEMPROXY_IP>:<TWEMPROXY_PORT>)
+    done
+    ```
+
+-   Start the migration
+
+    ``` {.bash}
+    sudo bash hash.sh
+    ```
 
 ### Check success
 
@@ -2297,9 +2570,9 @@ migration process.
 
 ## Resources
 
--   [Import and Export data in Azure Cache for
-    Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-import-export-data)
-    \# Data Migration
+-   [twemproxy](https://github.com/twitter/twemproxy)
+
+# Data Migration
 
 ## Back up the instance
 
@@ -2443,8 +2716,9 @@ TBD
 ## Execute migration
 
 With the basic migration components in place, it is now possible to
-proceed with the data migration. WWI will utilize the Redis pgAdmin
-option to export the data and then import it into Azure Cache for Redis.
+proceed with the data migration. WWI will utilize the Redis backup and
+restore option to export the data and then import it into Azure Cache
+for Redis.
 
 Options:
 
@@ -3128,9 +3402,9 @@ You can scale up to 10 shards in Azure Cache for Redis Premium.
 
 [Geo-replication](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-retries-exponential-backoff)
 allows you to created cache replication links to Azure Cache for Redis
-instances running in any region in Azure. This provides for the ability
-to recover from any regional outages that may occur. Secondary instances
-are read-only and can be accessed from applications.
+premium tier instances running in any region in Azure. This provides for
+the ability to recover from any regional outages that may occur.
+Secondary instances are read-only and can be accessed from applications.
 
 Geo-replication is not automatic failover, so if any issues do arise,
 you will need to be ready to `unlike` the replication to make the
@@ -3140,6 +3414,19 @@ route traffic.
 
 > **Note** Geo-replication is not enabled for the `Basic` or `Standard`
 > tiers.
+
+### Active geo-replication
+
+The Enterprise tiers support a more advanced form of geo-replication
+called active geo-replication. Using conflict-free replicated data
+types, the Redis Enterprise software supports writes to multiple cache
+instances and takes care of merging of changes and resolving conflicts.
+You can join two or more Enterprise tier cache instances in different
+Azure regions to form an active geo-replicated cache.
+
+In this configuration, both instances are active and will accept write
+requests. Unlike geo-replication, active geo-replication can essentially
+be used for automatic failover.
 
 #### Cache Replication Links
 
@@ -3249,10 +3536,18 @@ and rouge programs.
 ## Encryption
 
 Redis does not directly support any form of data encryption, so all
-encoding must be performed by client applications. Additionally, Redis
-does not provide any form of transport security. If you need to protect
-data as it flows across the network, we recommend implementing an SSL
+encoding must be performed by client applications.
+
+Additionally, Redis OSS does not provide any form of transport security
+unless a supported version is specifically compiled to support it. When
+running a default non-SSL enabled instance, if you need to protect data
+as it flows across the network, it is recommended to implement an SSL
 proxy.
+
+Azure Cache for Redis supported SSL/TLS encryption and is enabled by
+default. As covered in the migration assessment, your application may
+need to be modified to support SSL connectivity as it is not recommended
+to enable the non-SSL port in Azure Cache for Redis.
 
 ## Authentication
 
@@ -3311,7 +3606,7 @@ options](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-netw
 you can choose from in Azure, each one has some advantages and
 limitations.
 
-### Private Endpoint
+### Private Endpoint (Recommended)
 
 To limit access to the Azure Cache for Redis to internal Azure
 resources, enable [Private
@@ -3606,23 +3901,28 @@ Perform the following on the **PREFIX-win10** virtual machine resource.
       server_retry_timeout: 2000
       server_failure_limit: 1
       servers:
-      - <REDIS_IP1>:6379:1
-      - <REDIS_IP2>:6379:1
+      - <REDIS_IP1>:6379:0
+      - <REDIS_IP2>:6379:0
     ```
 
 -   Run `nutcracker`
 
     ``` {.bash}
-    nutcracker -d
+    cd
+    ./twemproxy/src/nutcracker -c ~/twemproxy/conf/nutcracker.yml
     ```
 
 -   Test `nutcracker`
 
     ``` {.bash}
-    redis-cli -h localhost -p 22121 set key1 "key1"
+    redis-cli -h localhost -p 22121 set hashkey1 "key1"
+    redis-cli -h localhost -p 22121 set hashkey2 "key2"
+    redis-cli -h localhost -p 22121 set hashkey3 "key3"
+    redis-cli -h localhost -p 22121 set hashkey4 "key4"
+    redis-cli -h localhost -p 22121 set hashkey5 "key5"
     ```
 
-    # Appendix B: ARM Templates
+# Appendix B: ARM Templates
 
 ## Secured
 
