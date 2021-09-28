@@ -12,9 +12,14 @@ D:\data\projects\redis-cache\03_Migration\01.02_DataMigration_Copy.md
 D:\data\projects\redis-cache\03_Migration\01.03_DataMigration_Replication.md
 D:\data\projects\redis-cache\03_Migration\01.04_DataMigration_Tools.md
 D:\data\projects\redis-cache\03_Migration\01.05_DataMigration_Abstraction.md
+D:\data\projects\redis-cache\03_Migration\01.06_DataMigration_Aof.md
+D:\data\projects\redis-cache\03_Migration\01.07_DataMigration_NonClusterToCluster.md
+D:\data\projects\redis-cache\03_Migration\01.08_DataMigration_ClusterToClutser.md
+D:\data\projects\redis-cache\03_Migration\01.09_DataMigration_HashToHash.md
 D:\data\projects\redis-cache\03_Migration\01_DataMigration.md
 D:\data\projects\redis-cache\03_Migration\02.01_DataMigration_Configuration.md
-D:\data\projects\redis-cache\03_Migration\03_DataMigration_AppSettings.md
+D:\data\projects\redis-cache\03_Migration\03_DataMigration_Common.md
+D:\data\projects\redis-cache\03_Migration\04_DataMigration_AppSettings.md
 D:\data\projects\redis-cache\04_PostMigration\01_Management.md
 D:\data\projects\redis-cache\04_PostMigration\02_Optimization.md
 D:\data\projects\redis-cache\04_PostMigration\03_BCDR.md
@@ -24,3 +29,6 @@ D:\data\projects\redis-cache\05_Appendix\00_Setup.md
 D:\data\projects\redis-cache\05_Appendix\01_ARM Templates.md
 D:\data\projects\redis-cache\05_Appendix\03_InstallStunnel.md
 D:\data\projects\redis-cache\05_Appendix\04_ConfigureRedisSSL.md
+D:\data\projects\redis-cache\artifacts\applications\RedisWeb\wwwroot\lib\jquery-validation\LICENSE.md
+D:\data\projects\redis-cache\pandoc\Redis-guide.md
+D:\data\projects\redis-cache\pandoc\temp\Redis-guide.md

@@ -57,6 +57,7 @@ input-files:
 - D:\data\projects\redis-cache\05_Appendix\01_ARM Templates.md
 - D:\data\projects\redis-cache\05_Appendix\03_InstallStunnel.md
 - D:\data\projects\redis-cache\05_Appendix\04_ConfigureRedisSSL.md
+
 # ERROR, WARNING, or INFO
 verbosity: INFO
 log-file: log.json

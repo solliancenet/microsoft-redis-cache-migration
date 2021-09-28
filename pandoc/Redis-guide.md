@@ -212,7 +212,7 @@ handful of cases that may influence the migration path and version:
 To check the Redis server version run the following command against the
 Redis instance:
 
-``` {.bash}
+``` bash
 redis-server --version
 ```
 
@@ -293,7 +293,7 @@ modules. Look for any `loadmodule` directives in the `redis.conf` file
 that are not part of the default installation. You can also get a list
 of all modules by running:
 
-``` {.bash}
+``` bash
 redis-cli MODULE LIST
 ```
 
@@ -311,13 +311,13 @@ all databases and ensuring they are moved to the target appropriately
 versus just moving the default `0` database. You can find the number of
 databases by running the following:
 
-``` {.bash}
+``` bash
 redis-cli INFO keyspace
 ```
 
 OR
 
-``` {.bash}
+``` bash
 redis-cli config get databases
 ```
 
@@ -481,7 +481,7 @@ and will be used as a template for future migrations.
 To determine the memory usage, they interrogated the redis processes on
 their source system during a heavy load period:
 
-``` {.bash}
+``` bash
 ps -o pid,user,%mem,command ax | sort -b -k3 -r
 ```
 
@@ -494,13 +494,13 @@ Cache which means network bandwidth will have to be paid. They had a
 couple of tools to choose from to monitor the network traffic (`iptraf`
 and `nethogs`):
 
-``` {.bash}
+``` bash
 sudo apt-get install iptraf -y
 
 sudo netstat =tump | grep <port_number>
 ```
 
-``` {.bash}
+``` bash
 sudo apt-get install nethogs
 
 sudo nethogs
@@ -848,7 +848,7 @@ The append-only file is an alternative to RDB and is a fully-durable
 strategy for Redis. It first became available in version 1.1. AOF can be
 enabled in the Redis configuration file:
 
-``` {.text}
+``` text
 appendonly yes
 ```
 
@@ -1061,7 +1061,7 @@ the target.
 
 Use this query to get all the keys:
 
-``` {.bash}
+``` bash
 KEYS *
 ```
 
@@ -1073,7 +1073,7 @@ As of Redis 6.x, you can implement [ACL
 lists](https://redis.io/topics/acl). If your source is 6.x or higher,
 use this query to get all the users:
 
-``` {.bash}
+``` bash
 ACL LIST
 ```
 
@@ -1192,7 +1192,7 @@ benchmark Redis [here](https://redis.io/topics/benchmarks).
 
 -   Run the following:
 
-    ``` {.bash}
+    ``` bash
     redis-benchmark -t set -r 100000 -n 1000000
     ```
 
@@ -1203,7 +1203,7 @@ benchmark Redis [here](https://redis.io/topics/benchmarks).
 
 -   You can also run the tool against the target Azure instance:
 
-    ``` {.bash}
+    ``` bash
     redis-benchmark -h <REDIS_IP> -p <REDIS_PORT> -a <REDIS_PWD> -t set -r 100000 -n 1000000
     ```
 
@@ -1245,27 +1245,27 @@ article](03_DataMigration_Common.md).
 
 -   Run the following command to find where your RDB file is located:
 
-``` {.bash}
+``` bash
 redis-cli config get dir
 ```
 
 -   Create a backup
 
-``` {.bash}
+``` bash
 redis-cli bgsave
 ```
 
 -   To check for errors or the status of the background save, run the
     following:
 
-``` {.bash}
+``` bash
 sudo tail /var/log/redis/redis-server.log -n 100
 ```
 
 -   Install Azure CLI (this has already been done for you, but provided
     for reference)
 
-``` {.bash}
+``` bash
 cd
 
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
@@ -1278,7 +1278,7 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 > **NOTE** It can take a couple of minutes for the Azure RBAC assignment
 > to go into effect.
 
-``` {.bash}
+``` bash
 az login
 
 az account set --subscription "<subscription name>"
@@ -1316,7 +1316,7 @@ PowerShell.
 -   Install Azure Powershell (this has already been done for you, but
     provided for reference)
 
-    ``` {.bash}
+    ``` bash
     # Update the list of packages
     sudo apt-get update
     # Install pre-requisite packages.
@@ -1335,7 +1335,7 @@ PowerShell.
 
 -   Perform the import:
 
-    ``` {.powershell}
+    ``` powershell
     # Start PowerShell
     pwsh
 
@@ -1359,7 +1359,7 @@ PowerShell.
 
 -   Perform the import:
 
-    ``` {.bash}
+    ``` bash
     az redis import --files "https://<STORAGE_ACCOUNT_NAME>.blob.core.windows.net/redis/dump.rdb"  --file-format RDB --name "cacheName" --resource-group "resourceGroupName"  --subscription "subscriptionName"
     ```
 
@@ -1379,7 +1379,7 @@ PowerShell.
 -   Select the **dump.rdb** file
 -   Select **OK**
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -1452,13 +1452,13 @@ article](03_DataMigration_Common.md).
 
 -   Start a PowerShell session:
 
-    ``` {.bash}
+    ``` bash
     pwsh
     ```
 
 -   Run the following to dump all the keys and values:
 
-    ``` {.powershell}
+    ``` powershell
     $databases = $(redis-cli config get databases)[1];
 
     for ($i = 0; $i -lt $databases; $i++)
@@ -1479,7 +1479,7 @@ article](03_DataMigration_Common.md).
 
 -   Run the following command to import all keys and values
 
-    ``` {.powershell}
+    ``` powershell
     $databases = $(redis-cli config get databases)[1];
 
     for ($i = 0; $i -lt $databases; $i++)
@@ -1510,14 +1510,14 @@ article](03_DataMigration_Common.md).
 -   In the SSH window for the **PREFIX-redis01** virtual machine, run
     the following:
 
-    ``` {.bash}
+    ``` bash
     sudo nano restore.sh
     ```
 
 -   Paste the following into the file, be sure to replace the target
     Azure Cache for Redis details:
 
-    ``` {.bash}
+    ``` bash
     #!/bin/bash
     dbs=$(redis-cli config get databases)
     items=$(sed "s/databases//" <<< $dbs)
@@ -1552,7 +1552,7 @@ article](03_DataMigration_Common.md).
 
 -   Run the migration:
 
-    ``` {.bash}
+    ``` bash
     sudo bash restore.sh
     ```
 
@@ -1570,13 +1570,13 @@ them.
 
 -   Create a new script:
 
-    ``` {.bash}
+    ``` bash
     sudo nano migrate.sh
     ```
 
 -   Paste the following, replace the Redis information:
 
-    ``` {.bash}
+    ``` bash
     #!/bin/bash
     dbs=$(redis-cli config get databases)
     items=$(sed "s/databases//" <<< $dbs)
@@ -1598,14 +1598,14 @@ them.
 
     -   Run the script:
 
-        ``` {.bash}
+        ``` bash
         sudo bash migrate.sh
         ```
 
 > **NOTE** The target versions should be the same, or have similar
 > encoding of the values in order for the MIGRATE command to succeed.
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -1653,7 +1653,7 @@ to create an environment to support the following steps.
 
 -   Run the following to set the source Redis server to read only:
 
-    ``` {.bash}
+    ``` bash
     redis-cli config set min-replicas-to-write 3
 
     sudo service redis-server restart
@@ -1661,7 +1661,7 @@ to create an environment to support the following steps.
 
 -   If you have an errors, run the following:
 
-    ``` {.bash}
+    ``` bash
     journalctl -u redis-server
     ```
 
@@ -1671,7 +1671,7 @@ This can also be accomplished by rename-ing all write commands.
 
 -   Open the `redis.conf` file, add the following lines:
 
-    ``` {.bash}
+    ``` bash
     rename-command FLUSHDB ""
     rename-command FLUSHALL ""
     rename-command DEBUG ""
@@ -1687,7 +1687,7 @@ This can also be accomplished by rename-ing all write commands.
 
 -   Exit the editor, then run:
 
-    ``` {.bash}
+    ``` bash
     sudo service redis-server restart
     ```
 
@@ -1704,7 +1704,7 @@ This can also be accomplished by rename-ing all write commands.
 
 -   Run the following commands:
 
-    ``` {.bash}
+    ``` bash
     redis-cli
 
     slaveof source_hostname_or_ip source_port
@@ -1712,7 +1712,7 @@ This can also be accomplished by rename-ing all write commands.
 
 -   Once replication has completed, run the following on the target:
 
-    ``` {.bash}
+    ``` bash
     slaveof no one
     ```
 
@@ -1726,7 +1726,7 @@ This can also be accomplished by rename-ing all write commands.
 
 -   Run the following commands:
 
-    ``` {.bash}
+    ``` bash
     redis-cli
 
     replicaof source_hostname_or_ip source_port
@@ -1734,11 +1734,11 @@ This can also be accomplished by rename-ing all write commands.
 
 -   Once replication has completed, run the following on the target:
 
-    ``` {.bash}
+    ``` bash
     replicaof no one
     ```
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -1874,7 +1874,7 @@ source is a great starting point for building your own version.
 
 -   Open a PowerShell window, run the following:
 
-    ``` {.powershell}
+    ``` powershell
     cd c:/labfiles
 
     git clone https://github.com/deepakverma/redis-copy
@@ -1892,7 +1892,7 @@ source is a great starting point for building your own version.
 
 -   If the source system is running SSL, run the following,
 
-    ``` {.powershell}
+    ``` powershell
     cd /redis-copy/bin/debug
 
     redis-copy.exe --se localhost --sa "" --sp 6380 --sssl --db 0 --de <REDIS_NAME>.redis.cache.windows.net --da <REDIS_PWD> --dp 6380 --dssl --flushdest
@@ -1900,7 +1900,7 @@ source is a great starting point for building your own version.
 
 -   If the source system is not running SSL, run the following:
 
-    ``` {.powershell}
+    ``` powershell
     cd /redis-copy/bin/debug
 
     redis-copy.exe --se localhost --sa "" --sp 6379 --db 0 --de <REDIS_NAME>.redis.cache.windows.net --da <REDIS_PWD> --dp 6380 --dssl --flushdest
@@ -1947,7 +1947,7 @@ commands to migrate from a source to a destination instance.
 
 -   On the source server, run the following to install the tool:
 
-    ``` {.bash}
+    ``` bash
     sudo apt-get remove ruby ruby-dev
     sudo apt-get install ruby ruby-dev
     sudo apt-get install make pkg-config libssl-dev -y
@@ -1960,13 +1960,13 @@ commands to migrate from a source to a destination instance.
 
 -   Run the following to run the tool and dump the Redis cache to file:
 
-    ``` {.bash}
+    ``` bash
     redis-dump -u localhost:6379 > localhost.json
     ```
 
 -   Run the following to import the cache data:
 
-    ``` {.bash}
+    ``` bash
     cat localhost.json | redis-load -u redis://<REDIS_NAME>.redis.cache.windows.net:6379 -a <REDIS_PWD>
     ```
 
@@ -1974,26 +1974,26 @@ commands to migrate from a source to a destination instance.
 
 -   Setup NPM
 
-    ``` {.bash}
+    ``` bash
     sudo apt-get install npm -y
     ```
 
 -   Install redis-dump
 
-    ``` {.bash}
+    ``` bash
     sudo npm install redis-dump -g
     ```
 
 -   Create the migration script
 
-    ``` {.bash}
+    ``` bash
     sudo nano dump.sh
     ```
 
 -   Copy the following into the script, be sure to replace the redis
     tokens:
 
-    ``` {.bash}
+    ``` bash
     #!/bin/bash
     dbs=$(redis-cli config get databases)
     items=$(sed "s/databases//" <<< $dbs)
@@ -2010,11 +2010,11 @@ commands to migrate from a source to a destination instance.
 
 -   Run the following to dump out the contents of the Redis cache
 
-    ``` {.bash}
+    ``` bash
     sudo bash dump.sh
     ```
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -2058,7 +2058,7 @@ extra work to save the value to the new instance.
 -   In the `public static void SetData<T>(string key, T data)` method,
     add the following code:
 
-    ``` {.csharp}
+    ``` csharp
     if (mode == "Migrate")
     {
         //send the value to the target
@@ -2069,7 +2069,7 @@ extra work to save the value to the new instance.
 -   In the `public static T GetData<T>(string key)` method, add the
     following code:
 
-    ``` {.csharp}
+    ``` csharp
     if (mode == "Migrate")
     {
         //send the value to the target
@@ -2105,20 +2105,20 @@ article](03_DataMigration_Common.md).
 
 -   Check the contents of the AOF file, you should see an empty file:
 
-    ``` {.bash}
+    ``` bash
     sudo nano /var/lib/redis/appendonly.aof
     ```
 
 -   Add some cache values:
 
-    ``` {.bash}
+    ``` bash
     redis-cli set Key1 "Key1"
     ```
 
 -   Run the following command to enable AOF on the source, you also need
     to disable the `aof-use-rdb-preamble`:
 
-    ``` {.bash}
+    ``` bash
     redis-cli config set aof-use-rdb-preamble no
 
     redis-cli config set appendonly yes
@@ -2126,7 +2126,7 @@ article](03_DataMigration_Common.md).
 
 -   Make some changes:
 
-    ``` {.bash}
+    ``` bash
     redis-cli set Key2 "Key2"
     redis-cli set Key3 "Key3"
     ```
@@ -2134,37 +2134,37 @@ article](03_DataMigration_Common.md).
 -   Check the contents of the AOF file, you should now see the `Key2`
     and `Key3` changes, but notice no `Key1` item:
 
-    ``` {.bash}
+    ``` bash
     sudo nano /var/lib/redis/appendonly.aof
     ```
 
 -   Tell Redis to regenerate the AOF File:
 
-    ``` {.bash}
+    ``` bash
     redis-cli BGREWRITEAOF
     ```
 
 -   To check for errors or the status of the background save, run the
     following:
 
-    ``` {.bash}
+    ``` bash
     sudo tail /var/log/redis/redis-server.log -n 100
     ```
 
 -   Once you have a fresh AOF file, flush the target to start from
     scratch
 
-    ``` {.bash}
+    ``` bash
     redis-cli -h <REDIS_IP> -p <REDIS_PORT> -a <REDIS_PWD> flushall
     ```
 
 -   Import the AOF file from the source
 
-    ``` {.bash}
+    ``` bash
     sudo cat /var/lib/redis/appendonly.aof | sudo redis-cli -h <REDIS_IP> -p <REDIS_PORT> -a <REDIS_PWD> --pipe
     ```
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -2223,14 +2223,14 @@ applications if the keys overlap.
 -   In the SSH window for the **PREFIX-redis01** virtual machine, run
     the following:
 
-    ``` {.bash}
+    ``` bash
     sudo nano restore.sh
     ```
 
 -   Paste the following into the file, be sure to replace the target
     Azure Cache for Redis details:
 
-    ``` {.bash}
+    ``` bash
     #!/bin/bash
     dbs=$(redis-cli config get databases)
     items=$(sed "s/databases//" <<< $dbs)
@@ -2265,7 +2265,7 @@ applications if the keys overlap.
 
 -   Run the migration:
 
-    ``` {.bash}
+    ``` bash
     sudo bash restore.sh
     ```
 
@@ -2273,7 +2273,7 @@ applications if the keys overlap.
 > encoding of the values in order for the DUMP/RESTORE command to
 > succeed.
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -2323,20 +2323,20 @@ ports 30001-30007 (three mains, three replicas).
 
 -   Run the following to get all the keys in a cluster:
 
-    ``` {.bash}
+    ``` bash
     redis-cli --cluster call localhost:30001 KEYS "*"
     ```
 
 -   To migrate the keys in a cluster instance to an Azure cluster, run
     the following script:
 
-    ``` {.bash}
+    ``` bash
     sudo nano cluster-migrate.sh
     ```
 
 -   Copy the following into it:
 
-    ``` {.bash}
+    ``` bash
     #!/bin/bash
     dbs=$(redis-cli -h localhost -p 30001 config get databases)
     items=$(sed "s/databases//" <<< $dbs)
@@ -2409,11 +2409,11 @@ ports 30001-30007 (three mains, three replicas).
 
 -   Save the script, run it:
 
-    ``` {.bash}
+    ``` bash
     sudo bash cluster-migrate.sh
     ```
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -2459,7 +2459,7 @@ article](03_DataMigration_Common.md).
 
 -   Run the following:
 
-    ``` {.bash}
+    ``` bash
     sudo apt-get install automake libtool autoconf bzip2 -y
 
     git clone https://github.com/twitter/twemproxy
@@ -2472,14 +2472,14 @@ article](03_DataMigration_Common.md).
 
 -   Configure `twemproxy`:
 
-    ``` {.bash}
+    ``` bash
     sudo rm nutcracker.yml
     sudo nano nutcracker.yml
     ```
 
 -   Update the configuration to the following:
 
-    ``` {.bash}
+    ``` bash
     alpha:
       listen: 127.0.0.1:22121
       hash: fnv1a_64
@@ -2495,7 +2495,7 @@ article](03_DataMigration_Common.md).
 
 -   Run `nutcracker`
 
-    ``` {.bash}
+    ``` bash
     cd
     ./twemproxy/src/nutcracker -c ~/twemproxy/conf/nutcracker.yml
     ```
@@ -2507,7 +2507,7 @@ article](03_DataMigration_Common.md).
 
 -   Install the Redis dump tool
 
-    ``` {.bash}
+    ``` bash
     sudo apt-get remove ruby ruby-dev
     sudo apt-get install ruby ruby-dev
     sudo apt-get install make pkg-config libssl-dev -y
@@ -2520,13 +2520,13 @@ article](03_DataMigration_Common.md).
 
 -   Create a new migration file:
 
-    ``` {.bash}
+    ``` bash
     sudo nano hash.sh
     ```
 
 -   Copy the following into it;
 
-    ``` {.bash}
+    ``` bash
     #array of source hosts from twemproxy configuration file
     declare -a arr=("localhost:6379" "localhost:6379" "localhost:6379")
 
@@ -2540,11 +2540,11 @@ article](03_DataMigration_Common.md).
 
 -   Start the migration
 
-    ``` {.bash}
+    ``` bash
     sudo bash hash.sh
     ```
 
-### Check success
+## Check success
 
 Depending on the size of the file, it could take a while for the import
 to finish. Once it is completed, verify that all keys have been
@@ -2709,7 +2709,7 @@ beginning the migration phase.
 
 Instance object inventory script:
 
-``` {.powershell}
+``` powershell
 TBD
 ```
 
@@ -2790,19 +2790,19 @@ configuration settings and move them over to Azure Cache for Redis.
 
 -   To export the RDB configuration:
 
-    ``` {.bash}
+    ``` bash
     redis-cli config get save
     ```
 
 -   To export the AOF setting:
 
-    ``` {.bash}
+    ``` bash
     redis-cli config get appendonly
     ```
 
 -   To Export the eviction policy settings:
 
-    ``` {.bash}
+    ``` bash
     redis-cli config get databases
 
     redis-cli config get maxclients
@@ -2830,7 +2830,7 @@ rules that will need to be migrated.
 
 -   Run the following to export all users and ACLs
 
-    ``` {.powershell}
+    ``` powershell
     $users = redis-cli ACL LIST
 
     foreach($user in $users)
@@ -2870,7 +2870,7 @@ rules that will need to be migrated.
 
 -   Import into the target instance
 
-    ``` {.powershell}
+    ``` powershell
     $lines = get-content "users.txt"
 
 
@@ -2899,7 +2899,7 @@ To speed up the import, be sure to disable AOF in the target instance.
 
 -   Run the following on the target:
 
-``` {.bash}
+``` bash
 Set-AzRedisCache -ResourceGroupName "<RESOURCE_GROUP_NAME>" -Name "<REDIS_NAME>" -RedisConfiguration @{"aof-backup-enabled" = "false", "aof-storage-connection-string-0" = "DefaultEndpointsProtocol=https;BlobEndpoint=https://<STORAGE_ACCOUNT_NAME>.blob.core.windows.net/;AccountName=cjgredisstorage;AccountKey=<STORAGE_ACCOUNT_KEY1>", "aof-storage-connection-string-1" = "DefaultEndpointsProtocol=https;BlobEndpoint=https://<STORAGE_ACCOUNT_NAME>.blob.core.windows.net/;AccountName=cjgredisstorage;AccountKey=<STORAGE_ACCOUNT_KEY2>"}
 ```
 
@@ -2914,7 +2914,7 @@ If you disabled AOF in the target, re-enable it:
 
 -   Run the following on the target:
 
-``` {.bash}
+``` bash
 Set-AzRedisCache -ResourceGroupName "<RESOURCE_GROUP_NAME>" -Name "<REDIS_NAME>" -RedisConfiguration @{"aof-backup-enabled" = "true", "aof-storage-connection-string-0" = "DefaultEndpointsProtocol=https;BlobEndpoint=https://<STORAGE_ACCOUNT_NAME>.blob.core.windows.net/;AccountName=cjgredisstorage;AccountKey=<STORAGE_ACCOUNT_KEY1>", "aof-storage-connection-string-1" = "DefaultEndpointsProtocol=https;BlobEndpoint=https://<STORAGE_ACCOUNT_NAME>.blob.core.windows.net/;AccountName=cjgredisstorage;AccountKey=<STORAGE_ACCOUNT_KEY2>"}
 ```
 
@@ -2925,7 +2925,7 @@ Redis instance, but you should verify the source and destination.
 
 -   On the source, run the following:
 
-    ``` {.bash}
+    ``` bash
     redis-cli INFO
     ```
 
@@ -2933,7 +2933,7 @@ Redis instance, but you should verify the source and destination.
 
 -   On the target, run the following:
 
-    ``` {.bash}
+    ``` bash
     redis-cli -h <REDIS_NAME>.redis.cache.windows.net -p 6379 -a <REDIS_PWD> INFO
     ```
 
@@ -2979,7 +2979,7 @@ one of the migration paths:
 -   For the **REDIS_CONNECTION** application setting, replace it to
     point to the migrated Azure Cache for Redis instance:
 
-    ``` {.text}
+    ``` text
     "REDIS_CONNECTION": "PREFIX-redis-prem.redis.cache.windows.net:6380,password=<REDIS_PWD>,ssl=True,abortConnect=False"
     ```
 
@@ -3043,7 +3043,7 @@ page.
 
 For example, to get the memory usage of the Azure Cache for Redis:
 
-``` {.kql}
+``` kql
 AzureMetrics
 | where TimeGenerated > ago(15m)
 | where ResourceProvider == "MICROSOFT.CACHE"
@@ -3055,7 +3055,7 @@ AzureMetrics
 
 To get the CPU usage:
 
-``` {.kql}
+``` kql
 AzureMetrics
 | where TimeGenerated > ago(15m)
 | where ResourceProvider == "MICROSOFT.CACHE"
@@ -3095,7 +3095,7 @@ The Azure Portal and Windows PowerShell can be used for managing the
 Azure Cache for Redis. To get started with PowerShell, install the Azure
 PowerShell cmdlets for Redis with the following PowerShell command:
 
-``` {.powershell}
+``` powershell
 Install-Module -Name Az.RedisCache
 ```
 
@@ -3204,7 +3204,7 @@ administrators can explore instance-based options such as cache misses.
 
 To find cache misses, run the following:
 
-``` {.kql}
+``` kql
 AzureMetrics
 | where ResourceProvider == "MICROSOFT.CACHE"
 | where MetricName == 'cachemisses'
@@ -3758,7 +3758,7 @@ migration steps.
     > the Azure script extensions, you can check the Azure agent log
     > files using:
 
-    ``` {.bash}
+    ``` bash
     sudo nano /var/lib/waagent/custom-script/download/0/stdout
     sudo nano /var/lib/waagent/custom-script/download/0/stderr
     ```
@@ -3783,7 +3783,7 @@ migration steps.
 -   Login to the redis image (**PREFIX-redis01** and **PREFIX-redis02**)
     by opening a PowerShell window and run the following:
 
-    ``` {.powershell}
+    ``` powershell
     ssh s2admin@<IP>
     ```
 
@@ -3791,13 +3791,13 @@ migration steps.
 
 -   Open the `redis.conf` file:
 
-    ``` {.bash}
+    ``` bash
     sudo nano /etc/redis/redis.conf
     ```
 
 -   Check the following `bind` statement exists:
 
-    ``` {.bash}
+    ``` bash
     bind 0.0.0.0 ::1
     ```
 
@@ -3871,7 +3871,7 @@ Perform the following on the **PREFIX-win10** virtual machine resource.
 
 -   Run the following:
 
-    ``` {.bash}
+    ``` bash
     sudo apt-get install automake libtool autoconf bzip2 -y
 
     git clone https://github.com/twitter/twemproxy
@@ -3884,14 +3884,14 @@ Perform the following on the **PREFIX-win10** virtual machine resource.
 
 -   Configure `twemproxy`:
 
-    ``` {.bash}
+    ``` bash
     sudo rm nutcracker.yml
     sudo nano nutcracker.yml
     ```
 
 -   Update the configuration to the following:
 
-    ``` {.bash}
+    ``` bash
     alpha:
       listen: 127.0.0.1:22121
       hash: fnv1a_64
@@ -3907,14 +3907,14 @@ Perform the following on the **PREFIX-win10** virtual machine resource.
 
 -   Run `nutcracker`
 
-    ``` {.bash}
+    ``` bash
     cd
     ./twemproxy/src/nutcracker -c ~/twemproxy/conf/nutcracker.yml
     ```
 
 -   Test `nutcracker`
 
-    ``` {.bash}
+    ``` bash
     redis-cli -h localhost -p 22121 set hashkey1 "key1"
     redis-cli -h localhost -p 22121 set hashkey2 "key2"
     redis-cli -h localhost -p 22121 set hashkey3 "key3"
@@ -3946,13 +3946,13 @@ to the SSL endpoints.
 
 ## Install STunnel
 
-``` {.bash}
+``` bash
 sudo apt-get install stunnel4 -y
 ```
 
 -   Setup the SSL port for Azure Redis
 
-``` {.bash}
+``` bash
 sudo nano /etc/default/stunnel4
 ```
 
@@ -3960,7 +3960,7 @@ sudo nano /etc/default/stunnel4
 -   Save the file
 -   Setup the pids directory and create the redis connection:
 
-``` {.bash}
+``` bash
 cd
 
 mkdir pids
@@ -3972,7 +3972,7 @@ sudo nano /etc/stunnel/redis.conf
 
 -   Add the following:
 
-``` {.text}
+``` text
 [redis-cli]
 client = yes
 accept = 127.0.0.1:6380
@@ -3981,13 +3981,13 @@ connect = yourcachename.redis.cache.windows.net:6380
 
 -   Restart stunnel
 
-``` {.bash}
+``` bash
 /etc/init.d/stunnel4 restart
 ```
 
 -   Ensure that stunnel is running:
 
-``` {.bash}
+``` bash
 sudo apt install net-tools
 
 sudo netstat -tlpn | grep 6380
@@ -4002,7 +4002,7 @@ feature that needs to be enabled at compile time.
 
 -   Run the following to download Redis 6.0
 
-``` {.bash}
+``` bash
 wget https://download.redis.io/releases/redis-6.2.5.tar.gz
 tar xzf redis-6.2.5.tar.gz
 cd redis-6.2.5
@@ -4012,7 +4012,7 @@ cd redis-6.2.5
 
 -   Run the following to build Redis with TLS support:
 
-``` {.bash}
+``` bash
 sudo apt install make pkg-config libssl-dev
 
 make distclean
@@ -4024,7 +4024,7 @@ make BUILD_TLS=yes MALLOC=libc
 
 -   Create the self-signed certificates:
 
-``` {.bash}
+``` bash
 ./utils/gen-test-certs.sh
 
 sudo apt-get install -y tcl-tls
@@ -4034,7 +4034,7 @@ sudo apt-get install -y tcl-tls
 
 ## Start the server
 
-``` {.bash}
+``` bash
 ./src/redis-server --tls-port 6380 --port 6379 \
     --tls-cert-file ./tests/tls/redis.crt \
     --tls-key-file ./tests/tls/redis.key \
@@ -4046,7 +4046,7 @@ connections.
 
 ## Test connectivity
 
-``` {.bash}
+``` bash
 ./src/redis-cli --tls \
     --cert ./tests/tls/redis.crt \
     --key ./tests/tls/redis.key \
