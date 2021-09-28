@@ -2,7 +2,7 @@
 
 ## Backup and Restore
 
-As with any mission critical system, having a backup and restore as well as a disaster recovery (BCDR) strategy is an important part of the overall system design. If an unforseen event occurs, it is important to have the ability to restore the data to a point in time (Recovery Point Objective) and in a reasonable amount of time (Recovery Time Objective).
+As with any mission critical system, having a backup and restore as well as a disaster recovery (BCDR) strategy is an important part of the overall system design. If an unforeseen event occurs, it is important to have the ability to restore the data to a point in time (Recovery Point Objective) and in a reasonable amount of time (Recovery Time Objective).
 
 ### Backup
 
@@ -20,7 +20,7 @@ Azure Cache for Redis has several options for [implementing high availability](h
 
 ### Clustering
 
-To support high availability you can enabled clustering on the `Premium` and `Enterprise` skus.  `Basic` and `Standard` do not support clustering.  You can scale up to 10 shards in Azure Cache for Redis Premium.
+To support high availability, you can enabled clustering on the `Premium` and `Enterprise` skus.  `Basic` and `Standard` do not support clustering.  You can scale up to 10 shards in Azure Cache for Redis Premium.
 
 ### Geo-replication
 
@@ -63,9 +63,9 @@ WWI wanted to test the failover capabilities of clusters and geo-replication so 
 - Open the Azure Portal.
 - Browse to the Azure Cache for Redis **PREFIX-redis-basic6** instance.
 - Under **Settings**, select **Scale**
-- Select `C0 Standard`, then select **Select**, the instance will start to scale
+- Select `C0 Standard`, then choose **Select**, the instance will start to scale
 - Under **Settings**, select **Scale**
-- Select `P1 Premium`, then select **Select**, the instance will start to scale
+- Select `P1 Premium`, then choose **Select**, the instance will start to scale
 - Under **Settings**, select **Cluster size**
 - Select **Enable** to enable clustering on the instance
 - Select **Save**
@@ -90,7 +90,7 @@ Failover Steps:
 - Open the Azure Portal.
 - Browse to the **PREFIX-redis-basic6** Azure Cache for Redis instance.
 - Under **Settings** select **Geo-replication**
-- Select **Unlink caches**, the replication will unlink and the two caches will become read/write.
+- Select **Unlink caches**, the replication will un-link and the two caches will become read/write.
 
 ## BCDR Checklist
 

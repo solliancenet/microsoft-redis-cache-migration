@@ -8,7 +8,7 @@ The information provided will center on a customer journey using the Microsoft [
 
 ## Redis
 
-Redis has a rich history in the open source community and is heavily used in corporate websites and critical applications. This guide will assist administrators who have been asked to scope, plan, and execute the migration. Administrators new to Redis can also review the [Redis Documentation](https://redis.io/documentation) for deeper information of the internal workings on Redis. Additionally, each document section contains links to helpful reference articles and tutorials.
+Redis has a rich history in the open-source community and is heavily used in corporate websites and critical applications. This guide will assist administrators who have been asked to scope, plan, and execute the migration. Administrators new to Redis can also review the [Redis Documentation](https://redis.io/documentation) for deeper information of the internal workings on Redis. Additionally, each document section contains links to helpful reference articles and tutorials.
 
 ### Common Usage of Redis
 
@@ -20,6 +20,6 @@ Microsoft offers a fully managed Redis cache environment to support your data ca
 
 Although we will solely focus on the managed service, Redis can also run in Azure Virtual machines..
 
-![Comparison of Redis environments.](media/comparison.png)
+![Comparison of Redis environments.](./media/comparison.png)
 
 This guide will focus entirely on migrating the on-premises Redis workloads to the Platform as a Service (PaaS) Azure Cache for Redis offering due to its various advantages over Infrastructure as a Service (IaaS) such as scale-up and scale-out, pay-as-you-go, high availability, security and manageability features.

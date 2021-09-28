@@ -73,7 +73,7 @@ You can extend the features of Redis by implemented custom Redis modules.  Look 
 
 ## Databases
 
-When performing a migration, consider the Redis instance may have more than one database. Databases in Redis were not designed for scaling but rather for namespaces. For example a SaaS Application may run one code base but hundreds of clients each with their own namespace / redis database. Databases allow you to flush a client without affecting others and minimize administrative overhead.
+When performing a migration, consider the Redis instance may have more than one database. Databases in Redis were not designed for scaling but rather for namespaces. For example, a SaaS Application may run one code base but hundreds of clients each with their own namespace / redis database. Databases allow you to flush a client without affecting others and minimize administrative overhead.
 
 The tool you select will need to be able to support migrating keys in all databases and ensuring they are moved to the target appropriately versus just moving the default `0` database. You can find the number of databases by running the following:
 

@@ -47,7 +47,7 @@ This path is the preferred path as it will export the key in the Redis encoded f
 
 ### SLAVEOF / REPLICAOF
 
-Redis includes the ability to create replicas of master nodes.  This path is one of the easiest to setup, but unfortunately none of the Azure services support the `SLAVEOF` or `REPLICAOF` commands.  This means this path is best used for when you are moving from one version to another to support a move to the cloud using the `DUMP` and `RESTORE` path.
+Redis includes the ability to create replicas of master nodes.  This path is one of the easiest to setup, but unfortunately none of the Azure services supports the `SLAVEOF` or `REPLICAOF` commands.  This means this path is best used for when you are moving from one version to another to support a move to the cloud using the `DUMP` and `RESTORE` path.
 
 ### MIGRATE
 

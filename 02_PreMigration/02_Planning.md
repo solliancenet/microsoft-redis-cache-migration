@@ -7,15 +7,20 @@ An [Azure Landing zone](https://docs.microsoft.com/en-us/azure/cloud-adoption-fr
 Since WWI is based in San Francisco, all resources for the Azure landing zone were created in the `US West 2` region. The following resources were created to support the migration:
 
 - [Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/quickstart-create-Redis-server-instance-using-azure-portal)
+
 - [Express Route](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-introduction)
+
 - [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/quick-create-portal) with [hub and spoke design](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) with corresponding [virtual network peerings](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview) establish.
+
 - [App Service](https://docs.microsoft.com/en-us/azure/app-service/overview)
+
 - [Application Gateway](https://docs.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-internal-portal?tabs=option-1-create-internal-load-balancer-standard)
+
 - [Private endpoints](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview) for the App Services and Redis instance
 
-> **Note:** As part of this guide, two ARM templates (one with private endpoints, one without) were provided to deploy a potential Azure landing zone for a Redis migration project. The private endpoints ARM template provides a more secure, production-ready scenario. Additional manual Azure landing zone configuration may be necessary, depending on the requirements.
+    > **Note:** As part of this guide, two ARM templates (one with private endpoints, one without) were provided to deploy a potential Azure landing zone for a Redis migration project. The private endpoints ARM template provides a more secure, production-ready scenario. Additional manual Azure landing zone configuration may be necessary, depending on the requirements.
 
-> **Note** Creating a Redis instance in an Azure Virtual Machine with a default port and no password or on an non-SSL port with a password with no network security group protecting them is highly discouraged.  Bots continually monitor the Azure IP address space and will find your Redis instance within a few days.  Be very careful creating resources that are exposed to the internet.
+    > **Note** Creating a Redis instance in an Azure Virtual Machine with a default port and no password or on an non-SSL port with a password with no network security group protecting them is highly discouraged.  Bots continually monitor the Azure IP address space and will find your Redis instance within a few days.  Be very careful creating resources that are exposed to the internet.
 
 ## Networking
 
@@ -43,7 +48,7 @@ Other networking considerations include:
 
 ## Private Link and/or VNet integration
 
-All Azure Cache for Redis services support private links and VNet integration.  There are however be sure to review the [FAQs for private endpoints](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq) to understand the behavior of the cache when behind a private endpoint.
+All Azure Cache for Redis services supports private links and VNet integration.  There are however be sure to review the [FAQs for private endpoints](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq) to understand the behavior of the cache when behind a private endpoint.
 
 You should also be familiar with the communication ports of Redis which are outlined in [Outbound port requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#outbound-port-requirements).
 
@@ -51,7 +56,7 @@ When integrating with other Azure services, you must also ensure that [other net
 
 ## Networking with Geo-replication
 
-If you plan to use the Geo-replication feature of Azure Cache for Redis, there are several other ports that must be allowed in order for the replication to be successful.  See [Geo-replication peer port requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#geo-replication-peer-port-requirements) for more information.
+If you plan to use the Geo-replication feature of Azure Cache for Redis, there are several other ports that must be allowed for the replication to be successful.  See [Geo-replication peer port requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#geo-replication-peer-port-requirements) for more information.
 
 ## SSL/TLS Connectivity
 

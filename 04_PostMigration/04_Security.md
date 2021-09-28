@@ -12,7 +12,7 @@ Azure Cache for Redis supported SSL/TLS encryption and is enabled by default.  A
 
 ## Authentication
 
-Redis is focused purely on providing fast access to data, and is designed to run inside a trusted environment that can be accessed only by trusted clients. Redis supports [a limited security model](https://redis.io/topics/security) based on password authentication. (It is possible to remove authentication completely, although we don't recommend this.)
+Redis is focused purely on providing fast access to data and is designed to run inside a trusted environment that can be accessed only by trusted clients. Redis supports [a limited security model](https://redis.io/topics/security) based on password authentication. (It is possible to remove authentication completely, although we don't recommend this.)
 
 All authenticated clients share the same global password and have access to the same resources. If you need more comprehensive sign-in security, you must implement your own security layer in front of the Redis server, and all client requests should pass through this additional layer. Redis should not be directly exposed to untrusted or unauthenticated clients.
 
@@ -20,7 +20,7 @@ Azure Cache for Redis supports the basic authentication mechanisms for Redis use
 
 ## TLS Settings
 
-By default, Azure Cache for Redis disables the non-SSL port 6379 and uses the SSL port of 6380. You can re-enable the non-SSL port if needed, but it is recommended that you upgrade your applications to support SSL rather than open non-SSL access to Azure Cache for Redis.  Additionally, you will want to ensure your applications will support TLS 1.2 rather thant he older 1.0 or 1.1.
+By default, Azure Cache for Redis disables the non-SSL port 6379 and uses the SSL port of 6380. You can re-enable the non-SSL port if needed, but it is recommended that you upgrade your applications to support SSL rather than open non-SSL access to Azure Cache for Redis.  Additionally, you will want to ensure your applications will support TLS 1.2 rather than the older 1.0 or 1.1.
 
 ## Firewall
 

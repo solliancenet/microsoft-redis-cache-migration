@@ -57,7 +57,7 @@ When you select a path for migration, you will want the import to run as fast as
 - Export and configure Source Server configuration
 - Export and configure Target Server configuration
 - Export the instance objects (Users, etc.)
-- Export the data (if possible disable writing)
+- Export the data (if possible, disable writing)
 - Import the instance objects
 - Import the data
 - Validation
@@ -115,7 +115,7 @@ Once the data is migrated, point the application to the new instance
 
 Lastly, validate the target instance's inventory. Below is an example of the `INFO` results in a target environment. It is relatively easy to identify database key count discrepancies.
 
-Follow the `Check success` steps in the [common tasks article](03_DataMigration_Common.md).
+Follow the `Check success` steps in the [common tasks article](./03_DataMigration_Common.md).
 
 ## WWI Use Case
 

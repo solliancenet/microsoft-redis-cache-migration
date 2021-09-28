@@ -76,7 +76,7 @@ The [AzureRedisEvents](https://docs.microsoft.com/en-us/azure/Redis/concepts-pla
 
 > **Note:** Azure Cache for Redis maintenance notifications are incredibly important.  The instance maintenance can take the instance and connected applications down for a random period of time. Nodes are patched one at a time to prevent data loss. Basic caches will have data loss. Clustered caches are patched one shard at a time.
 
-In addition to supporting the Azure REdis Events, you can follow some best practices for application design when using caching technology:
+In addition to supporting the Azure Redis Events, you can follow some best practices for application design when using caching technology:
 
 - [Reliability patterns - Cloud Design Patterns](https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/reliability-patterns#resiliency)
 - [Retry guidance for Azure services - Best practices for cloud applications](https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific)
