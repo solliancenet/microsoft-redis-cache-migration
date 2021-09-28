@@ -53,13 +53,13 @@ After reviewing the above items, notice there is much more than just data that m
 
 Azure Cache for Redis is a fully supported version of Redis running as a platform as a service. However, there are some common limitations to become familiar with when doing an initial assessment for selected your landing zone. Many of these limitations are driven by the tier selected as shown in the online [supported features document](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-overview#feature-comparison)
 
-Many of the other items are simply operational aspects that administrators should become familiar with as part of the operational data workload lifecycle management. This guide will explore many of these operational aspects in the [Post Migration Management](../04_PostMigration/01_Management.md) section.
+Many of the other items are simply operational aspects that administrators should become familiar with as part of the operational data workload lifecycle management. This guide will explore many of these operational aspects in the [Post Migration Management](#management) section.
 
 - Each tier supports a maximum number of databases (when not in cluster mode).  If you have more than the default of `16`, be sure that you pick a tier to migrate too that has support for all source databases.
 
 - Although you can cluster enable the premium tier, in doing so, you will only be able to support the `db0` database.  If you are using a tool that supports migrating databases, you will need to ensure that you move all source databases to the `db0` database in the target.
 
-- You cannot cluster enable `Basic` or `Standard` tiers so migrating via cluster failover is not an option. You can cluster enable a premium instance but it will become part of its own cluster and you cannot use it to cluster failover.
+- You cannot cluster enable `Basic` or `Standard` tiers so migrating via cluster failover is not an option. You can cluster enable a premium instance, but it will become part of its own cluster and you cannot use it to cluster failover.
 
 - Once you cluster enabled the premium instance, it will communication over the Redis cluster protocol.
 
@@ -73,7 +73,7 @@ You can extend the features of Redis by implemented custom Redis modules.  Look 
 
 ## Databases
 
-When performing a migration, consider the Redis instance may have more than one database. Databases in Redis were not designed for scaling but rather for namespaces. For example, a SaaS Application may run one code base but hundreds of clients each with their own namespace / redis database. Databases allow you to flush a client without affecting others and minimize administrative overhead.
+When performing a migration, consider the Redis instance may have more than one database. Databases in Redis were not designed for scaling but rather for namespaces. For example, a SaaS Application may run one code base but hundreds of clients each with their own namespace / Redis database. Databases allow you to flush a client without affecting others and minimize administrative overhead.
 
 The tool you select will need to be able to support migrating keys in all databases and ensuring they are moved to the target appropriately versus just moving the default `0` database. You can find the number of databases by running the following:
 
@@ -111,7 +111,7 @@ During the migration from the hashing layer, you will need to export keys from e
 
 ### Cloud Providers
 
-Migrating instances from cloud services providers, such as Google Cloud (GCP) and Amazon Web Services (AWS), may require extra networking configuration steps to access the cloud-hosted Redis instances or they may prevent Redis migration commands. Any first party or third party migration tools will require access from outside IP ranges and may be blocked by default.
+Migrating instances from cloud services providers, such as Google Cloud (GCP) and Amazon Web Services (AWS), may require extra networking configuration steps to access the cloud-hosted Redis instances or they may prevent Redis migration commands. Any first party or third-party migration tools will require access from outside IP ranges and may be blocked by default.
 
 ### On-premises
 
@@ -127,11 +127,15 @@ Equipped with the assessment information (CPU, memory, storage, etc.), the migra
 
 There are currently five potential options:
 
-- **Azure Cache for Redis (Basic)** : An OSS Redis cache running on a single VM. This tier has no service-level agreement (SLA) and is ideal for development/test and non-critical workloads.
-- **Azure Cache for Redis (Standard)** : An OSS Redis cache running on two VMs in a replicated configuration.
-- **Azure Cache for Redis (Premium)** : High-performance OSS Redis caches. This tier offers higher throughput, lower latency, better availability, and more features. Premium caches are deployed on more powerful VMs compared to the VMs for Basic or Standard caches.
-- **Azure Cache for Redis (Enterprise)** : High-performance caches powered by Redis Labs' Redis Enterprise software. This tier supports Redis modules including RediSearch, RedisBloom, and RedisTimeSeries. Also, it offers even higher availability than the Premium tier.
-- **Azure Cache for Redis (Enterprise Flash)** : Cost-effective large caches powered by Redis Labs' Redis Enterprise software. This tier extends Redis data storage to non-volatile memory, which is cheaper than DRAM, on a VM. It reduces the overall per-GB memory cost.
+- **Azure Cache for Redis (Basic)**: An OSS Redis cache running on a single VM. This tier has no service-level agreement (SLA) and is ideal for development/test and non-critical workloads.
+
+- **Azure Cache for Redis (Standard)**: An OSS Redis cache running on two VMs in a replicated configuration.
+
+- **Azure Cache for Redis (Premium)**: High-performance OSS Redis caches. This tier offers higher throughput, lower latency, better availability, and more features. Premium caches are deployed on more powerful VMs compared to the VMs for Basic or Standard caches.
+
+- **Azure Cache for Redis (Enterprise)**: High-performance caches powered by Redis Labs' Redis Enterprise software. This tier supports Redis modules including RediSearch, RedisBloom, and RedisTimeSeries. Also, it offers even higher availability than the Premium tier.
+
+- **Azure Cache for Redis (Enterprise Flash)**: Cost-effective large caches powered by Redis Labs' Redis Enterprise software. This tier extends Redis data storage to non-volatile memory, which is cheaper than DRAM, on a VM. It reduces the overall per-GB memory cost.
 
 Briefly, these options were discussed in the [Limitations](##Limitations) document.
 
@@ -154,7 +158,7 @@ As displayed above, if the instance is running Redis 3.x or lower and do not pla
 
 After evaluating the entire WWI Redis data workloads, WWI determined they would need at least 6GB of cache capacity with data persistence and clustering support so a Premium Sku was selected. WWI intentionally chose to begin its Azure migration journey with a relatively small workload. However, the best practices of instance migration still apply and will be used as a template for future migrations.
 
-To determine the memory usage, they interrogated the redis processes on their source system during a heavy load period:
+To determine the memory usage, they interrogated the Redis processes on their source system during a heavy load period:
 
   ```bash
   ps -o pid,user,%mem,command ax | sort -b -k3 -r

@@ -58,7 +58,7 @@ Identifying missing instance objects needs to occur quickly during a migration w
 | Key Count Mismatch | Less than the remaining window | No | Sync the missing keys
 | Key Value Mismatch | More than the remaining window | Yes | Start the Rollback
 
-In the [migration](./../03_Migration/01_DataMigration.md) section, we will provide a instance migration inventory script that will provide object counts that can be used to compare source and destination after a migration path has been completed.
+In the [migration](#data-migration) section, we will provide a instance migration inventory script that will provide object counts that can be used to compare source and destination after a migration path has been completed.
 
 ## WWI Use Case
 

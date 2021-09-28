@@ -4,16 +4,16 @@
 # EXAMPLE:  dir *.md /S /B /O N>markdown-files.txt
 # Take the contents in the markdown-file.txt and paste it into the 'input-files'
 # Run this command with the defaults.yaml file in the same directory.
-# EXAMPLE:  pandoc --defaults=defaults
-# Fix the in document links. In MS Word: FILE | OPTIONS | ADVANCED | SHOW FIELD VALUES.   Find links like: D:\\data\\projects\\redis-cache\\pandoc\\04_PostMigration\\01_Management.md/
-# Edit link and update to correct document location.
-from: markdown+backtick_code_blocks+pipe_tables
-to: docx
+# EXAMPLE:  pandoc --defaults=make-word-doc
+# To create a reference.docx - pandoc -o reference.docx --data-dir="D:\mcw_temp\Redis-guide\pandoc\temp" --print-default-data-file sample.docx
+from: markdown+backtick_code_blocks
+to: docx+styles
 output-file: Redis-guide.docx
 dpi: 300
-
+data-dir: C:\github\solliancenet\microsoft-redis-cache-migration\pandoc
+reference-doc: sample-reference.docx
 input-files:
- - D:\mcw_temp\Redis\pandoc\Redis-guide.md    
+ - C:\github\solliancenet\microsoft-redis-cache-migration\pandoc\Redis-guide.md   
 
 # ERROR, WARNING, or INFO
 verbosity: INFO

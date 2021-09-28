@@ -23,7 +23,7 @@ You can also select the [persistence in Azure Redis instances](https://docs.micr
 
 ### RDB File
 
-By default, Redis will keep cache data persisted to disk on a fairly regular basis, this can however be disabled by the administrator to improve performance. However, doing so would cause any data in memory to be lost in the case of a server fault or reboot.  In most cases this is enabled, but has [advantages and disadvantages](https://redis.io/topics/persistence).
+By default, Redis will keep cache data persisted to disk on a regular basis, this can however be disabled by the administrator to improve performance. However, doing so would cause any data in memory to be lost in the case of a server fault or reboot.  In most cases this is enabled, but has [advantages and disadvantages](https://redis.io/topics/persistence).
 
 ### Append Only File (AOF)
 
@@ -39,7 +39,7 @@ This option is more durable than the RDB file, but comes at some costs in larger
 
 ### Manual (SET)
 
-The most basic way to migrate an instance is to enumerate all the keys from the source and then `SET` the values in the destination.  This works well with basic key values such as strings and integers, but care has to be taken with more complex objects such that the tool encodes the values correctly in the migrate process.
+The most basic way to migrate an instance is to enumerate all the keys from the source and then `SET` the values in the destination.  This works well with basic key values such as strings and integers, but care must be taken with more complex objects such that the tool encodes the values correctly in the migrate process.
 
 ### Manual (DUMP/RESTORE)
 
@@ -95,9 +95,9 @@ In terms of the more specific tools and methods, here is a table of supported fe
 
 ## WWI Use Case
 
-WWI has selected its conference instance as its first migration workload. The workload was selected because it had the least risk and the most available downtime due to the gap in the annual conference schedule. They also assessed the instance to not be using any unsupported features in the target Azure Cache for Redis service. Based on the migration team's other assessment details, they determined that they will attempt to perform an offline migration using the backup and restore Redis tools.
+WWI has selected its conference instance as its first migration workload. The workload was selected because it had the least risk and the most available downtime due to the gap in the annual conference schedule. They also assessed the instance to not be using any unsupported features in the target Azure Cache for Redis service. Based on the migration team's other assessment details, they determined that they would attempt to perform an offline migration using the backup and restore Redis tools.
 
-During their assessment period, they did find that the customer instance does use some languages, extensions, and a custom function that are not available in the target service for the conference instance. They have asked the development team to review replacing those features while they migrate the more simple workloads. If they can be replaced successfully, they will choose an Azure Cache for Redis service, otherwise, they will provision an Azure VM to host the workload.
+During their assessment period, they did find that the customer instance does use some languages, extensions, and a custom function that are not available in the target service for the conference instance. They have asked the development team to review replacing those features while they migrate the simpler workloads. If they can be replaced successfully, they will choose an Azure Cache for Redis service, otherwise, they will provision an Azure VM to host the workload.
 
 ## Migration Methods Checklist
 

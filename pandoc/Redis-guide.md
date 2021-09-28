@@ -21,7 +21,7 @@ an Azure Cache for Redis environment.
 
 ## Redis
 
-Redis has a rich history in the open source community and is heavily
+Redis has a rich history in the open-source community and is heavily
 used in corporate websites and critical applications. This guide will
 assist administrators who have been asked to scope, plan, and execute
 the migration. Administrators new to Redis can also review the [Redis
@@ -57,15 +57,15 @@ Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-overvi
 documentation page.
 
 Although we will solely focus on the managed service, Redis can also run
-in Azure Virtual machines..
+in Azure Virtual Machines.
 
-![Comparison of Redis environments.](media/comparison.png)
+![Comparison of Redis environments.](./media/comparison.png)
 
 This guide will focus entirely on migrating the on-premises Redis
 workloads to the Platform as a Service (PaaS) Azure Cache for Redis
 offering due to its various advantages over Infrastructure as a Service
 (IaaS) such as scale-up and scale-out, pay-as-you-go, high availability,
-security and manageability features.
+security, and manageability features.
 
 # Use Case
 
@@ -266,7 +266,7 @@ Many of the other items are simply operational aspects that
 administrators should become familiar with as part of the operational
 data workload lifecycle management. This guide will explore many of
 these operational aspects in the [Post Migration
-Management](../04_PostMigration/01_Management.md) section.
+Management](#management) section.
 
 -   Each tier supports a maximum number of databases (when not in
     cluster mode). If you have more than the default of `16`, be sure
@@ -280,7 +280,7 @@ Management](../04_PostMigration/01_Management.md) section.
 
 -   You cannot cluster enable `Basic` or `Standard` tiers so migrating
     via cluster failover is not an option. You can cluster enable a
-    premium instance but it will become part of its own cluster and you
+    premium instance, but it will become part of its own cluster and you
     cannot use it to cluster failover.
 
 -   Once you cluster enabled the premium instance, it will communication
@@ -301,8 +301,8 @@ redis-cli MODULE LIST
 
 When performing a migration, consider the Redis instance may have more
 than one database. Databases in Redis were not designed for scaling but
-rather for namespaces. For example a SaaS Application may run one code
-base but hundreds of clients each with their own namespace / redis
+rather for namespaces. For example, a SaaS Application may run one code
+base but hundreds of clients each with their own namespace / Redis
 database. Databases allow you to flush a client without affecting others
 and minimize administrative overhead.
 
@@ -379,7 +379,7 @@ new hashing layer setup with the same configuration on the target side.
 Migrating instances from cloud services providers, such as Google Cloud
 (GCP) and Amazon Web Services (AWS), may require extra networking
 configuration steps to access the cloud-hosted Redis instances or they
-may prevent Redis migration commands. Any first party or third party
+may prevent Redis migration commands. Any first party or third-party
 migration tools will require access from outside IP ranges and may be
 blocked by default.
 
@@ -405,20 +405,24 @@ Redis service and pricing tier to start with.
 
 There are currently five potential options:
 
--   **Azure Cache for Redis (Basic)** : An OSS Redis cache running on a
+-   **Azure Cache for Redis (Basic)**: An OSS Redis cache running on a
     single VM. This tier has no service-level agreement (SLA) and is
     ideal for development/test and non-critical workloads.
--   **Azure Cache for Redis (Standard)** : An OSS Redis cache running on
+
+-   **Azure Cache for Redis (Standard)**: An OSS Redis cache running on
     two VMs in a replicated configuration.
--   **Azure Cache for Redis (Premium)** : High-performance OSS Redis
+
+-   **Azure Cache for Redis (Premium)**: High-performance OSS Redis
     caches. This tier offers higher throughput, lower latency, better
     availability, and more features. Premium caches are deployed on more
     powerful VMs compared to the VMs for Basic or Standard caches.
--   **Azure Cache for Redis (Enterprise)** : High-performance caches
+
+-   **Azure Cache for Redis (Enterprise)**: High-performance caches
     powered by Redis Labs' Redis Enterprise software. This tier supports
     Redis modules including RediSearch, RedisBloom, and RedisTimeSeries.
     Also, it offers even higher availability than the Premium tier.
--   **Azure Cache for Redis (Enterprise Flash)** : Cost-effective large
+
+-   **Azure Cache for Redis (Enterprise Flash)**: Cost-effective large
     caches powered by Redis Labs' Redis Enterprise software. This tier
     extends Redis data storage to non-volatile memory, which is cheaper
     than DRAM, on a VM. It reduces the overall per-GB memory cost.
@@ -478,7 +482,7 @@ chose to begin its Azure migration journey with a relatively small
 workload. However, the best practices of instance migration still apply
 and will be used as a template for future migrations.
 
-To determine the memory usage, they interrogated the redis processes on
+To determine the memory usage, they interrogated the Redis processes on
 their source system during a heavy load period:
 
 ``` bash
@@ -640,8 +644,10 @@ were created to support the migration:
 
 -   [Azure Cache for
     Redis](https://docs.microsoft.com/en-us/azure/Redis/quickstart-create-Redis-server-instance-using-azure-portal)
+
 -   [Express
     Route](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-introduction)
+
 -   [Azure Virtual
     Network](https://docs.microsoft.com/en-us/azure/virtual-network/quick-create-portal)
     with [hub and spoke
@@ -649,27 +655,30 @@ were created to support the migration:
     with corresponding [virtual network
     peerings](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview)
     establish.
+
 -   [App
     Service](https://docs.microsoft.com/en-us/azure/app-service/overview)
+
 -   [Application
     Gateway](https://docs.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-internal-portal?tabs=option-1-create-internal-load-balancer-standard)
+
 -   [Private
     endpoints](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview)
     for the App Services and Redis instance
 
-> **Note:** As part of this guide, two ARM templates (one with private
-> endpoints, one without) were provided to deploy a potential Azure
-> landing zone for a Redis migration project. The private endpoints ARM
-> template provides a more secure, production-ready scenario. Additional
-> manual Azure landing zone configuration may be necessary, depending on
-> the requirements.
+    > **Note:** As part of this guide, two ARM templates (one with
+    > private endpoints, one without) were provided to deploy a
+    > potential Azure landing zone for a Redis migration project. The
+    > private endpoints ARM template provides a more secure,
+    > production-ready scenario. Additional manual Azure landing zone
+    > configuration may be necessary, depending on the requirements.
 
-> **Note** Creating a Redis instance in an Azure Virtual Machine with a
-> default port and no password or on an non-SSL port with a password
-> with no network security group protecting them is highly discouraged.
-> Bots continually monitor the Azure IP address space and will find your
-> Redis instance within a few days. Be very careful creating resources
-> that are exposed to the internet.
+    > **Note** Creating a Redis instance in an Azure Virtual Machine
+    > with a default port and no password or on an non-SSL port with a
+    > password with no network security group protecting them is highly
+    > discouraged. Bots continually monitor the Azure IP address space
+    > and will find your Redis instance within a few days. Be very
+    > careful creating resources that are exposed to the internet.
 
 ## Networking
 
@@ -716,8 +725,8 @@ tool location.
                                                                the target
                                                                instance
 
-  3rd party tools Offline        On-premises    Based on tool  Based on tool
-                   Online                                      
+  3rd party tools Offline or     On-premises    Based on tool  Based on tool
+                  Online                                       
   ---------------------------------------------------------------------------
 
 > **Note** We will discuss these migration methods in more detail in the
@@ -734,7 +743,7 @@ Other networking considerations include:
 
 ## Private Link and/or VNet integration
 
-All Azure Cache for Redis services support private links and VNet
+All Azure Cache for Redis services supports private links and VNet
 integration. There are however be sure to review the [FAQs for private
 endpoints](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-private-link#faq)
 to understand the behavior of the cache when behind a private endpoint.
@@ -751,8 +760,8 @@ is also allowed in a virtual network.
 ## Networking with Geo-replication
 
 If you plan to use the Geo-replication feature of Azure Cache for Redis,
-there are several other ports that must be allowed in order for the
-replication to be successful. See [Geo-replication peer port
+there are several other ports that must be allowed for the replication
+to be successful. See [Geo-replication peer port
 requirements](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-vnet#geo-replication-peer-port-requirements)
 for more information.
 
@@ -835,11 +844,11 @@ instances](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-ho
 
 ### RDB File
 
-By default, Redis will keep cache data persisted to disk on a fairly
-regular basis, this can however be disabled by the administrator to
-improve performance. However, doing so would cause any data in memory to
-be lost in the case of a server fault or reboot. In most cases this is
-enabled, but has [advantages and
+By default, Redis will keep cache data persisted to disk on a regular
+basis, this can however be disabled by the administrator to improve
+performance. However, doing so would cause any data in memory to be lost
+in the case of a server fault or reboot. In most cases this is enabled,
+but has [advantages and
 disadvantages](https://redis.io/topics/persistence).
 
 ### Append Only File (AOF)
@@ -867,7 +876,7 @@ huge write loads.
 
 The most basic way to migrate an instance is to enumerate all the keys
 from the source and then `SET` the values in the destination. This works
-well with basic key values such as strings and integers, but care has to
+well with basic key values such as strings and integers, but care must
 be taken with more complex objects such that the tool encodes the values
 correctly in the migrate process.
 
@@ -882,7 +891,7 @@ version range for the encoding algorithm.
 
 Redis includes the ability to create replicas of master nodes. This path
 is one of the easiest to setup, but unfortunately none of the Azure
-services support the `SLAVEOF` or `REPLICAOF` commands. This means this
+services supports the `SLAVEOF` or `REPLICAOF` commands. This means this
 path is best used for when you are moving from one version to another to
 support a move to the cloud using the `DUMP` and `RESTORE` path.
 
@@ -1007,14 +1016,14 @@ the most available downtime due to the gap in the annual conference
 schedule. They also assessed the instance to not be using any
 unsupported features in the target Azure Cache for Redis service. Based
 on the migration team's other assessment details, they determined that
-they will attempt to perform an offline migration using the backup and
+they would attempt to perform an offline migration using the backup and
 restore Redis tools.
 
 During their assessment period, they did find that the customer instance
 does use some languages, extensions, and a custom function that are not
 available in the target service for the conference instance. They have
 asked the development team to review replacing those features while they
-migrate the more simple workloads. If they can be replaced successfully,
+migrate the simpler workloads. If they can be replaced successfully,
 they will choose an Azure Cache for Redis service, otherwise, they will
 provision an Azure VM to host the workload.
 
@@ -1127,10 +1136,10 @@ Manage by exception.
   Key Count Mismatch   Less than the remaining window   No          Sync the missing keys
   Key Value Mismatch   More than the remaining window   Yes         Start the Rollback
 
-In the [migration](./../03_Migration/01_DataMigration.md) section, we
-will provide a instance migration inventory script that will provide
-object counts that can be used to compare source and destination after a
-migration path has been completed.
+In the [migration](#data-migration) section, we will provide a instance
+migration inventory script that will provide object counts that can be
+used to compare source and destination after a migration path has been
+completed.
 
 ## WWI Use Case
 
@@ -1224,17 +1233,217 @@ In reviewing the Redis instance, the Redis 4.0 server is running with
 the default server configuration set during the initial install so no
 configuration settings will need to be migrated.
 
-# Option 1 - Data Migration with Backup and Restore (RDB)
+# Data Migration
+
+## Back up the instance
+
+Lower risk and back up the instance before upgrading or migrating data.
+Use the Redis `save` or `bgsave` command to backup the Redis data to
+disk.
+
+## Offline vs. Online
+
+Before selecting a migration tool, decide if the migration should be
+online or offline.
+
+-   **Offline migrations** require the system to be down while the
+    migration takes place. Users will not be able to modify data. This
+    option ensures that the state of the data will be exactly what is
+    expected when restored in Azure.
+-   **Online migrations** will migrate the data in near real-time. This
+    option is appropriate when there is little downtime for the users or
+    application consuming the data workload. The costs are too high for
+    the corporation to wait for complete migration. The process involves
+    replicating the data using some type of replication method.
+
+> **Case Study:** In the case of WWI, their environment has some complex
+> networking and security requirements that will not allow for the
+> appropriate changes to be applied for inbound and outbound
+> connectivity in the target migration time frame. These complexities
+> and requirements essentially eliminate the online approach from
+> consideration.
+
+> **Note:** Review the Planning and Assessment sections for more details
+> on Offline vs Online migration.
+
+## Data Drift
+
+Offline migration strategies have the potential for data drift. Data
+drift occurs when newly modified source data becomes out of sync with
+migrated data. When this happens, a full export or a delta export is
+necessary. To mitigate this problem, stop all write traffic to the
+instance and then perform the export. If stopping all data modification
+traffic is not possible, it will be necessary to account for the data
+drift as part of the migration effort.
+
+Determining the changes can be complicated if you do not have a tracking
+mechanism. Luckily, Redis has the AppendOnly feature that will generate
+a log file of all key changes. This could be used as the diff of the
+instance from a particular point (such as the start of the migration).
+
+## Performance recommendations
+
+### Source Tool Network
+
+When running the migration tool on a virtual machine, it is possible to
+change the TCP_NODELAY setting. By default, TCP uses Nagle's algorithm,
+which optimizes by batching up outgoing packets. This means fewer sends
+and this works well if the application sends packets frequently and
+latency is not the highest priority. Realize latency improvements by
+sending on sockets created with the TCP_NODELAY option enabled. This
+results in lower latency but more sends. Consider this client-side
+setting for the Virtual Machine (VM). Applications that benefit from the
+TCP_NODELAY option typically tend to do smaller, infrequent writes and
+are particularly sensitive to latency. As an example, alter this setting
+to reduce latency from 15-40 ms to 2-3 ms.
+
+To change this setting on Windows machines, do the following:
+
+-   Open the `REGEDIT` tool
+-   Under the subtree HKEY_LOCAL_MACHINE, find the
+    `SYSTEM\CurrentControlSet\services\Tcpip\Parameters\Interfaces` key
+-   Find the correct network interface
+-   In the space, right-click and select **New** for creating a DWORD
+    Value
+-   For the value name, type **TcpNoDelay**
+-   For the Dword value, type **1**
+    -   In the empty space right-click, and select **New** for creating
+        a DWORD Value
+-   For the value name, type **TcpAckFrequency**
+-   For the Dword value, type **1**
+-   Close the REGEDIT tool
+
+### Exporting
+
+When exporting your data, you can do it in a serialized fashion (where
+you export each key one by one), or you can utilize a tool to break
+apart the key space and export the data in a multi-threaded fashion. If
+you have a large cache and a small time-frame to do the migration,
+explore a multi-threaded approach.
+
+Alternatively, we will look at some online approaches to migrating that
+will simulate real-time migration activity.
+
+### Importing
+
+When you select a path for migration, you will want the import to run as
+fast as possible. You can disable the AOF feature to get faster imports,
+then re-enable it when you are done with the migration.
+
+## Performing the Migration
+
+-   Back up the instance
+-   Create and verify the Azure Landing zone
+-   Export and configure Source Server configuration
+-   Export and configure Target Server configuration
+-   Export the instance objects (Users, etc.)
+-   Export the data (if possible, disable writing)
+-   Import the instance objects
+-   Import the data
+-   Validation
+-   Migrate the Application(s)
+
+## Common Steps
+
+Despite what path is taken, there are common steps in the process:
+
+-   Upgrade to a supported Azure Redis version that matches the target
+    and migration tool support
+-   Inventory instance objects
+-   Export users and permissions (ACLS)
+-   Export and configuration settings
+
+### Post Import
+
+-   Setup Compliance and Security features
+-   Configure monitoring of the instance
+-   Optimize applications
+
+## Instance Objects
+
+As outlined in the [Test Plans](#test-plans) section, take an inventory
+of instance objects before and after the migration.
+
+Migration teams should develop and test helpful inventory scripts before
+beginning the migration phase.
+
+Instance object inventory script:
+
+``` powershell
+TBD
+```
+
+## Execute migration
+
+With the basic migration components in place, it is now possible to
+proceed with the data migration. WWI will utilize the Redis backup and
+restore option to export the data and then import it into Azure Cache
+for Redis.
+
+Options:
+
+-   [Backup and Restore](./01.01_DataMigration_BackupRestore.md)
+-   [Copy command](./01.02_DataMigration_Copy.md)
+-   [Replication](./01.03_DataMigration_Replication.md)
+-   [3rd Party Tools](./01.04_DataMigration_Tools.md)
+-   [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
+-   [Append Only File](./01.06_DataMigration_Aof.md)
+
+```{=html}
+<!--
+- [Non-cluster to cluster](./01.06_DataMigration_NonClusterToCluster.md)
+- [Cluster to cluster](./01.06_DataMigration_ClusterToCluster.md)
+- [Hash to Hash](./01.06_DataMigration_HashToHash.md)
+-->
+```
+Once the data is migrated, point the application to the new instance
+
+-   [Migrate Application
+    Settings](#data-migration--application-settings)
+
+Lastly, validate the target instance's inventory. Below is an example of
+the `INFO` results in a target environment. It is relatively easy to
+identify database key count discrepancies.
+
+Follow the `Check success` steps in the [common tasks
+article](#common-tasks).
+
+## WWI Use Case
+
+Worldwide Importers has decided to use a simple backup and restore of
+their Redis Conference instance. They will backup the RDB file and then
+copy it to Azure Storage. Once uploaded, they will utilize the Azure
+PowerShell cmdlets to restore the RDB file contents to the new Azure
+Cache for Redis premium instance. Once migrated, they will enable the
+instance to be cluster enabled and then modify their applications to
+point to the new instance.
+
+## Data Migration Checklist
+
+-   Understand the complexity of the environment and determine if an
+    online approach is feasible.
+-   Account for data drift. Stopping or denying writes in the source can
+    eliminate potential data drift. Determine acceptable downtime costs.
+-   Configure source configuration for fast export.
+-   Configure target configuration for fast import.
+-   Test any migrations that have a different source version vs the
+    target.
+-   Migrate any miscellaneous objects, such as user names and
+    privileges.
+-   Update application settings to point to the new instance.
+-   Document all tasks. Update task completion to indicate progress.
+
+# Path 1 - Migration with RDB
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 ## Disable AOF
 
 Follow the `Disable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#disable_aof).
 
 ## Data
 
@@ -1311,9 +1520,9 @@ PowerShell.
 > data is imported, the keys are redistributed among the shards of the
 > cluster.
 
-#### Azure Powershell
+#### Azure PowerShell
 
--   Install Azure Powershell (this has already been done for you, but
+-   Install Azure PowerShell (this has already been done for you, but
     provided for reference)
 
     ``` bash
@@ -1371,7 +1580,7 @@ PowerShell.
 #### Azure Portal
 
 -   Browse to the Azure Portal
--   Select the redis resource group
+-   Select the Redis resource group
 -   Select the target Redis instance (must be Premium or higher)
 -   Under **Import**, select **Import**
 -   Select the storage account
@@ -1386,12 +1595,12 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable AOF in Target
 
 Follow the `Enable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Summary - Backup and Restore
 
@@ -1413,18 +1622,18 @@ migration process.
 -   [Azure
     CLI](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cli-samples)
 
-# Option 2 - Data Migration with Redis (Mass Insertion)
+# Path 2 - Migration via Insertion
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 ## Connectivity Setup
 
 In order to connect to Azure Redis, you must either enable non-SSL port,
 or you must install a tunneling tool such as
-[STunnel](./../05_Appendix/03_InstallStunnel.md).
+[STunnel](#install-stunnel).
 
 > **NOTE** The following approaches move all databases from the target
 > to the source. If you are migrating to a cluster, it has only one
@@ -1444,7 +1653,7 @@ or you must install a tunneling tool such as
 ## Disable AOF
 
 Follow the `Disable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#disable_aof).
 
 ## Mass Insertion (SET)
 
@@ -1556,17 +1765,15 @@ article](03_DataMigration_Common.md).
     sudo bash restore.sh
     ```
 
-> **NOTE** The target versions should be the same, or have similar
-> encoding of the values in order for the DUMP/RESTORE command to
-> succeed.
+> **NOTE** The target versions should be the same or have similar
+> encoding of the values for the DUMP/RESTORE command to succeed.
 
 ## Mass Insertion (MIGRATE)
 
 You can use the `MIGRATE` command to move key values to a new instance.
-In terms of the details, this command actually executes a DUMP+DEL in
-the source instance, and a RESTORE in the target instance. This path is
-very risky as it will remove the keys from the source as it processes
-them.
+In terms of the details, this command executes a DUMP+DEL in the source
+instance, and a RESTORE in the target instance. This path is very risky
+as it will remove the keys from the source as it processes them.
 
 -   Create a new script:
 
@@ -1602,8 +1809,8 @@ them.
         sudo bash migrate.sh
         ```
 
-> **NOTE** The target versions should be the same, or have similar
-> encoding of the values in order for the MIGRATE command to succeed.
+> **NOTE** The target versions should be the same or have similar
+> encoding of the values for the MIGRATE command to succeed.
 
 ## Check success
 
@@ -1612,12 +1819,12 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable AOF in Target
 
 Follow the `Enable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Resources
 
@@ -1626,12 +1833,12 @@ article](03_DataMigration_Common.md).
 -   [DUMP Command](https://redis.io/commands/dump)
 -   [MIGRATE Command](https://redis.io/commands/migrate)
 
-# Option 3 - Data Migration with Redis Replication
+# Path 3 - Migration via Replication
 
 Using the `SLAVEOF` or the `MIGRATEOF` is for migrating from one version
 to another to support a move to Azure.
 
-> **NOTE** None of the Azure services (`basic`, `standard`, `premimum`,
+> **NOTE** None of the Azure services (`basic`, `standard`, `premium`,
 > or `enterprise` support the `SLAVEOF` or `REPLICAOF` commands).
 
 Taking this path is an intermediate step for when a migration tool has
@@ -1641,13 +1848,13 @@ encoding of the key value does not port properly.
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 > **Note** If the server is not enabled for SSL and is running 6.0 or
 > higher, it is highly recommended that it is configured. See [Configure
-> Redis for SSL connectivity](../05_Appendix/04_ConfigureRedisSSL.md) to
-> enable SSL for the instance.
+> Redis for SSL connectivity](#configure-redis-ssl) to enable SSL for
+> the instance.
 
 ## Option 1 : Set to Read Only
 
@@ -1667,7 +1874,7 @@ to create an environment to support the following steps.
 
 ## Option 2 : Rename Commands
 
-This can also be accomplished by rename-ing all write commands.
+This can also be accomplished by renameing all write commands.
 
 -   Open the `redis.conf` file, add the following lines:
 
@@ -1745,7 +1952,7 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Resources
 
@@ -1753,32 +1960,30 @@ article](03_DataMigration_Common.md).
 -   [SLAVEOF](https://redis.io/commands/SLAVEOF)
 -   [REPLICAOF](https://redis.io/commands/REPLICAOF)
 
-# Option 4 - Data Migration with 3rd Party Tools
+# Path 4 - Migration via 3rd Party Tools
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 > **Note** If the source server is not enabled for SSL and is running
 > 6.0 or higher, it is highly recommended that it is enabled and
 > configured. See [Configure Redis for SSL
-> connectivity](../05_Appendix/04_ConfigureRedisSSL.md) to enable SSL
-> for the instance.
+> connectivity](#configure-redis-ssl) to enable SSL for the instance.
 
 > **NOTE** Tools that use the `SLAVEOF` and `REPLICAOF` commands will
 > not work with Azure Cache for Redis instances.
 
 ## Install STunnel
 
-If you have not done so already, setup
-[STunnel](./../05_Appendix/03_InstallStunnel.md) if you are not running
-redis-cli 6.x or higher.
+If you have not done so already, setup [STunnel](#install-stunnel) if
+you are not running redis-cli 6.x or higher.
 
 ## Disable AOF
 
 Follow the `Disable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ```{=html}
 <!--
@@ -1990,7 +2195,7 @@ commands to migrate from a source to a destination instance.
     sudo nano dump.sh
     ```
 
--   Copy the following into the script, be sure to replace the redis
+-   Copy the following into the script, be sure to replace the Redis
     tokens:
 
     ``` bash
@@ -2021,19 +2226,21 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable AOF in Target
 
 Follow the `Enable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Resources
+
+Some helpful resources:
 
 -   [Redis migrate](https://github.com/vipshop/redis-migrate-tool)
 -   [Redis Copy](https://github.com/deepakverma/redis-copy)
 
-# Option 5 - Data Migration with Layer of Abstraction (Dual Write)
+# Path 5 - Migration via Dual Write
 
 If migrating an entire Redis instance is not feasible or worth the extra
 effort, you can add a layer of abstraction in your application code that
@@ -2089,17 +2296,17 @@ extra work to save the value to the new instance.
 > **NOTE** It is important to ensure that the save operation to the new
 > instance is `async` to prevent any application performance issues.
 
-# Option 6 - Data Migration with Append Only File (AOF)
+# Path 6 - Migration via Append Only File
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 ## Disable AOF
 
 Follow the `Disable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Data Setup
 
@@ -2171,12 +2378,12 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable AOF in Target
 
 Follow the `Enable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Summary - Backup and Restore
 
@@ -2196,13 +2403,13 @@ entire migration.
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 ## Disable AOF
 
 Follow the `Disable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable clustering on Target
 
@@ -2269,9 +2476,8 @@ applications if the keys overlap.
     sudo bash restore.sh
     ```
 
-> **NOTE** The target versions should be the same, or have similar
-> encoding of the values in order for the DUMP/RESTORE command to
-> succeed.
+> **NOTE** The target versions should be the same or have similar
+> encoding of the values for the DUMP/RESTORE command to succeed.
 
 ## Check success
 
@@ -2280,12 +2486,12 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable AOF in Target
 
 Follow the `Enable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Summary - Backup and Restore
 
@@ -2305,13 +2511,13 @@ migration process.
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 ## Disable AOF
 
 Follow the `Disable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Data
 
@@ -2420,12 +2626,12 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable AOF in Target
 
 Follow the `Enable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Summary - Backup and Restore
 
@@ -2445,13 +2651,13 @@ migration process.
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 ## Disable AOF
 
 Follow the `Disable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Data
 
@@ -2551,12 +2757,12 @@ to finish. Once it is completed, verify that all keys have been
 migrated.
 
 Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Enable AOF in Target
 
 Follow the `Enable AOF in the target` steps in the [common tasks
-article](03_DataMigration_Common.md).
+article](#common-tasks).
 
 ## Summary - Backup and Restore
 
@@ -2571,206 +2777,6 @@ migration process.
 ## Resources
 
 -   [twemproxy](https://github.com/twitter/twemproxy)
-
-# Data Migration
-
-## Back up the instance
-
-Lower risk and back up the instance before upgrading or migrating data.
-Use the Redis `save` or `bgsave` command to backup the Redis data to
-disk.
-
-## Offline vs. Online
-
-Before selecting a migration tool, decide if the migration should be
-online or offline.
-
--   **Offline migrations** require the system to be down while the
-    migration takes place. Users will not be able to modify data. This
-    option ensures that the state of the data will be exactly what is
-    expected when restored in Azure.
--   **Online migrations** will migrate the data in near real-time. This
-    option is appropriate when there is little downtime for the users or
-    application consuming the data workload. The costs are too high for
-    the corporation to wait for complete migration. The process involves
-    replicating the data using some type of replication method.
-
-> **Case Study:** In the case of WWI, their environment has some complex
-> networking and security requirements that will not allow for the
-> appropriate changes to be applied for inbound and outbound
-> connectivity in the target migration time frame. These complexities
-> and requirements essentially eliminate the online approach from
-> consideration.
-
-> **Note:** Review the Planning and Assessment sections for more details
-> on Offline vs Online migration.
-
-## Data Drift
-
-Offline migration strategies have the potential for data drift. Data
-drift occurs when newly modified source data becomes out of sync with
-migrated data. When this happens, a full export or a delta export is
-necessary. To mitigate this problem, stop all write traffic to the
-instance and then perform the export. If stopping all data modification
-traffic is not possible, it will be necessary to account for the data
-drift as part of the migration effort.
-
-Determining the changes can be complicated if you do not have a tracking
-mechanism. Luckily, Redis has the AppendOnly feature that will generate
-a log file of all key changes. This could be used as the diff of the
-instance from a particular point (such as the start of the migration).
-
-## Performance recommendations
-
-### Source Tool Network
-
-When running the migration tool on a virtual machine, it is possible to
-change the TCP_NODELAY setting. By default, TCP uses Nagle's algorithm,
-which optimizes by batching up outgoing packets. This means fewer sends
-and this works well if the application sends packets frequently and
-latency is not the highest priority. Realize latency improvements by
-sending on sockets created with the TCP_NODELAY option enabled. This
-results in lower latency but more sends. Consider this client-side
-setting for the Virtual Machine (VM). Applications that benefit from the
-TCP_NODELAY option typically tend to do smaller, infrequent writes and
-are particularly sensitive to latency. As an example, alter this setting
-to reduce latency from 15-40 ms to 2-3 ms.
-
-To change this setting on Windows machines, do the following:
-
--   Open the `REGEDIT` tool
--   Under the subtree HKEY_LOCAL_MACHINE, find the
-    `SYSTEM\CurrentControlSet\services\Tcpip\Parameters\Interfaces` key
--   Find the correct network interface
--   In the space, right-click and select **New** for creating a DWORD
-    Value
--   For the value name, type **TcpNoDelay**
--   For the Dword value, type **1**
-    -   In the empty space right-click, and select **New** for creating
-        a DWORD Value
--   For the value name, type **TcpAckFrequency**
--   For the Dword value, type **1**
--   Close the REGEDIT tool
-
-### Exporting
-
-When exporting your data, you can do it in a serialized fashion (where
-you export each key one by one), or you can utilize a tool to break
-apart the key space and export the data in a multi-threaded fashion. If
-you have a large cache and a small time-frame to do the migration,
-explore a multi-threaded approach.
-
-Alternatively, we will look at some online approaches to migrating that
-will simulate real-time migration activity.
-
-### Importing
-
-When you select a path for migration, you will want the import to run as
-fast as possible. You can disable the AOF feature to get faster imports,
-then re-enable it when you are done with the migration.
-
-## Performing the Migration
-
--   Back up the instance
--   Create and verify the Azure Landing zone
--   Export and configure Source Server configuration
--   Export and configure Target Server configuration
--   Export the instance objects (Users, etc.)
--   Export the data (if possible disable writing)
--   Import the instance objects
--   Import the data
--   Validation
--   Migrate the Application(s)
-
-## Common Steps
-
-Despite what path is taken, there are common steps in the process:
-
--   Upgrade to a supported Azure Redis version that matches the target
-    and migration tool support
--   Inventory instance objects
--   Export users and permissions (ACLS)
--   Export and configuration settings
-
-### Post Import
-
--   Setup Compliance and Security features
--   Configure monitoring of the instance
--   Optimize applications
-
-## Instance Objects
-
-As outlined in the [Test Plans](../02_PreMigration/04_TestPlans.md)
-section, take an inventory of instance objects before and after the
-migration.
-
-Migration teams should develop and test helpful inventory scripts before
-beginning the migration phase.
-
-Instance object inventory script:
-
-``` powershell
-TBD
-```
-
-## Execute migration
-
-With the basic migration components in place, it is now possible to
-proceed with the data migration. WWI will utilize the Redis backup and
-restore option to export the data and then import it into Azure Cache
-for Redis.
-
-Options:
-
--   [Backup and Restore](./01.01_DataMigration_BackupRestore.md)
--   [Copy command](./01.02_DataMigration_Copy.md)
--   [Replication](./01.03_DataMigration_Replication.md)
--   [3rd Party Tools](./01.04_DataMigration_Tools.md)
--   [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
--   [Append Only File](./01.06_DataMigration_Aof.md)
-
-```{=html}
-<!--
-- [Non-cluster to cluster](./01.06_DataMigration_NonClusterToCluster.md)
-- [Cluster to cluster](./01.06_DataMigration_ClusterToCluster.md)
-- [Hash to Hash](./01.06_DataMigration_HashToHash.md)
--->
-```
-Once the data is migrated, point the application to the new instance
-
--   [Migrate Application Settings](./04_DataMigration_AppSettings.md)
-
-Lastly, validate the target instance's inventory. Below is an example of
-the `INFO` results in a target environment. It is relatively easy to
-identify database key count discrepancies.
-
-Follow the `Check success` steps in the [common tasks
-article](03_DataMigration_Common.md).
-
-## WWI Use Case
-
-Worldwide Importers has decided to use a simple backup and restore of
-their Redis Conference instance. They will backup the RDB file and then
-copy it to Azure Storage. Once uploaded, they will utilize the Azure
-PowerShell cmdlets to restore the the RDB file contents to the new Azure
-Cache for Redis premium instance. Once migrated, they will enable the
-instance to be cluster enabled and then modify their applications to
-point to the new instance.
-
-## Data Migration Checklist
-
--   Understand the complexity of the environment and determine if an
-    online approach is feasible.
--   Account for data drift. Stopping or denying writes in the source can
-    eliminate potential data drift. Determine acceptable downtime costs.
--   Configure source configuration for fast export.
--   Configure target configuration for fast import.
--   Test any migrations that have a different source version vs the
-    target.
--   Migrate any miscellaneous objects, such as user names and
-    privileges.
--   Update application settings to point to the new instance.
--   Document all tasks. Update task completion to indicate progress.
 
 # Data Migration - Configuration
 
@@ -2920,7 +2926,7 @@ Set-AzRedisCache -ResourceGroupName "<RESOURCE_GROUP_NAME>" -Name "<REDIS_NAME>"
 
 ## Check Success
 
-You should now have the redis instance keys and values moved to the new
+You should now have the Redis instance keys and values moved to the new
 Redis instance, but you should verify the source and destination.
 
 -   On the source, run the following:
@@ -2953,7 +2959,7 @@ for more information.
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide
 to create an environment to support the following steps.
 
 ## Migration
@@ -2961,11 +2967,11 @@ to create an environment to support the following steps.
 Ensure that you have migrated the data in the source to the target using
 one of the migration paths:
 
--   [Backup and Restore](./01.01_DataMigration_BackupRestore.md)
+-   [Backup and Restore](#path-1---data-migration-with-rdb)
 -   [Copy command](./01.02_DataMigration_Copy.md)
--   [Replication](./01.03_DataMigration_Replication.md)
+-   [Replication](#path-3---data-migration-via-replication)
 -   [3rd Party Tools](./01.04_DataMigration_Tools.md)
--   [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
+-   [Layer of abstraction](#path-5---data-migration-via-dual-write)
 -   [Append Only File](./01.06_DataMigration_Aof.md)
 
 ## Update Applications to support SSL
@@ -3104,7 +3110,7 @@ like the following to learn ways to take advantage of scripting various
 management activities:
 
 -   [Manage Azure Cache for Redis with Azure
-    Powershell](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-manage-redis-cache-powershell)
+    PowerShell](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-manage-redis-cache-powershell)
 
 ## Azure Cache for Redis Upgrade Process
 
@@ -3150,7 +3156,7 @@ installation of an update or critical security patch.
 > patched one at a time to prevent data loss. Basic caches will have
 > data loss. Clustered caches are patched one shard at a time.
 
-In addition to supporting the Azure REdis Events, you can follow some
+In addition to supporting the Azure Redis Events, you can follow some
 best practices for application design when using caching technology:
 
 -   [Reliability patterns - Cloud Design
@@ -3199,7 +3205,7 @@ As previously mentioned, monitoring metrics such as the
 to upgrade the instance tier. Consistently high values could indicate a
 tier upgrade is necessary.
 
-Additionally, if cpu and memory do not seem to be the issue,
+Additionally, if CPU and memory do not seem to be the issue,
 administrators can explore instance-based options such as cache misses.
 
 To find cache misses, run the following:
@@ -3362,7 +3368,7 @@ efficiency.
 
 As with any mission critical system, having a backup and restore as well
 as a disaster recovery (BCDR) strategy is an important part of the
-overall system design. If an unforseen event occurs, it is important to
+overall system design. If an unforeseen event occurs, it is important to
 have the ability to restore the data to a point in time (Recovery Point
 Objective) and in a reasonable amount of time (Recovery Time Objective).
 
@@ -3394,7 +3400,7 @@ geo-replication.
 
 ### Clustering
 
-To support high availability you can enabled clustering on the `Premium`
+To support high availability, you can enable clustering on the `Premium`
 and `Enterprise` skus. `Basic` and `Standard` do not support clustering.
 You can scale up to 10 shards in Azure Cache for Redis Premium.
 
@@ -3481,10 +3487,10 @@ geo-replication so they performed the steps outlined below.
 -   Browse to the Azure Cache for Redis **PREFIX-redis-basic6**
     instance.
 -   Under **Settings**, select **Scale**
--   Select `C0 Standard`, then select **Select**, the instance will
+-   Select `C0 Standard`, then choose **Select**, the instance will
     start to scale
 -   Under **Settings**, select **Scale**
--   Select `P1 Premium`, then select **Select**, the instance will start
+-   Select `P1 Premium`, then choose **Select**, the instance will start
     to scale
 -   Under **Settings**, select **Cluster size**
 -   Select **Enable** to enable clustering on the instance
@@ -3514,7 +3520,7 @@ Failover Steps:
 -   Browse to the **PREFIX-redis-basic6** Azure Cache for Redis
     instance.
 -   Under **Settings** select **Geo-replication**
--   Select **Unlink caches**, the replication will unlink and the two
+-   Select **Unlink caches**, the replication will un-link and the two
     caches will become read/write.
 
 ## BCDR Checklist
@@ -3551,9 +3557,9 @@ to enable the non-SSL port in Azure Cache for Redis.
 
 ## Authentication
 
-Redis is focused purely on providing fast access to data, and is
-designed to run inside a trusted environment that can be accessed only
-by trusted clients. Redis supports [a limited security
+Redis is focused purely on providing fast access to data and is designed
+to run inside a trusted environment that can be accessed only by trusted
+clients. Redis supports [a limited security
 model](https://redis.io/topics/security) based on password
 authentication. (It is possible to remove authentication completely,
 although we don't recommend this.)
@@ -3575,7 +3581,7 @@ uses the SSL port of 6380. You can re-enable the non-SSL port if needed,
 but it is recommended that you upgrade your applications to support SSL
 rather than open non-SSL access to Azure Cache for Redis. Additionally,
 you will want to ensure your applications will support TLS 1.2 rather
-thant he older 1.0 or 1.1.
+than the older 1.0 or 1.1.
 
 ## Firewall
 
@@ -3754,7 +3760,7 @@ migration steps.
 -   Select **Create**, after about 20 minutes the landing zone will be
     deployed
 
-    > **NOTE** If anything deploys incorrectly in the redis images via
+    > **NOTE** If anything deploys incorrectly in the Redis images via
     > the Azure script extensions, you can check the Azure agent log
     > files using:
 
@@ -3780,7 +3786,7 @@ migration steps.
 
 -   Record the public IP address
 
--   Login to the redis image (**PREFIX-redis01** and **PREFIX-redis02**)
+-   Login to the Redis image (**PREFIX-redis01** and **PREFIX-redis02**)
     by opening a PowerShell window and run the following:
 
     ``` powershell
@@ -3958,7 +3964,7 @@ sudo nano /etc/default/stunnel4
 
 -   Set the `Enabled` value to `1`
 -   Save the file
--   Setup the pids directory and create the redis connection:
+-   Setup the pids directory and create the Redis connection:
 
 ``` bash
 cd

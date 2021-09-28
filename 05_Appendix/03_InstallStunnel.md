@@ -16,7 +16,7 @@ sudo nano /etc/default/stunnel4
 
 - Set the `Enabled` value to `1`
 - Save the file
-- Setup the pids directory and create the redis connection:
+- Setup the pids directory and create the Redis connection:
 
 ```bash
 cd

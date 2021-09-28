@@ -35,7 +35,7 @@ namespace RedisTesting
 
             db = serviceProvider.GetService<IDatabase>();
 
-            //add one of all types to redis cache...
+            //add one of all types to Redis cache...
             string str = GetSetData<string>("key1", "Hello world");
         }
 

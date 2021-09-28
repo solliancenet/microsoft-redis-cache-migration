@@ -20,7 +20,7 @@ Azure Cache for Redis has several options for [implementing high availability](h
 
 ### Clustering
 
-To support high availability, you can enabled clustering on the `Premium` and `Enterprise` skus.  `Basic` and `Standard` do not support clustering.  You can scale up to 10 shards in Azure Cache for Redis Premium.
+To support high availability, you can enable clustering on the `Premium` and `Enterprise` skus.  `Basic` and `Standard` do not support clustering.  You can scale up to 10 shards in Azure Cache for Redis Premium.
 
 ### Geo-replication
 

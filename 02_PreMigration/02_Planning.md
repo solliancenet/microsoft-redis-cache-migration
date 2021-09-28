@@ -36,7 +36,7 @@ The migration tool location will determine the network connectivity requirements
 | DUMP/RESTORE | Online | On-premises  | None | Open port to the target instance |
 | SLAVEOF / REPLICAOF | Online | On-premises  | None | Open port to the target instance |
 | MIGRATE | Online | On-premises  | None | Open port to the target instance |
-| 3rd party tools | Offline \ Online | On-premises  | Based on tool | Based on tool |
+| 3rd party tools | Offline or Online | On-premises  | Based on tool | Based on tool |
 
 > **Note** We will discuss these migration methods in more detail in the next section.
 

@@ -4,18 +4,18 @@ Most applications use Redis client libraries to handle communication with their 
 
 ## Setup
 
-Follow all the steps in the [Setup](./../05_Appendix/00_Setup.md) guide to create an environment to support the following steps.
+Follow all the steps in the [Setup](#appendix-a-environment-setup) guide to create an environment to support the following steps.
 
 ## Migration
 
 Ensure that you have migrated the data in the source to the target using one of the migration paths:
 
-- [Backup and Restore](./01.01_DataMigration_BackupRestore.md)
-- [Copy command](./01.02_DataMigration_Copy.md)
-- [Replication](./01.03_DataMigration_Replication.md)
-- [3rd Party Tools](./01.04_DataMigration_Tools.md)
-- [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
-- [Append Only File](./01.06_DataMigration_Aof.md)
+- [Backup and Restore](#path-1---migration-with-rdb))
+- [Copy command](#path-2---migration-with-insertion)
+- [Replication](#path-3---migration-via-replication)
+- [3rd Party Tools](#path-4---migration-via-3rd-party-tools)
+- [Layer of abstraction](#path-5---migration-via-dual-write)
+- [Append Only File](#path-6---migration-via-append-only-file)
 
 ## Update Applications to support SSL
 

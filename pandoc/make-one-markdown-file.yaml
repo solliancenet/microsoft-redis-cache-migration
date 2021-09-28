@@ -28,35 +28,35 @@ output-file: Redis-guide.md
 dpi: 300
 
 input-files:
-- D:\data\projects\redis-cache\01_Introduction\01_Overview.md
-- D:\data\projects\redis-cache\01_Introduction\02_CaseStudy.md
-- D:\data\projects\redis-cache\02_PreMigration\01_Assessment.md
-- D:\data\projects\redis-cache\02_PreMigration\02_Planning.md
-- D:\data\projects\redis-cache\02_PreMigration\03_Methods.md
-- D:\data\projects\redis-cache\02_PreMigration\04_TestPlans.md
-- D:\data\projects\redis-cache\02_PreMigration\05_PerformanceBaselines.md
-- D:\data\projects\redis-cache\03_Migration\01.01_DataMigration_BackupRestore.md
-- D:\data\projects\redis-cache\03_Migration\01.02_DataMigration_Copy.md
-- D:\data\projects\redis-cache\03_Migration\01.03_DataMigration_Replication.md
-- D:\data\projects\redis-cache\03_Migration\01.04_DataMigration_Tools.md
-- D:\data\projects\redis-cache\03_Migration\01.05_DataMigration_Abstraction.md
-- D:\data\projects\redis-cache\03_Migration\01.06_DataMigration_Aof.md
-- D:\data\projects\redis-cache\03_Migration\01.07_DataMigration_NonClusterToCluster.md
-- D:\data\projects\redis-cache\03_Migration\01.08_DataMigration_ClusterToClutser.md
-- D:\data\projects\redis-cache\03_Migration\01.09_DataMigration_HashToHash.md
-- D:\data\projects\redis-cache\03_Migration\01_DataMigration.md
-- D:\data\projects\redis-cache\03_Migration\02.01_DataMigration_Configuration.md
-- D:\data\projects\redis-cache\03_Migration\03_DataMigration_Common.md
-- D:\data\projects\redis-cache\03_Migration\04_DataMigration_AppSettings.md
-- D:\data\projects\redis-cache\04_PostMigration\01_Management.md
-- D:\data\projects\redis-cache\04_PostMigration\02_Optimization.md
-- D:\data\projects\redis-cache\04_PostMigration\03_BCDR.md
-- D:\data\projects\redis-cache\04_PostMigration\04_Security.md
-- D:\data\projects\redis-cache\04_PostMigration\06_CallToAction.md
-- D:\data\projects\redis-cache\05_Appendix\00_Setup.md
-- D:\data\projects\redis-cache\05_Appendix\01_ARM Templates.md
-- D:\data\projects\redis-cache\05_Appendix\03_InstallStunnel.md
-- D:\data\projects\redis-cache\05_Appendix\04_ConfigureRedisSSL.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\01_Introduction\01_Overview.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\01_Introduction\02_CaseStudy.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\02_PreMigration\01_Assessment.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\02_PreMigration\02_Planning.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\02_PreMigration\03_Methods.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\02_PreMigration\04_TestPlans.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\02_PreMigration\05_PerformanceBaselines.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.00_DataMigration.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.01_DataMigration_BackupRestore.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.02_DataMigration_Copy.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.03_DataMigration_Replication.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.04_DataMigration_Tools.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.05_DataMigration_Abstraction.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.06_DataMigration_Aof.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.07_DataMigration_NonClusterToCluster.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.08_DataMigration_ClusterToClutser.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\01.09_DataMigration_HashToHash.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\02.01_DataMigration_Configuration.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\03_DataMigration_Common.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\03_Migration\04_DataMigration_AppSettings.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\04_PostMigration\01_Management.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\04_PostMigration\02_Optimization.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\04_PostMigration\03_BCDR.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\04_PostMigration\04_Security.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\04_PostMigration\06_CallToAction.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\05_Appendix\00_Setup.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\05_Appendix\01_ARM Templates.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\05_Appendix\03_InstallStunnel.md
+- C:\github\solliancenet\microsoft-redis-cache-migration\05_Appendix\04_ConfigureRedisSSL.md
 
 # ERROR, WARNING, or INFO
 verbosity: INFO

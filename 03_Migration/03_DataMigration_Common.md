@@ -24,7 +24,7 @@ Set-AzRedisCache -ResourceGroupName "<RESOURCE_GROUP_NAME>" -Name "<REDIS_NAME>"
 
 ## Check Success
 
-You should now have the redis instance keys and values moved to the new Redis instance, but you should verify the source and destination.
+You should now have the Redis instance keys and values moved to the new Redis instance, but you should verify the source and destination.
 
 - On the source, run the following:
 

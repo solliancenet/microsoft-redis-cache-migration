@@ -1,1 +1,161 @@
-[]
+[
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/comparison.png",
+        "for": "./media/comparison.png"
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Tool"
+            ]
+        }
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/../../05_Appendix/media/redisbenchmark-local.png",
+        "for": "media/../../05_Appendix/media/redisbenchmark-local.png"
+    },
+    {
+        "type": "BlockNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawBlock",
+            "c": [
+                "html",
+                "<!--\n- [Non-cluster to cluster](./01.06_DataMigration_NonClusterToCluster.md)\n- [Cluster to cluster](./01.06_DataMigration_ClusterToCluster.md)\n- [Hash to Hash](./01.06_DataMigration_HashToHash.md)\n-->"
+            ]
+        }
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_ImportAzRedisCache_Error1.png",
+        "for": "./media/Redis_ImportAzRedisCache_Error1.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_ImportAzRedisCache_Error2.png",
+        "for": "./media/Redis_ImportAzRedisCache_Error2.png"
+    },
+    {
+        "type": "BlockNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawBlock",
+            "c": [
+                "html",
+                "<!--\n## Redis-migrate\n\n- https://github.com/vipshop/redis-migrate-tool\n\n- Download the source and compile the tool by running the following:\n\n    ```bash\n    sudo apt-get install git-all -y\n\n    sudo apt-get install automake libtool autoconf bzip2 -y\n\n    git clone https://github.com/vipshop/redis-migrate-tool\n\n    cd redis-migrate-tool\n    autoreconf -fvi\n    ./configure\n    make\n    ```\n\n- Create a migration configuration file call `migrate.conf`, run the following:\n\n    ```bash\n    sudo nano migrate.conf\n    ```\n\n- Copy the following into it, be sure to replace the target Redis instance name, port and password:\n\n    ```text\n    [source]\n    type: single\n    redis_auth: S2@dmins2@dmin\n    servers:\n    - 127.0.0.1:6379\n\n    [target]\n    type: single\n    redis_auth: <REDIS_PWD>\n    servers:\n    - <REDIS_NAME>.redis.cache.windows.net:6379\n\n    [common]\n    listen: 0.0.0.0:8888\n    threads: 2\n    step: 1\n    mbuf_size: 1024\n    source_safe: true\n    ```\n\n- To use the tool, run the following:\n\n    ```bash\n    ./src/redis-migrate-tool -c migrate.conf -o log -d\n    ```\n\n- Check the status of the tool:\n\n    ```bash\n    redis-cli -h 127.0.0.1 -p 8888\n    ```\n\n- Review the log file:\n\n    ```bash\n    sudo nano log\n    ```\n\n- Check that data in the source and target:\n\n    ```bash\n    ./src/redis-migrate-tool -c migrate.conf -o log -C redis_check\n    ```\n\n- Run a test insert\n\n    ```bash\n    ./src/redis-migrate-tool -c migrate.conf -o log -C \"redis_testinsert\"\n    ```\n-->"
+            ]
+        }
+    },
+    {
+        "type": "BlockNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawBlock",
+            "c": [
+                "html",
+                "<!--\n## redis-copy (yaauie)\n\nAnother tool you can utilize the `redis-copy` command : https://github.com/yaauie/redis-copy.\n\n- To install it, run the following:\n\n    ```bash\n\n    sudo apt-get remove ruby ruby-dev -y\n\n    sudo apt-get install ruby ruby-dev -y\n\n    sudo gem install redis-copy\n    ```\n\n- Run the tool:\n\n    ```bash\n    redis-copy --no-prompt redis://localhost:6379 redis://:<REDIS_PWD>@<REDIS_NAME>.redis.cache.windows.net:6380\n    ```\n\n> **NOTE** Can't use with Azure as the URI doesn't like the azure passwords.\n-->"
+            ]
+        }
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_SourceInfo.png",
+        "for": "./media/Redis_SourceInfo.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_TargetInfo.png",
+        "for": "./media/Redis_TargetInfo.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/RedisWeb_HelloWorld.png",
+        "for": "./media/RedisWeb_HelloWorld.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/00_Template_Deployment.png",
+        "for": "media/00_Template_Deployment.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/00_Build_Template_In_Editor.png",
+        "for": "media/00_Build_Template_In_Editor.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/00_Putting_Template_In_Editor.png",
+        "for": "media/00_Putting_Template_In_Editor.png"
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\redismigration"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\microsoft"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\artifacts"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\applications"
+            ]
+        }
+    },
+    {
+        "type": "InlineNotRendered",
+        "verbosity": "INFO",
+        "contents": {
+            "t": "RawInline",
+            "c": [
+                "tex",
+                "\\Redis"
+            ]
+        }
+    }
+]

@@ -30,7 +30,7 @@ The following steps will configure an environment to perform the guide's migrati
 - Select the **I agree...** checkbox
 - Select **Create**, after about 20 minutes the landing zone will be deployed
 
-  > **NOTE** If anything deploys incorrectly in the redis images via the Azure script extensions, you can check the Azure agent log files using:
+  > **NOTE** If anything deploys incorrectly in the Redis images via the Azure script extensions, you can check the Azure agent log files using:
 
   ```bash
   sudo nano /var/lib/waagent/custom-script/download/0/stdout
@@ -45,7 +45,7 @@ The following steps will configure an environment to perform the guide's migrati
 - Select your lab resource group
 - Select the **PREFIX-redis01** virtual machine
 - Record the public IP address
-- Login to the redis image (**PREFIX-redis01** and **PREFIX-redis02**) by opening a PowerShell window and run the following:
+- Login to the Redis image (**PREFIX-redis01** and **PREFIX-redis02**) by opening a PowerShell window and run the following:
 
   ```PowerShell
   ssh s2admin@<IP>

@@ -6,7 +6,7 @@ In addition to the audit and activity logs, cache performance can also be monito
 
 As previously mentioned, monitoring metrics such as the `allpercentprocessortime` or `usedmemory` can be important when deciding to upgrade the instance tier. Consistently high values could indicate a tier upgrade is necessary.
 
-Additionally, if cpu and memory do not seem to be the issue, administrators can explore instance-based options such as cache misses.
+Additionally, if CPU and memory do not seem to be the issue, administrators can explore instance-based options such as cache misses.
 
 To find cache misses, run the following:
 

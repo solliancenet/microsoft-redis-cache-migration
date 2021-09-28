@@ -56,7 +56,7 @@ Install-Module -Name Az.RedisCache
 
 After the modules are installed, reference tutorials and documentation like the following to learn ways to take advantage of scripting various management activities:
 
-- [Manage Azure Cache for Redis with Azure Powershell](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-manage-redis-cache-powershell)
+- [Manage Azure Cache for Redis with Azure PowerShell](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-manage-redis-cache-powershell)
 
 ## Azure Cache for Redis Upgrade Process
 
