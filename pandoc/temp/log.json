@@ -1,5 +1,11 @@
 [
     {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/comparison.png",
+        "for": "media/comparison.png"
+    },
+    {
         "type": "InlineNotRendered",
         "verbosity": "INFO",
         "contents": {
@@ -15,6 +21,18 @@
         "verbosity": "WARNING",
         "message": "PandocResourceNotFound \"media/../../05_Appendix/media/redisbenchmark-local.png\"",
         "path": "media/../../05_Appendix/media/redisbenchmark-local.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_ImportAzRedisCache_Error1.png",
+        "for": "./media/Redis_ImportAzRedisCache_Error1.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_ImportAzRedisCache_Error2.png",
+        "for": "./media/Redis_ImportAzRedisCache_Error2.png"
     },
     {
         "type": "BlockNotRendered",
@@ -48,6 +66,42 @@
                 "<!--\n- [Non-cluster to cluster](./01.06_DataMigration_NonClusterToCluster.md)\n- [Cluster to cluster](./01.06_DataMigration_ClusterToCluster.md)\n- [Hash to Hash](./01.06_DataMigration_HashToHash.md)\n-->"
             ]
         }
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_SourceInfo.png",
+        "for": "./media/Redis_SourceInfo.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/Redis_TargetInfo.png",
+        "for": "./media/Redis_TargetInfo.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "./media/RedisWeb_HelloWorld.png",
+        "for": "./media/RedisWeb_HelloWorld.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/00_Template_Deployment.png",
+        "for": "media/00_Template_Deployment.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/00_Build_Template_In_Editor.png",
+        "for": "media/00_Build_Template_In_Editor.png"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "from": "media/00_Putting_Template_In_Editor.png",
+        "for": "media/00_Putting_Template_In_Editor.png"
     },
     {
         "type": "InlineNotRendered",
