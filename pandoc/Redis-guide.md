@@ -1382,20 +1382,19 @@ for Redis.
 
 Options:
 
--   [Backup and Restore](./01.01_DataMigration_BackupRestore.md)
--   [Copy command](./01.02_DataMigration_Copy.md)
--   [Replication](./01.03_DataMigration_Replication.md)
--   [3rd Party Tools](./01.04_DataMigration_Tools.md)
--   [Layer of abstraction](./01.05_DataMigration_Abstraction.md)
--   [Append Only File](./01.06_DataMigration_Aof.md)
+-   [Backup and Restore](#path-1---migration-with-rdb))
+-   [Copy command](#path-2---migration-with-insertion)
+-   [Replication](#path-3---migration-via-replication)
+-   [3rd Party Tools](#path-4---migration-via-3rd-party-tools)
+-   [Layer of abstraction](#path-5---migration-via-dual-write)
+-   [Append Only File](#path-6---migration-via-append-only-file)
 
-```{=html}
-<!--
-- [Non-cluster to cluster](./01.06_DataMigration_NonClusterToCluster.md)
-- [Cluster to cluster](./01.06_DataMigration_ClusterToCluster.md)
-- [Hash to Hash](./01.06_DataMigration_HashToHash.md)
--->
-```
+Hash & Clustered options:
+
+-   [Non-cluster to cluster](#data-migration-non-cluser-to-cluster)
+-   [Cluster to cluster](#data-migration-cluser-to-cluster)
+-   [Hash to Hash](#data-migration-hash-to-hash)
+
 Once the data is migrated, point the application to the new instance
 
 -   [Migrate Application
@@ -1574,7 +1573,7 @@ PowerShell.
 
 -   Imports are only supported on `Premium` or higher tiers:
 
-    ![Import error for Basic and
+    ![Another import error for Basic and
     Standard.](./media/Redis_ImportAzRedisCache_Error2.png)
 
 #### Azure Portal
@@ -2507,7 +2506,7 @@ migration process.
 
 -   [Redis Clustering](https://redis.io/topics/cluster-tutorial)
 
-# Data Migration (Non-cluster to cluster)
+# Data Migration (Cluster to cluster)
 
 ## Setup
 
@@ -2967,12 +2966,12 @@ to create an environment to support the following steps.
 Ensure that you have migrated the data in the source to the target using
 one of the migration paths:
 
--   [Backup and Restore](#path-1---data-migration-with-rdb)
--   [Copy command](./01.02_DataMigration_Copy.md)
--   [Replication](#path-3---data-migration-via-replication)
--   [3rd Party Tools](./01.04_DataMigration_Tools.md)
--   [Layer of abstraction](#path-5---data-migration-via-dual-write)
--   [Append Only File](./01.06_DataMigration_Aof.md)
+-   [Backup and Restore](#path-1---migration-with-rdb))
+-   [Copy command](#path-2---migration-with-insertion)
+-   [Replication](#path-3---migration-via-replication)
+-   [3rd Party Tools](#path-4---migration-via-3rd-party-tools)
+-   [Layer of abstraction](#path-5---migration-via-dual-write)
+-   [Append Only File](#path-6---migration-via-append-only-file)
 
 ## Update Applications to support SSL
 

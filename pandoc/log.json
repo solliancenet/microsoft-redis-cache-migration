@@ -23,17 +23,6 @@
         "for": "media/../../05_Appendix/media/redisbenchmark-local.png"
     },
     {
-        "type": "BlockNotRendered",
-        "verbosity": "INFO",
-        "contents": {
-            "t": "RawBlock",
-            "c": [
-                "html",
-                "<!--\n- [Non-cluster to cluster](./01.06_DataMigration_NonClusterToCluster.md)\n- [Cluster to cluster](./01.06_DataMigration_ClusterToCluster.md)\n- [Hash to Hash](./01.06_DataMigration_HashToHash.md)\n-->"
-            ]
-        }
-    },
-    {
         "type": "LoadedResource",
         "verbosity": "INFO",
         "from": "./media/Redis_ImportAzRedisCache_Error1.png",
