@@ -6,7 +6,7 @@ An [Azure Landing zone](https://docs.microsoft.com/en-us/azure/cloud-adoption-fr
 
 Since WWI is based in San Francisco, all resources for the Azure landing zone were created in the `US West 2` region. The following resources were created to support the migration:
 
-- [Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/Redis/quickstart-create-Redis-server-instance-using-azure-portal)
+- [Azure Cache for Redis](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/quickstart-create-redis)
 
 - [Express Route](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-introduction)
 

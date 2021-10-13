@@ -13,19 +13,17 @@ We explore the following commonly used tools in this section:
 - MIGRATE command
 - 3rd Party tools
 
-## Import / Export
-
-### Redis Persistence
+## Redis Persistence
 
 Redis is a memory server, designed for high-performance storage and retrieval.  If the server or service where to be shutdown, all the items in the cache would be lost.  To ensure durability, you can [select a persistence mode](https://redis.io/topics/persistence) to keep the values in the case of failure. These two persistence methods include RDB and AOF.
 
 You can also select the [persistence in Azure Redis instances](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-how-to-premium-persistence).
 
-### RDB File
+## RDB File
 
-By default, Redis will keep cache data persisted to disk on a regular basis, this can however be disabled by the administrator to improve performance. However, doing so would cause any data in memory to be lost in the case of a server fault or reboot.  In most cases this is enabled, but has [advantages and disadvantages](https://redis.io/topics/persistence).
+When enabled, Redis can keep cache data persisted to disk on a regular basis.  When enabled this can lead to some performance degradation so testing should be done to ensure your cache responds to your clients appropriately after enabling the feature. When not enabled, in the event of a server failure or reboot any data in memory will be lost. Read more about the RDP file persistence [advantages and disadvantages](https://redis.io/topics/persistence).
 
-### Append Only File (AOF)
+## Append Only File (AOF)
 
 The append-only file is an alternative to RDB and is a fully-durable strategy for Redis. It first became available in version 1.1. AOF can be enabled in the Redis configuration file:
 
@@ -37,27 +35,27 @@ Once enabled, every time Redis receives a command that changes the dataset (e.g.
 
 This option is more durable than the RDB file, but comes at some costs in larger files, repeated commands and slower performance when under huge write loads.
 
-### Manual (SET)
+## Manual (SET)
 
 The most basic way to migrate an instance is to enumerate all the keys from the source and then `SET` the values in the destination.  This works well with basic key values such as strings and integers, but care must be taken with more complex objects such that the tool encodes the values correctly in the migrate process.
 
-### Manual (DUMP/RESTORE)
+## Manual (DUMP/RESTORE)
 
 This path is the preferred path as it will export the key in the Redis encoded format. Although it is the preferred method, it presents various challenges when the source and target are not within a compatible version range for the encoding algorithm.
 
-### SLAVEOF / REPLICAOF
+## SLAVEOF / REPLICAOF
 
 Redis includes the ability to create replicas of master nodes.  This path is one of the easiest to setup, but unfortunately none of the Azure services supports the `SLAVEOF` or `REPLICAOF` commands.  This means this path is best used for when you are moving from one version to another to support a move to the cloud using the `DUMP` and `RESTORE` path.
 
-### MIGRATE
+## MIGRATE
 
 The [`MIGRATE`](https://redis.io/commands/migrate) Redis command will atomically transfer a key from a source Redis instance to a destination Redis instance. On success the key is deleted from the original instance and is guaranteed to exist in the target instance.
 
-### Layer of Abstraction (Dual write)
+## Layer of Abstraction (Dual write)
 
 Layer of abstraction means that you can use your applications to migrate your Redis data in real-time and as the data is used.  Once you hit 100% key coverage, you can then remove the layer of abstraction and retire the old Redis instances.
 
-### Other open-source tools
+## Other open-source tools
 
 There are several 3rd party migration tools that help migrate Redis workloads easily and quickly. In most cases, the time savings and ease of use come with a price and may add extra costs to the migration.
 

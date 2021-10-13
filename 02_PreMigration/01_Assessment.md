@@ -4,11 +4,11 @@ Before jumping right into migrating a Redis workload, there is a fair amount of 
 
 ## Redis Versions
 
-Remote Dictionary Server (Redis) has a rich history starting in late 2000s.  Since then, it has evolved into a widely used memory based key value data management system. Azure Cache for Redis started with the support of Redis version 4.0 and has continued to 6.0 (as of 8/2021).  For a listing of all Redis versions, reference [this detailed page](https://bucardo.org/postgres_all_versions.html).
+Remote Dictionary Server (Redis) has a rich history starting in late 2000s.  Since then, it has evolved into a widely used memory based key value data management system. Azure Cache for Redis started with the support of Redis version 3.0 and has continued to 6.0 (as of 10/2021).  For a listing of all Redis version releases, reference [this detailed page](https://github.com/redis/redis/releases).
 
-For the latest on Azure Cache for Redis version support, reference [Supported Azure Cache for Redis server versions](https://docs.microsoft.com/en-us/azure/Redis/concepts-supported-versions). In the Post Migration Management section, we will review how upgrades (such as 4.0 to 6.0) are applied to the Redis instances in Azure.
+For the latest on Azure Cache for Redis version support, reference [Supported Azure Cache for Redis server versions](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-overview#redis-versions). In the Post Migration Management section, we will review how upgrades (such as 4.0 to 6.0) are applied to the Redis instances in Azure.
 
-> **Note** Redis OSS Support is based on the release of the latest stable release and only the latest stable version, and the last two versions will receive maintenance from Redis OSS. As of 4/2021, anything prior to 4.0 is end of life.  Microsoft Cache for Redis may not exactly match to these same support windows.
+> **Note** Redis OSS Support is based on the release of the latest stable release and only the latest stable version, and the last two versions will receive maintenance from Redis OSS. As of 10/2021, anything prior to 4.0 is end of life.  Microsoft Cache for Redis may not exactly match to these same version support windows and may provide support for a period after Redis OSS support ends, review the [supported versions](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-overview#redis-versions) for the latest updates.
 
 Knowing the source Redis version is important as many features have been introduced through the major versions. The applications using the system may be expecting behavior and features that are specific to that version. Although Redis has been great at keeping breaking changes at a minimum and keeping compatibility between versions, there are a small handful of cases that may influence the migration path and version:
 
@@ -57,11 +57,11 @@ Many of the other items are simply operational aspects that administrators shoul
 
 - Each tier supports a maximum number of databases (when not in cluster mode).  If you have more than the default of `16`, be sure that you pick a tier to migrate too that has support for all source databases.
 
-- Although you can cluster enable the premium tier, in doing so, you will only be able to support the `db0` database.  If you are using a tool that supports migrating databases, you will need to ensure that you move all source databases to the `db0` database in the target.
+- Although you can cluster enable the premium (Enterprise tiers are cluster enabled by default), in doing so, you will only be able to support the `db0` database.  If you are using a tool that supports migrating databases, you will need to ensure that you move all source databases to the `db0` database in the target.
 
 - You cannot cluster enable `Basic` or `Standard` tiers so migrating via cluster failover is not an option. You can cluster enable a premium instance, but it will become part of its own cluster and you cannot use it to cluster failover.
 
-- Once you cluster enabled the premium instance, it will communication over the Redis cluster protocol.
+- Once you cluster enabled the premium instance or use an Enterprise Tier instance, it will communicate over the [Redis cluster protocol](https://redis.io/topics/cluster-spec).
 
 ### Redis Modules
 
@@ -147,9 +147,9 @@ Which Azure Cache for Redis service should be selected and used?  This table out
 | --- | --- |--- |--- |
 | Azure VM | Any version, most flexible, full Redis feature support | Customer responsible for updates, security, and administration | Any Version
 | Basic | Sizes up to 53GB, low cost | Lower performance, no data persistence, no replication or failover | 4.x, 6.x
-| Standard | All basic, plus replication and failover support | Lower performance, no data persistence | 4.x, 6.x
+| Standard | All basic, plus replication and failover support | Lower performance, no data persistence, no geo-replication | 4.x, 6.x
 | Premium | All Standard, plus zone redundancy, data persistence and clustering | No support for Redis Modules, no active geo-replication | 4.x, 6.x
-| Enterprise | All Premium, plus Redis Module support | Higher costs | 6.x
+| Enterprise | All Premium, plus Redis Module support and active geo-replication | Higher costs | 6.x
 | Enterprise Flash | Flash based memory | No Redis Module support | 6.x
 
 As displayed above, if the instance is running Redis 3.x or lower and do not plan to upgrade, the workload will need to run in an Azure VM.
