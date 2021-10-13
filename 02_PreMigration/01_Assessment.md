@@ -143,7 +143,7 @@ Briefly, these options were discussed in the [Limitations](##Limitations) docume
 
 Which Azure Cache for Redis service should be selected and used?  This table outlines some of the advantages and disadvantages of each along with their Redis version support as of 4/2021.
 
-| Service | Pros | Cons | Versions Supported
+| **Service** | **Pros** | **Cons** | **Versions Supported**
 | --- | --- |--- |--- |
 | Azure VM | Any version, most flexible, full Redis feature support | Customer responsible for updates, security, and administration | Any Version
 | Basic | Sizes up to 53GB, low cost | Lower performance, no data persistence, no replication or failover | 4.x, 6.x
@@ -182,7 +182,7 @@ Additionally, because they want [data persistence](https://redis.io/topics/persi
 
 Using the [Azure Cache for Redis pricing calculator](https://azure.microsoft.com/en-us/pricing/details/cache/) WWI was able to determine the costs for the Azure Cache for Redis instance. As of 8/2021, the total costs of ownership (TCO) is displayed in the following table for the WWI Conference instance:
 
- | Resource | Description | Quantity | Cost |
+ | **Resource** | **Description** | **Quantity** | **Cost** |
  | --- | --- | --- | --- |
  | Compute (Premium) | 6GB Memory (1 primary, 1 replica) | 24 x 365 @ $0.554/hr | $4853.04 / yr |
  | Storage (backup) | 6GB | 6 * 12 @ $0.15 | $10.80 / yr |
@@ -191,7 +191,7 @@ Using the [Azure Cache for Redis pricing calculator](https://azure.microsoft.com
 
 After reviewing the initial costs, WWI's CIO confirmed they will be on Azure for a period much longer than 3 years. They decided to use 3-year [reserve instances](https://docs.microsoft.com/en-us/azure/Redis/concept-reserved-pricing) to save an extra ~$2.6K/yr:
 
- | Resource | Description | Quantity | Cost |
+ | **Resource** | **Description** | **Quantity** | **Cost** |
  | --- | --- | --- | --- |
  | Compute (Premium) | 6GB Memory (1 primary, 1 replica) | 24 x 365 @ $0.249/hr | $2190 / yr |
  | Storage (backup) | 6GB | 6 * 12 @ $0.15 | $10.80 / yr |
@@ -216,7 +216,7 @@ Lastly, it is likely that the application configuration will need to be modified
 
 WWI started the assessment by gathering information about their Redis instances. They were able to compile the following:
 
- | Name | Source | Size | Data Persistence | Version | Owner | Downtime |
+ | **Name** | **Source** | **Size** | **Data Persistence** | **Version** | **Owner** | **Downtime** |
  | --- | --- | --- | ---- | ---- | ---- | ---- |
  | Redis (Www) | AWS (PaaS) | 6GB | yes | 3.0 | Information Technology | 4 hr |
  | Redis (Database) | On-premises | 12GB | yes | 5.0 | Information Technology | 1 hrs |

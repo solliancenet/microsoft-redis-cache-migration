@@ -72,7 +72,7 @@ As outlined above, there are plenty of paths for migrating cache data. Deciding 
 
 There are many paths WWI can take to migrate their Redis workloads. We have provided a table of the potential paths and the advantages and disadvantages of each:
 
-| Objective | Description | Tool | Prerequisites | Advantages | Disadvantages |
+| **Objective** | **Description** | **Tool** | **Prerequisites** | **Advantages** | **Disadvantages** |
 | --- | --- | --- | --- | ---- | ---- |
 | Fastest migration possible | Parallel approach | 3rd party tool | Scripted Setup | Highly parallelized | Target throttling |
 | Online migration | Keep the source up for as long as possible | Replication | None | Seamless | Extra processing and storage |
@@ -80,7 +80,7 @@ There are many paths WWI can take to migrate their Redis workloads. We have prov
 
 In terms of the more specific tools and methods, here is a table of supported features with advantages and disadvantages of each:
 
-| Path\Tool | Supported in Azure | Multiple Databases | Clusters | Underlying Cmds | Advantages | Disadvantages
+| **Path\Tool** | **Supported in Azure** | **Multiple Databases** | **Clusters** | **Underlying Cmds** | **Advantages** | **Disadvantages**
 | --- | --- | --- | --- | --- | --- | --- |
 | RDP Backup/Restore | Premium+ | Yes | Yes | N/A | Simple file copy | Requires storage account, Complicated for clusters
 | AOF Backup/Restore | Premium+ | Yes | Yes | N/A | Replay of AOF file via redis-cli | Requires storage account, Complicated for clusters, Not all commands may execute

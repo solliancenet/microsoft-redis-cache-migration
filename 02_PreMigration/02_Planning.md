@@ -30,7 +30,7 @@ Take the time to understand and evaluate the network connectivity between the so
 
 The migration tool location will determine the network connectivity requirements. As shown in the table below, the selected migration tool must be able to connect to both the on-premises machine and Azure. Azure should be configured to only accept network traffic from the migration tool location.
 
-| Migration Tool | Type | Tool Location | Inbound Network Requirements | Outbound Network Requirements |
+| **Migration Tool** | **Type** | **Tool Location** | **Inbound Network Requirements** | **Outbound Network Requirements** |
 | --- | --- | --- | --- | --- |
 | Import/Export (RDB) | Offline | On-premises  | None | A path to copy the file to the new instance |
 | DUMP/RESTORE | Online | On-premises  | None | Open port to the target instance |

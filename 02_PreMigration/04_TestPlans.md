@@ -53,7 +53,7 @@ Identifying missing instance objects needs to occur quickly during a migration w
 
 ### Decision Table
 
-| Discrepancy | Time To Sync | Rollback? | Resolution Path |
+| **Discrepancy** | **Time To Sync** | **Rollback?** | **Resolution Path** |
 | --- | --- | --- | --- |
 | Key Count Mismatch | Less than the remaining window | No | Sync the missing keys
 | Key Value Mismatch | More than the remaining window | Yes | Start the Rollback

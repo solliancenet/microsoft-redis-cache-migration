@@ -22,7 +22,7 @@ WWI used the [Cloud Adoption Framework (CAF)](https://docs.microsoft.com/azure/c
 
 These stages include:
 
- | Stage | Name | Activities |
+ | **Stage** | **Name** | **Activities** |
  | --- | --- | --- |
  | 1 | Pre-migration | Assessment, Planning, Migration Method Evaluation, Application Implications, Test Plans, Performance Baselines |
  | 2 | Migration | Execute Migration, Execute Test Plans |
